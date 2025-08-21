@@ -1,5 +1,6 @@
 from flask import Flask
-from Joan.transaction.routes import transaction_bp
+from flask_sqlalchemy import SQLAlchemy
+from transaction.routes import transaction_bp
 
 
 app = Flask(__name__)
