@@ -110,3 +110,72 @@ body{
 .register-link p a:hover{
   text-decoration: underline;
 }
+
+
+.sidebar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 100%;
+  background-color: #325896;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* centers vertically */
+  align-items: center;      /* centers horizontally */
+  padding: 0;
+  z-index: 1000;   /* higher than profilecard */
+  border-top: 1px solid black;     
+  border-bottom: 1px solid black;  
+}
+
+.sidebar a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  margin: 15px 0; /* spacing between items */
+  width: 100%;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  background-color: #2c21bb;
+  color: rgb(255, 255, 255);
+}
+
+.sidebar a.active {
+  background-color: #2c21bb;
+  color: white;
+}
+
+body {
+  background-color: rgb(240, 237, 183);
+}
+   
+.profilecard {
+  position:fixed ;
+  top: 0;
+  left: 50px;
+  width: 100%;              /* fill the whole width of page */
+  height: 20vh;             /* take 1/5 of screen height (20%) */
+  padding: 20px;
+  background-color: #94bdf0;
+  border-radius: 0 0 15px 15px; /* only bottom corners rounded */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  text-align: center;
+  display: flex;            /* make layout flexible */
+  align-items: center;      /* center vertically */
+  justify-content: center;  /* center horizontally */
+  z-index: 500;   /* lower than sidebar */
+}
+
+.profilecard img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
