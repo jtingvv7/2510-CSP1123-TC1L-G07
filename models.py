@@ -74,7 +74,7 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = True)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
     rating= db.Column(db.Integer, nullable = False)
     comment = db.Column(db.Text, nullable = True)
     date_review = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
@@ -90,7 +90,7 @@ class Review(db.Model):
 class SafeLocation(db.Model):
     __tablename__ = 'safelocation'
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(100), nullable = True)
+    name = db.Column(db.String(100), nullable = False)
     latitude = db.Column(db.Float, nullable = True)
     longitude = db.Column(db.Float, nullable = True)
     description = db.Column(db.Text, nullable = True)
@@ -112,8 +112,8 @@ class Payment(db.Model):
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
     payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     amount = db.Column(db.Float, nullable = False)
-    method =db.Column(db.String(20), nullable= False) #wallet / online
-    status = db.Column(db.String(20), default = 'pending') #pending / success
+    method =db.Column(db.String(20), nullable= False) #wallet / online / offline
+    status = db.Column(db.String(20), default = 'pending') #pending / success / fail
     date_created = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     
     def __repr__(self):
