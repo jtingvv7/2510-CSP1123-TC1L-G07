@@ -41,7 +41,7 @@ class Transaction(db.Model):
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     status = db.Column(db.String(50), default = "pending") #pending/ accepted/ rejected/ completed
     created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
-    safe_location_id = db.Column(db.Integer, db.ForeignKey('SafeLocation.id'))
+    safe_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'))
     
 #relationship
     messages = db.relationship('Messages', backref = 'chating',lazy = True)
@@ -88,6 +88,7 @@ class Review(db.Model):
     
 #location db
 class SafeLocation(db.Model):
+    __tablename__ = 'safelocation'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100), nullable = True)
     latitude = db.Column(db.Float, nullable = True)
