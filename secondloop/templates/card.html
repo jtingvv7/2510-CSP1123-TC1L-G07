@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Credit/Debit Card</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="card-box">
+    <h2>Credit/Debit Card</h2>
+    <p>Order: <b>{{ order.order_id }}</b></p>
+    <p>Total: <b>RM {{ '%.2f' % (order.amount/100) }}</b></p>
+
+    <div>
+      <input type="radio" id="card" name="payment_method" value="card" checked>
+      <label class="payment-method" for="card">
+        <img src="https://img.icons8.com/color/96/visa.png" alt="Card"> Credit/Debit Card
+      </label>
+    </div>
+    <div>
+</body>
+</html>
