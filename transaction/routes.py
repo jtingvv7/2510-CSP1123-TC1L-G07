@@ -14,6 +14,19 @@ transaction_bp = Blueprint('transaction', __name__, template_folder='templates',
 def buy_product(product_id):
     product = Product.query.get_or_404(product_id)
 
+    #check if product is available
+    if not product.is_active or product.is_sold:
+        flash("Product is not available for purchase.","warning")
+        return redirect (url_for("transaction.home"))
+    
+    #prevent duplicate purchase requests
+    existing = Transaction.query.filter_by( buyer_id = current_user,
+                                           product_id = product_id,
+                                           status = "pending").first()
+    if existing:
+        flash("You have already requested to purchase this product","info")
+        return redirect(url_for("transaction.home"))
+
     new_transaction = Transaction (buyer_id = current_user.id,
                                    product_id = product_id,
                                    status = "pending")
