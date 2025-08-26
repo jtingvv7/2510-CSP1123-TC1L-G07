@@ -31,7 +31,8 @@ def buy_product(product_id):
     try:
         new_transaction = Transaction (buyer_id = current_user.id,
                                    product_id = product_id,
-                                   status = Transaction.status_pending)  #use a constant 
+                                   status = Transaction.status_pending,
+                                   created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc)))  #use a constant 
         db.session.add(new_transaction)
         db.session.commit()
         flash("Purchase request send! Waiting for seller confirmation","success")
@@ -42,12 +43,28 @@ def buy_product(product_id):
 
         return redirect(url_for("transaction.index"))
 
-#check transaction record & check request     
+#check transaction record & check request    
 @transaction_bp.route("/my_transactions") 
 @login_required
 def my_transaction():
     transactions = Transaction.query.filter_by(buyer_id = current_user.id).all  #check all owner by current user transaction record
     return render_template("transaction/my_transactions.html", transactions = transactions )
+
+@transaction_bp.route("/confirm/< int:transaction_id>",methods = ["POST"])
+@login_required
+def confirm_receipt(transaction_id):
+    transaction = Transaction.query.get_or_404(transaction_id)
+    #only buyer can complete transaction
+    if transaction.buyer_id != current_user.id:
+        flash("You are not authorized to confirm this transaction.","danger")
+        return redirect(url_for("transaction.my_transactions"))
+    
+    #only can complete when shipped 
+    if transaction.status != "shipped":
+        flash ("You can only confirm after the product is shipped.","waining")
+        return redirect(url_for("transaction.my_transactions"))
+    
+
 
 #buyer want to cancel transaction when pending state
 @transaction_bp.route("cancel/ <int: trancaction_id >",methods = ["POST"])
