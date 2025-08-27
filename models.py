@@ -26,6 +26,7 @@ class Product(db.Model):
     name = db.Column(db.String(30), nullable = False, unique = True) #product name
     price = db.Column(db.Float, nullable = False)
     description = db.Column(db.Text, nullable = True) #can be empty
+    is_sold = db.Column(db.Boolean, default = True)
     date_posted = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
 #relationship
     transactions = db.relationship('Transaction', backref = 'product',lazy = True)

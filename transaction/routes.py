@@ -16,7 +16,7 @@ def buy_product(product_id):
     product = Product.query.get_or_404(product_id)
 
     #check if product is available
-    if not product.is_active or product.is_sold:
+    if not product.is_sold == False:
         flash("Product is not available for purchase.","warning")
         return redirect (url_for("transaction.home"))
     
@@ -115,13 +115,45 @@ def view_requests():
 @transaction_bp.route("accept/< int:transaction_id>",methods = ["POST"])
 @login_required
 def accept_transaction(transaction_id):
-    transaction = Transaction.query.get_or_404(transaction_id)
-    
+    tx = Transaction.query.get_or_404(transaction_id)
+    product = Product.query.get_or_404(tx.product_id)
 
+    if product.seller_id != current_user.id:
+        flash("You do not have permission to perform this request.","danger")
+        return redirect(url_for("transaction.view_requests"))
+    
+    try:
+        tx.status = "accepted"
+        product.is_sold = True
+        db.session.commit()
+        flash("You have accepted the purchase request.","success")
+    except SQLAlchemyError:
+        db.session.rollback()
+        flash("Error accept the purchase request.","danger")
+
+    return redirect(url_for("transaction.view_requests"))
 
 
 #reject order
+@transaction_bp.route("reject/< int:transaction_id>",methods = ["POST"])
+@login_required
+def reject_request(transaction_id):
+    tx = Transaction.query.get_or_404(transaction_id)
+    product = Product.query.get_or_404(tx.product_id)
 
+    if product.seller_id != current_user.id:
+        flash("You do not have permission to perform this request.","danger")
+        return redirect(url_for("transaction.view_requests"))
+    
+    try:
+        tx.status = "rejected"
+        db.session.commit()
+        flash("You have rejected the purchase request.","success")
+    except SQLAlchemyError:
+        db.session.rollback()
+        flash("Error to reject the purchase request.","danger")
+
+    return redirect(url_for("transaction.view_requests"))
 
 
 #check transaction records  (buyer/seller) 
