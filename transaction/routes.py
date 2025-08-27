@@ -9,7 +9,7 @@ transaction_bp = Blueprint('transaction', __name__, template_folder='templates',
 
 #buyer action
 
-#buyer click product, initiate purchase request
+#buyer click product, initiate purchase request   all return to transaction home
 @transaction_bp.route("/buy/<int:product_id>", methods = ["POST"])
 @login_required
 def buy_product(product_id):
@@ -25,7 +25,12 @@ def buy_product(product_id):
                                            product_id = product_id,
                                            status = "pending").first() 
     if existing:
-        flash("You have already requested to purchase this product","info")
+        flash("You have already requested to purchase this product.","info")
+        return redirect(url_for("transaction.home"))
+
+    #prevent seller buy own product
+    if product.seller_id == current_user.id:
+        flash("You cannot buy your own product.","warning")
         return redirect(url_for("transaction.home"))
 
     #save in database
@@ -44,7 +49,7 @@ def buy_product(product_id):
 
         return redirect(url_for("transaction.index"))
 
-#check transaction record & check request    
+#check transaction record & check request  all return to my_transactions  
 @transaction_bp.route("/my_transactions") 
 @login_required
 def my_transaction():
@@ -106,5 +111,5 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
 #transaction front page
 @transaction_bp.route("/")
 def index():
-    return render_template("transaction/transaction.html")
+    return render_template("transaction.home")
 
