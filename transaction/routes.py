@@ -28,6 +28,7 @@ def buy_product(product_id):
         flash("You have already requested to purchase this product","info")
         return redirect(url_for("transaction.home"))
 
+    #save in database
     try:
         new_transaction = Transaction (buyer_id = current_user.id,
                                    product_id = product_id,
@@ -63,6 +64,16 @@ def confirm_receipt(transaction_id):
     if transaction.status != "shipped":
         flash ("You can only confirm after the product is shipped.","waining")
         return redirect(url_for("transaction.my_transactions"))
+    
+     #change status
+    try:
+        transaction.status = "completed"
+        transaction.created_at = datetime.mow(timezone.utc)
+        db.session.commit()
+    except SQLAlchemyError:
+        db.session.rollback()
+        flash("Error confirming transaction.","danger")
+    return redirect(url_for("transaction/my_transactions"))
     
 
 
