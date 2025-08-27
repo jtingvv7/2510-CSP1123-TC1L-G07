@@ -49,13 +49,8 @@ def buy_product(product_id):
 
         return redirect(url_for("transaction.index"))
 
-#check transaction record & check request  all return to my_transactions  
-@transaction_bp.route("/my_transactions") 
-@login_required
-def my_transaction():
-    transactions = Transaction.query.filter_by(buyer_id = current_user.id).all  #check all owner by current user transaction record
-    return render_template("transaction/my_transactions.html", transactions = transactions )
 
+#complete transaction
 @transaction_bp.route("/confirm/< int:transaction_id>",methods = ["POST"])
 @login_required
 def confirm_receipt(transaction_id):
@@ -81,7 +76,6 @@ def confirm_receipt(transaction_id):
     return redirect(url_for("transaction/my_transactions"))
     
 
-
 #buyer want to cancel transaction when pending state
 @transaction_bp.route("cancel/ <int: trancaction_id >",methods = ["POST"])
 @login_required
@@ -106,6 +100,41 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
     return redirect(url_for("transaction.my_transactions"))
 
 
+#seller action
+
+#check request
+@transaction_bp.route("/my_requests")
+@login_required
+def view_requests():
+    requests = Transaction.query.join(Product).filter(
+        Product.seller_id == current_user.id,
+            Transaction.status =="pending"   ).all()
+    return redirect("transaction/my_request.html", requests = requests)
+
+#seller accept order
+@transaction_bp.route("accept/< int:transaction_id>",methods = ["POST"])
+@login_required
+def accept_transaction(transaction_id):
+    transaction = Transaction.query.get_or_404(transaction_id)
+    
+
+
+
+#reject order
+
+
+
+#check transaction records  (buyer/seller) 
+@transaction_bp.route("/my_transactions") 
+@login_required
+def my_transaction():#check all owner by current user transaction record
+    bought_transactions = Transaction.query.filter_by(buyer_id = current_user.id).all()  
+
+    sold_transactions = Transaction.query.filter_by(seller_id = current_user.id).all()
+
+    return render_template("transaction/my_transactions.html", 
+                           bought_transactions = bought_transactions,
+                            sold_transactions = sold_transactions )
 
 
 #transaction front page
