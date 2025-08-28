@@ -1,10 +1,11 @@
+import logging
 from flask import Blueprint, render_template, redirect, url_for , flash
 from flask_login import  login_required , current_user
 from datetime import datetime, timezone
 from models import db, Product, Transaction
 from sqlalchemy.exc import SQLAlchemyError
 
-
+logging.basicConfig(level = logging.INFO, filename = "app.log")
 transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
 
 #buyer action
@@ -37,13 +38,14 @@ def buy_product(product_id):
     try:
         new_transaction = Transaction (buyer_id = current_user.id,
                                    product_id = product_id,
-                                   status = Transaction.status_pending,
-                                   created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc)))  #use a constant 
+                                   status = "pending")
         db.session.add(new_transaction)
         db.session.commit()
         flash("Purchase request send! Waiting for seller confirmation","success")
-    except SQLAlchemyError: 
+    except SQLAlchemyError as e: #e will save the wrong object
         db.session.rollback()
+        logging.error( f"Transaction creation failed: buyer_id ={current_user.id},product_id = {product_id}. Error:{e}",
+                      exc_info = True ) #save in app log thn we can know 
         flash("An error occurred while processing your request.","danger")
 
 
@@ -111,6 +113,7 @@ def view_requests():
             Transaction.status =="pending"   ).all()
     return render_template("transaction/view_requests.html", requests = requests)
 
+
 #seller accept order
 @transaction_bp.route("/accept/<int:transaction_id>",methods = ["POST"])
 @login_required
@@ -127,8 +130,10 @@ def accept_transaction(transaction_id):
         product.is_sold = True
         db.session.commit()
         flash("You have accepted the purchase request.","success")
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
         db.session.rollback()
+        logging.error( f"Transaction creation failed: buyer_id ={current_user.id},product_id = {tx.product_id}. Error:{e}",
+                      exc_info = True )
         flash("Error accept the purchase request.","danger")
 
     return redirect(url_for("transaction/view_requests"))
