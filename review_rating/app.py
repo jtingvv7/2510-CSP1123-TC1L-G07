@@ -20,17 +20,8 @@ class Review(db.Model):
     comment = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now()) 
 
-# If database already exist，delete and create new one
-if os.path.exists(DB_NAME):
-    print("old database deleted，creating new one...")
-    os.remove(DB_NAME)
-
 with app.app_context():
     db.create_all()
-    sample_review = Review(username="Alice", rating=5, comment="Great product!")
-    db.session.add(sample_review)
-    db.session.commit()
-
 
 
 
@@ -46,9 +37,12 @@ def index():
 @app.route("/add", methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
-        username = request.form.get('name')
+        username = request.form.get('username')
         rating = int(request.form.get('rating'))
         comment = request.form.get('comment')
+
+        if not username or not comment:
+            return "Username and Comment cannot be emty!", 400
 
         new_review = Review(username=username, rating=rating, comment=comment)
         db.session.add(new_review)
