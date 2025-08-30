@@ -3,15 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
+# SQLite
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+# Order Model
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.String(20), unique=True, nullable =False)
-    amount = db.Column(db.Float, nullable =False)
+    order_id = db.Column(db.String(20), unique=True, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
     currency = db.Column(db.String(10), default= "MYR")
 
 
@@ -26,6 +28,7 @@ with app.app_context():
 
 
 
+# Main Page: Display Order ID and Payment Methods
 @app.route("/")
 def index():
     order = Order.query.first()
