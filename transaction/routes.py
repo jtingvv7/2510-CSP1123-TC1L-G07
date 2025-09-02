@@ -6,7 +6,7 @@ from models import db, Product, Transaction
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
-transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
+transaction_bp = Blueprint('transaction', __name__, template_folder='transaction/templates', static_folder='transaction/static')
 
 #buyer action
 
@@ -17,7 +17,7 @@ def buy_product(product_id):
     product = Product.query.get_or_404(product_id)
 
     #check if product is available
-    if not product.is_sold == False:
+    if product.is_sold == True:
         flash("Product is not available for purchase.","warning")
         return redirect (url_for("transaction.home"))
     
@@ -38,6 +38,7 @@ def buy_product(product_id):
     try:
         new_transaction = Transaction (buyer_id = current_user.id,
                                    product_id = product_id,
+                                   seller_id =product.seller_id,
                                    status = "pending")
         db.session.add(new_transaction)
         db.session.commit()
@@ -65,31 +66,31 @@ def confirm_receipt(transaction_id):
     #only can complete when shipped 
     if transaction.status != "shipped":
         flash ("You can only confirm after the product is shipped.","warning")
-        return redirect(url_for("transaction/my_transactions"))
+        return redirect(url_for("transaction.my_transactions"))
     
      #change status
     try:
         transaction.status = "completed"
-        transaction.created_at = datetime.mow(timezone.utc)
+        transaction.created_at = datetime.now(timezone.utc)
         db.session.commit()
     except SQLAlchemyError:
         db.session.rollback()
         flash("Error confirming transaction.","danger")
-    return redirect(url_for("transaction/my_transactions"))
+    return redirect(url_for("transaction.my_transactions"))
     
 
 #buyer want to cancel transaction when pending state
-@transaction_bp.route("/cancel/<int:transaction_id >",methods = ["POST"])
+@transaction_bp.route("/cancel/<int:transaction_id>",methods = ["POST"])
 @login_required
 def cancel_transaction(transaction_id): #user cannot delete transaction for others
     transaction = Transaction.query.get_or_404(transaction_id)
     if transaction.buyer_id != current_user.id :
         flash("You cannot cancel this transaction.","warning")
-        return redirect(url_for("transaction/my_transactions"))
+        return redirect(url_for("transaction.my_transactions"))
     
     if transaction.status != "pending": #only transaction in pending state can be cancelled
         flash("Only pending requests can be cancelled,","warning")
-        return redirect(url_for("transaction/my_transactions"))
+        return redirect(url_for("transaction.my_transactions"))
     
     try:
         transaction.status = "cancelled"
@@ -99,7 +100,7 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
         db.session.rollback()
         flash("Error cancelling transaction.","danger")
 
-    return redirect(url_for("transaction/my_transactions"))
+    return redirect(url_for("transaction.my_transactions"))
 
 
 #seller action
@@ -123,20 +124,19 @@ def accept_transaction(transaction_id):
 
     if product.seller_id != current_user.id:
         flash("You do not have permission to perform this request.","danger")
-        return redirect(url_for("transaction/view_requests"))
+        return redirect(url_for("transaction.view_requests"))
     
     try:
         tx.status = "accepted"
-        product.is_sold = True
         db.session.commit()
         flash("You have accepted the purchase request.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
-        logging.error( f"Transaction creation failed: buyer_id ={current_user.id},product_id = {tx.product_id}. Error:{e}",
+        logging.error( f"Transaction accept failed, buyer_id ={current_user.id},product_id = {tx.product_id}. Error:{e}",
                       exc_info = True )
         flash("Error accept the purchase request.","danger")
 
-    return redirect(url_for("transaction/view_requests"))
+    return redirect(url_for("transaction.view_requests"))
 
 
 #reject order
@@ -148,7 +148,7 @@ def reject_request(transaction_id):
 
     if product.seller_id != current_user.id:
         flash("You do not have permission to perform this request.","danger")
-        return redirect(url_for("transaction/view_requests"))
+        return redirect(url_for("transaction.view_requests"))
     
     try:
         tx.status = "rejected"
@@ -158,7 +158,7 @@ def reject_request(transaction_id):
         db.session.rollback()
         flash("Error to reject the purchase request.","danger")
 
-    return redirect(url_for("transaction/view_requests"))
+    return redirect(url_for("transaction.view_requests"))
 
 
 #check transaction records  (buyer/seller) 
@@ -175,7 +175,7 @@ def my_transaction():#check all owner by current user transaction record
 
 
 #transaction front page
-@transaction_bp.route("/")
+@transaction_bp.route("/home")
 def home():
-    return render_template("transaction_home.html")
+    return render_template("transaction/home.html")
 
