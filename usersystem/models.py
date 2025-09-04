@@ -24,8 +24,7 @@ class Product(db.Model):
 
     def __repr__(self):
         return f"<Product {self.id} {self.name}>"
-
-# SafeLocation model
+      
 class SafeLocation(db.Model):
     __tablename__ = 'safelocation'
     id = db.Column(db.Integer, primary_key=True)

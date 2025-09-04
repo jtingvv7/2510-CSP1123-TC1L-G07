@@ -20,20 +20,23 @@
   <div class="checkout-box">
     <h2>Checkout</h2>
     <p>Order: <b>{{ order.order_id }}</b></p>
-    <p>Total: <b>RM {{ '%.2f' % (order.amount/100) }}</b></p>
-
+    <p>Total: <b>RM {{ '%.2f' |format(order.amount) }}</b></p>
+    
+    <form id="paymentForm" method="GET">
     <div>
       <input type="radio" id="card" name="payment_method" value="card" checked>
       <label class="payment-method" for="card">
         <img src="https://img.icons8.com/color/96/visa.png" alt="Card"> Credit/Debit Card
       </label>
     </div>
+
     <div>
       <input type="radio" id="grabpay" name="payment_method" value="grabpay">
       <label class="payment-method" for="grabpay">
         <img src="https://img.icons8.com/color/96/google-pay.png" alt="GrabPay"> GrabPay (Wallet)
       </label>
     </div>
+
     <div>
       <input type="radio" id="fpx" name="payment_method" value="fpx">
       <label class="payment-method" for="fpx">
@@ -41,36 +44,24 @@
       </label>
     </div>
 
-    <button class="pay-btn" id="payBtn">Proceed to Pay</button>
-  </div>
+    <button class="pay-btn" type="submit">Proceed to Pay</button>
+    </form>
 
-<script>
-  document.getElementById('payBtn').addEventListener('click', async () => {
-    const selected = document.querySelector('input[name="payment_method"]:checked').value;
 
-    try {
-      const res = await fetch('/create-checkout-session', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ payment_method: selected })
+    <script>
+      document.getElementById("paymentForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const choice = document.querySelector('input[name="payment_method"]:checked').value;
+        if (choice === "card") {
+          this.action = "/card";
+        } else if (choice === "grabpay") {
+          this.action = "/grabpay";
+        } else if (choice === "fpx") {
+          this.action = "/fpx";
+        }
+        this.submit();
       });
-
-      if (!res.ok) {
-        throw new Error("Server returned " + res.status);
-      }
-
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url; // to Stripe Checkout
-      } else {
-        alert("Error: " + JSON.stringify(data));
-      }
-    } catch (err) {
-      alert("Fetch error: " + err);
-      console.error(err);
-    }
-  });
-</script>
+    </script>
+  </div>
 </body>
 </html>

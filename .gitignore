@@ -1,2 +1,6 @@
-# ===Eviroment File===
-.env
+__pycache--/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
