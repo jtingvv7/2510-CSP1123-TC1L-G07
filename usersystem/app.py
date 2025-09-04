@@ -1,12 +1,14 @@
 import os
-from flask import Flask, render_template, request, redirect, jsonify, url_for
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 import stripe
 from dotenv import load_dotenv
+
+from main import app, db
+from models import User
 
 load_dotenv()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-app = Flask(__name__)
 
 order_data = {
     "order_id": "SECONDLOOP_123456",
@@ -19,6 +21,26 @@ order_data = {
 def login():
     return render_template("login.html", order=order_data)
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        # handle form submission
+        name = request.form.get("name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        # save user into db 
+        from main import db
+        from models import User
+        new_user = User(name=name, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash("🎉 Registration successful! Welcome, " + name, "success")
+        return redirect(url_for("profile"))  # go to profile after register
+
+    # if GET, just show the form
+    return render_template("register.html")
 
 
 @app.route("/profile")
