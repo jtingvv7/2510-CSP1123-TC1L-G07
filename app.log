@@ -1,0 +1,83 @@
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:24:16] "[35m[1mGET /transaction/home HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:24:16] "GET /transaction/home?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:24:16] "GET /transaction/home?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:24:16] "GET /transaction/home?__debugger__=yes&cmd=resource&f=console.png&s=qC6Y27JnUlYJ6r2jfQp7 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:24:16] "GET /transaction/home?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:27:40] "[35m[1mGET /transaction/home HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:27:40] "[36mGET /transaction/home?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:27:40] "[36mGET /transaction/home?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:27:40] "GET /transaction/home?__debugger__=yes&cmd=resource&f=console.png&s=q99MI7v1grdndmTe4rWm HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 21:27:40] "[36mGET /transaction/home?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:00:33] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:00:33] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:00:33] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:00:33] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=0FekkqftlwyIEuTEFPNk HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:00:33] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:41] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:41] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:41] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:41] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=YRBlc4ieYkmG80mvjoZb HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:41] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=YRBlc4ieYkmG80mvjoZb HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=YRBlc4ieYkmG80mvjoZb HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:06:42] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:26] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:26] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:26] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:26] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=YRBlc4ieYkmG80mvjoZb HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:26] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=YRBlc4ieYkmG80mvjoZb HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=YRBlc4ieYkmG80mvjoZb HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:11:28] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\secondloop\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
