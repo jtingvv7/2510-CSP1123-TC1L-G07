@@ -28,6 +28,7 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable = True) #can be empty
     is_sold = db.Column(db.Boolean, default = True)
     date_posted = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+
 #relationship
     transactions = db.relationship('Transaction', backref = 'product',lazy = True)
 
@@ -52,7 +53,6 @@ class Transaction(db.Model):
 
     def __repr__(self):
         return f"<Transaction {self.id}  {self.status}>"
-
 
 #messaging db
 class Messages(db.Model):
