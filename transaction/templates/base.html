@@ -16,7 +16,7 @@
     <nav class=" navbar navbar-expand-lg navbar-dark bg-dark">
         <!--cls=navbar = navigation bar-->  <!--expand-lg = adapt to screen size--> <!--dark = word automitic bcm light color whn in dark bg-->
         <div class=" container-fluid"> <!--navigation bar fill the entire width-->
-            <a class="navbar-brand" href="{{url_for('index')}}">Second Loop</a>
+            <a class="navbar-brand" href="{{url_for('home_index')}}">Second Loop</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -26,7 +26,7 @@
                         <a class="nav-link" href="{{url_for('transaction.my_transaction')}}">My Transaction</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for(view_requests)}}">View Requests</a>
+                        <a class="nav-link" href="{{url_for(transaction.view_requests)}}">View Requests</a>
                     </li>
                 </ul>
             </div>

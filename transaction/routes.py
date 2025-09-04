@@ -2,11 +2,12 @@ import logging
 from flask import Blueprint, render_template, redirect, url_for , flash
 from flask_login import  login_required , current_user
 from datetime import datetime, timezone
-from models import db, Product, Transaction
+from models import db
+from models import Product, Transaction
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
-transaction_bp = Blueprint('transaction', __name__, template_folder='transaction/templates', static_folder='transaction/static')
+transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
 
 #buyer action
 
@@ -43,6 +44,8 @@ def buy_product(product_id):
         db.session.add(new_transaction)
         db.session.commit()
         flash("Purchase request send! Waiting for seller confirmation","success")
+        return redirect(url_for("transaction.home"))
+    
     except SQLAlchemyError as e: #e will save the wrong object
         db.session.rollback()
         logging.error( f"Transaction creation failed: buyer_id ={current_user.id},product_id = {product_id}. Error:{e}",
