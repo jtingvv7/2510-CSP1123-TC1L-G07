@@ -1,8 +1,9 @@
 from extensions import db
 from datetime import datetime, timezone
+from flask_login import UserMixin
 
 #user db
-class User(db.Model):
+class User(db.Model,UserMixin):
     #__tablename__ = 'user'
     id = db.Column (db.Integer, primary_key = True) #primary key
     name = db.Column (db.String(30), nullable = False, unique = True) #nullable = cannot be empty, unique = cannot same with others

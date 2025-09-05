@@ -1,13 +1,25 @@
 import logging
 from flask import Blueprint, render_template, redirect, url_for , flash
-from flask_login import  login_required , current_user
+from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
-from models import Product, Transaction
+from models import User, Product, Transaction
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
+
+#use for test user login in transaction system !!!!!!!
+@transaction_bp.route("/fake_login")
+def fake_login():
+    user = User.query.first()
+    if not user:
+        user = User(name="test",password="123",email="test@gmail.com")
+        db.session.add(user)
+        db.session.commit()
+    login_user(user)
+    return f"You are now logged in as {user.name} "
+
 
 #buyer action
 
