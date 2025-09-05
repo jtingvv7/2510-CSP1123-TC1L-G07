@@ -12,8 +12,12 @@
       <h1>Register</h1>
       <form method="POST" action="{{url_for('register')}}">
         <div class="input-box">
-          <input type="email" name= "email" placeholder="student email" required>
+          <input type="text" name="name" placeholder="user name" required>
           <i class='bx bxs-user'></i>
+        </div>
+        <div class="input-box">
+          <input type="email" name= "email" placeholder="student email" required>
+          <i class='bx bx-envelope'></i>
         </div>
         <div class="input-box">
           <input type="password" name="password" placeholder="password" required>
