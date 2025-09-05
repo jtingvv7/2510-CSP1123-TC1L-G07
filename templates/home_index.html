@@ -1,9 +1,75 @@
 {% extends "base.html" %}
 
-{% block title %} Second Loop {% endblock %}
+{% block title %}Second Loop - MMU Second Hand Trading Platform{% endblock %}
 
 {% block content %}
-    <h1>Welcome to Second Loop</h1>
-    <p>haha</p>
-
+<div class="row mt-5">
+    <div class="col-lg-8 mx-auto text-center">
+        <h1 class="display-4 mb-4">
+            <i class="bi bi-arrow-repeat text-primary"></i>
+            Welcom to Second Loop
+        </h1>
+        <p class="lead mb-5">MMU Second Hand Trading Platform - Make items valuable again</p>
+        
+        <div class="alert alert-info mb-4">
+            <i class="bi bi-shield-check"></i>
+            <strong>MMU Exclusive Platform</strong> - Only @student.mmu.edu.my registration is allowed
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-shop text-primary" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Product List</h5>
+                        <p class="card-text">Buy and sell to hepl items find new owners</p>
+                        <a href="{{ url_for('transaction.home') }}" class="btn btn-primary">Start to Trading</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-star text-warning" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Review</h5>
+                        <p class="card-text">View and post product reviews</p>
+                        <a href="{{ url_for('review_rating.review') }}" class="btn btn-warning">View Review</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-credit-card text-success" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Payment</h5>
+                        <p class="card-text">Multiple payment methods，Trading are more safer</p>
+                        <a href="{{ url_for('payment.payment') }}" class="btn btn-success">Payment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-5">
+            <h3>Why choose Second Loop？</h3>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Campus Exclusive，Safe and Reliable</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Multiple Payment Methods</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Real-time Transaction Status Tracking</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> User Rating System</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Convenient Communication Tool</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success"></i> Frendly Design</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

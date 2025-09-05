@@ -1,38 +1,90 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Rating & Review</title>
-    <style>
-        body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: o;}
-        header {background: linear-gradient(90deg, #4e73df, #1cc88a); color: white; padding: 20px; text-align: center;}
-        h1 {margin: 0;}
-        .container {width: 60%; margin: 30px auto; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0, 1);}
-        a.button {display: inline-block; padding: 10px 20px; background: #1cc88a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s;}
-        a.button:hover {background: #17a673;}
-        ul {list-style: none; padding: 0;}
-        li {background: #f1f3f6; margin-bottom: 15px; padding: 15px; border-radius: 8px;}
-        li strong {font-size: 18px;}
-        li small {color: gray; font-size: 12px;}
+{% extends "base.html" %}
 
-    </style>
-</head>
-<body>
-    <header>
-        <h1>All Reviews</h1>
-    </header>
-    <div class="container">
-        <a href="/add" class="button">Add a Review</a>
-        <ul>
-            {% for review in reviews %}
-            <li>
-                <strong>{{ review.username }}</strong>({{ review.ratign }}/5)<br>
-                <p>{{ review.comment }}</p>
-                <small>{{ review.create_at }}</small>
+{% block title %}Ratin System - Second Loop{% endblock %}
 
-            </li>
-            {% endfor %}
-        </ul>
+{% block content %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="bi bi-star text-warning"></i>
+            User Rating System
+        </h1>
     </div>
-</body>
-</html>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <h4><i class="bi bi-chat-dots"></i> User Reviews</h4>
+                <hr>
+                
+                {% if reviews %}
+                    {% for review in reviews %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="card-title">{{ review.username }}</h6>
+                                    <div class="mb-2">
+                                        {% for i in range(5) %}
+                                            {% if i < review.rating %}
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            {% else %}
+                                                <i class="bi bi-star text-muted"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <p class="card-text">{{ review.comment }}</p>
+                                </div>
+                                <small class="text-muted">{{ review.created_at.strftime('%Y-%m-%d') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        There are no reviews yet. Be the first to review this product！
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5><i class="bi bi-plus-circle"></i> Post a Review</h5>
+                <hr>
+                
+                <a href="{{ url_for('review_rating.add') }}" class="btn btn-warning w-100 mb-3">
+                    <i class="bi bi-star"></i> Add Review
+                </a>
+                
+                <hr>
+                
+                <h6><i class="bi bi-bar-chart"></i> Review Statistics</h6>
+                <div class="text-center">
+                    <div class="display-6 text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        {% if reviews %}
+                            {{ "%.1f"|format(reviews|map(attribute='rating')|sum / reviews|length) }}
+                        {% else %}
+                            0.0
+                        {% endif %}
+                    </div>
+                    <p class="text-muted">Average Rating</p>
+                </div>
+                
+                <div class="mt-3">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check"></i>
+                        All reviews are moderated to ensure authenticity
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,9 @@
-from extensions import db
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
+
+
+db = SQLAlchemy()
+
 
 #user db
 class User(db.Model):
@@ -70,22 +74,14 @@ class Messages(db.Model):
     def __repr__(self):
         return f"<Messages {self.id} from {self.sender_id} to {self.receiver_id}>"
     
-#review & rating db
+# Review Model
 class Review(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
-    rating= db.Column(db.Integer, nullable = False)
-    comment = db.Column(db.Text, nullable = True)
-    date_review = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
-
-#relationship
-    sender = db.relationship('User', foreign_keys=[buyer_id], backref='sender', lazy = True)
-    receiver = db.relationship('User', foreign_keys=[seller_id], backref='reveiver', lazy = True)
-
-    def __repr__(self):
-        return f"<Review {self.id} :buyer rate {self.rating}>"
+    __tablename__ = 'reviews'  # Create table name
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now()) 
     
 #location db
 class SafeLocation(db.Model):
@@ -100,25 +96,12 @@ class SafeLocation(db.Model):
         return f"<Safe Location : {self.name}>"
 
 
-class Wallet(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    balance = db.Column(db.Float, default = 0.0)
-
-    def __repr__(self):
-        return f"<Wallet {self.user_id} balance {self.balance}>"
-    
-class Payment(db.Model):
-    id =db.Column(db.Integer, primary_key = True)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
-    payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    amount = db.Column(db.Float, nullable = False)
-    method =db.Column(db.String(20), nullable= False) #wallet / online / offline
-    status = db.Column(db.String(20), default = 'pending') #pending / success / fail
-    date_created = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
-    
-    def __repr__(self):
-        return f"<Payment {self.id} amount: {self.amount}>"
+# Order Model
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.String(20), unique=True, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(10), default= "MYR")
 
 
     

@@ -1,43 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Add Review</title>
-        <style>
-        body {font-family: Arial, Helvetica, sans-serif; background: #f5f5f5; margin: 0; padding: 40px;}
-        .container {max-height: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0, 0, 0, 1);}
-        h2 {text-align: center; margin-bottom: 20px;}
-        label {display: block; margin: 10px 0 5px; font-weight: bold;}
-        input, textarea {width: 98.5%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: 14px; margin-right: 100px;}
-        select {width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: 14px; margin-right: 100px;}
-        textarea {resize: vertical; min-height: 100px;}
-        button:hover {background: #0f9c45;}
-        button {margin-top: 10px; width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;}
-        a {display: block; text-align: center; color: #666; border: none; border-radius: 6px; font-family: 16px; cursor: pointer;}
-        p {color: #666; font-family: 14px; margin-top: 10px; text-align: center;}
-    </style>
-</head>
-<body>
-    <div class="container">
-    <h2>Add a Reviews</h2>
-    <form action="/add" method="POST" class="review-form">
-        <label for="username">User Name</label>
-        <input type="text" id="username" name="username" placeholder="Your name" required>
+{% extends "base.html" %}
 
-        <label>Rating</label>
-        <select id="rating" name="rating" required>
-            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
-            <option value="4">⭐️⭐️⭐️⭐️</option>
-            <option value="3">⭐️⭐️⭐️</option>
-            <option value="2">⭐️⭐️</option>
-            <option value="1">⭐️</option>
-        </select>
+{% block title %}Add Review - Second Loop{% endblock %}
 
-        <label for="comment">Comment</label>
-        <textarea name="comment" placeholder="Write your review..." required></textarea>
-
-        <button type="submit">Add</a></button>
-    </form>
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4">
+                    <i class="bi bi-star text-warning"></i>
+                    Add Review
+                </h2>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="请输入您的用户名" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <select class="form-select" id="rating" name="rating" required>
+                            <option value="">Please Select a Rating</option>
+                            <option value="1">⭐ 1 Star</option>
+                            <option value="2">⭐⭐ 2 Star</option>
+                            <option value="3">⭐⭐⭐ 3 Star</option>
+                            <option value="4">⭐⭐⭐⭐ 4 Star</option>
+                            <option value="5">⭐⭐⭐⭐⭐ 5 Star</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Review Content</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="4" 
+                                  placeholder="Please share your review..." required></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-warning btn-lg" type="submit">
+                            <i class="bi bi-star"></i> Submit Review
+                        </button>
+                        <a href="{{ url_for('review_rating.review') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back
+                        </a>
+                    </div>
+                </form>
+                
+                <div class="mt-3 text-center">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i>
+                        Your review will help others user!
+                    </small>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

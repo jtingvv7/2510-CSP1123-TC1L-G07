@@ -1,29 +1,31 @@
 import logging
-from flask import Flask, render_template
-from extensions import db  
+from flask import Flask, render_template, redirect, url_for
+from models import db
+
+app = Flask(__name__)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///secondloop.db"  #connect database
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+logging.basicConfig(level = logging.INFO, filename = "app.log") #for creators can see errors
+
+db.init_app(app)
 
 
-def create_app():
-    app = Flask(__name__)    
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///secondloop.db"  #connect database
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+from payment.payment import payment_bp
+from review_rating.review import review_bp
 
-    logging.basicConfig(level = logging.INFO, filename = "app.log") #for creators can see errors
+# register blueprint
 
-    db.init_app(app)
-
-    from transaction.routes import transaction_bp
-    # register blueprint
-    app.register_blueprint(transaction_bp, url_prefix="/transaction")
+app.register_blueprint(payment_bp, url_prefix="/payment")
+app.register_blueprint(review_bp, url_prefix="/review")
     
-    @app.route("/")
-    def index():
-        return render_template ("home_index.html")
-    
-    return app
+
+@app.route("/")
+def home():
+    return render_template ("home_index.html")
 
 
 if __name__ == "__main__":
-    app = create_app()
     app.run(debug=True)
 

@@ -1,22 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Rating & Review</title>
-    <style>
-    body {font-family: Arial, Helvetica, sans-serif; text-align: center; padding: 50px; background: #f5f5f5;}
-    .message {background: #fff; padding: 30px; border-radius: 10px; display: inline-block; box-shadow: 0 4ps 10px rgba(0,0,0,0.1);}
-    h1 {color: #28a745;}
-    a { display: inline-block; margin-top: 20px; text-decoration: none; color: #fff; background: #ee4d2d; padding: 10px 20px; border-radius: 5px;}
-    a:hover {background: #d63c1f;}
-</style>
-</head>
-<body>
-    <div class="message">
-        <h1>Rate and Review Success!</h1>
-        <p>Your action was successful.</p>
-        <p>Have a Nice Day!</p>
-        <a href="/">Go Back to Home</a>
+{% extends "base.html" %}
+
+{% block title %}Comment Successful - Second Loop{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow text-center">
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                </div>
+                
+                <h2 class="text-success mb-3">Review Submit Successful！</h2>
+                
+                <p class="lead">Thank you for your review！</p>
+                <p class="text-muted">Your review will help others user!</p>
+                
+                <div class="mt-4">
+                    <a href="{{ url_for('review_rating.review') }}" class="btn btn-primary me-2">
+                        <i class="bi bi-star"></i> View all Reviews
+                    </a>
+                    <a href="{{ url_for('home') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-house"></i> Back to Home Page
+                    </a>
+                </div>
+                
+                <div class="mt-4">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i>
+                        Review will be displayed after approval
+                    </small>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

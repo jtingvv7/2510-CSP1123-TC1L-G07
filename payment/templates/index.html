@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - Second Loop{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4">
+                    <i class="bi bi-credit-card text-primary"></i>
+                    Payment
+                </h2>
+                
+                <div class="alert alert-info">
+                    <h5>Order Details</h5>
+                    <p class="mb-1">Order ID: <strong>{{ order.order_id }}</strong></p>
+                    <p class="mb-0">Ammount: <strong>RM {{ "%.2f"|format(order.amount) }}</strong></p>
+                </div>
+                
+                <form id="paymentForm" method="GET">
+                    <h5 class="mb-3">Select Payment Method</h5>
+                    
+                    <div class="mb-3">
+                        <input type="radio" id="card" name="payment_method" value="card" checked class="form-check-input">
+                        <label class="form-check-label d-flex align-items-center p-3 border rounded" for="card">
+                            <i class="bi bi-credit-card text-primary me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <strong>Credit Crad/Debit Card</strong>
+                                <br><small class="text-muted">Support Visa, MasterCard</small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="radio" id="grabpay" name="payment_method" value="grabpay" class="form-check-input">
+                        <label class="form-check-label d-flex align-items-center p-3 border rounded" for="grabpay">
+                            <i class="bi bi-wallet2 text-success me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <strong>GrabPay Wallet</strong>
+                                <br><small class="text-muted">Fast and Secure E-Wallet Payments</small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="radio" id="fpx" name="payment_method" value="fpx" class="form-check-input">
+                        <label class="form-check-label d-flex align-items-center p-3 border rounded" for="fpx">
+                            <i class="bi bi-bank text-info me-3" style="font-size: 2rem;"></i>
+                            <div>
+                                <strong>FPX</strong>
+                                <br><small class="text-muted">Support Major Bank in Malaysia</small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="bi bi-credit-card"></i> Pay Now
+                        </button>
+                        <a href="{{ url_for('payment.payment_cancel') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel Payment
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById("paymentForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const choice = document.querySelector('input[name="payment_method"]:checked').value;
+    
+    if (choice === "card") {
+        this.action = "{{ url_for('payment.card') }}";
+    } else if (choice === "grabpay") {
+        this.action = "{{ url_for('payment.grabpay') }}";
+    } else if (choice === "fpx") {
+        this.action = "{{ url_for('payment.fpx') }}";
+    }
+    this.submit();
+});
+</script>
+{% endblock %}
