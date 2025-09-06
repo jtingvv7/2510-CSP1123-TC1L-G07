@@ -8,6 +8,15 @@
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="msg {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
   <div class="wrapper">
       <h1>Register</h1>
       <form method="POST" action="{{url_for('register')}}">
@@ -23,10 +32,6 @@
           <input type="password" name="password" placeholder="password" required>
           <i class='bx bxs-lock'></i>
         </div>
-        <div class="input-box">
-          <input type="password" name="confirm_password" placeholder="check your password" required>
-          <i class='bx bxs-lock-alt' ></i>
-        </div>
         <div class="login-link">
         <p>Already have an account? <a href="{{ url_for('login') }}">login</a>
       </div>
@@ -40,5 +45,14 @@
 
     </form>
   </div>
+  <script>
+  setTimeout(() => {
+    document.querySelectorAll('.msg').forEach(msg => {
+      msg.style.transition = "opacity 0.5s ease";
+      msg.style.opacity = "0";
+      setTimeout(() => msg.remove(), 500);
+    });
+  }, 3000); // hides after 3 seconds
+</script>
 </body>
 </html>
