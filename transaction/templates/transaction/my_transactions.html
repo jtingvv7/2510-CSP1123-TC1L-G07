@@ -3,7 +3,7 @@
 {% block title %}My transaction {% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Welcome to my transaction</h1>
+<h1 class="mb-4 text-center">Welcome to my transaction</h1> 
 
 <!--bought product-->
 <h3>Bought Transactions</h3>
@@ -25,7 +25,7 @@
                 <td>{{ t.status }}</td>
                 <td>
                     {% if t.status == "pending" %}
-                        <form action = "{{ url_for('transaction.cancel_transactions', transaction_id =t.id) }}" method="POST">
+                        <form action = "{{ url_for('transaction.cancel_transaction', transaction_id =t.id) }}" method="POST">
                             <button type ="submit" class="btn btn-danger btn-sm">Cancel</button>
                         </form>
                     {% endif %}
