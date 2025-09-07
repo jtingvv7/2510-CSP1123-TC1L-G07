@@ -39,7 +39,25 @@ def fake_transaction():
     ]
     db.session.add_all(fake_data)
     db.session.commit()
-    return "Fake transactions"
+    return "Fake transactions inserted"
+
+#use for test view requests
+@transaction_bp.route("/fake_purchase")
+def fake_purchase():
+    buyer_id = 999
+    seller_id = current_user.id
+    fake_requests = [
+        Transaction(product_id="111",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+        Transaction(product_id="222",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+        Transaction(product_id="1018",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+    ]
+    db.session.add_all(fake_requests)
+    db.session.commit()
+    return "Fake purchase requests inserted"
+
+
+
+
 
 #buyer action
 
@@ -144,9 +162,9 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
 @transaction_bp.route("/view_requests")
 @login_required
 def view_requests():
-    requests = Transaction.query.join(Product).filter(
-        Product.seller_id == current_user.id,
-            Transaction.status =="pending"   ).all()
+    requests = Transaction.query.filter(
+        Transaction.seller_id == current_user.id,
+        Transaction.status == "pending"   ).all()
     return render_template("transaction/view_requests.html", requests = requests)
 
 

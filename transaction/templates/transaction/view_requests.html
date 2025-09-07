@@ -7,7 +7,7 @@
     <h1 class="mb-4 text-center">Purchase Requests</h1>
     {% if requests %}
         <div class="list-group">
-            {& for r in requests &}
+            {% for r in requests %}
                 <div class="list-group-item shadow-sm mb-3">
                     <h5 class="mb-1">Request #{{r.id}} </h5>
                     <p class="mb-1">Product ID : <b>{{r.product_id}}</b></p>
@@ -24,11 +24,11 @@
                         {% endif %}
                     </p>
 
-                    {& if r.status == "pending" &}
+                    {% if r.status == "pending" %}
                         <form action="{{url_for('transaction.accept_transaction',transaction_id=r.id)}}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-sm btn-success">Accept</button>
                         </form>
-                        <form action="{{url_for('transaction.reject_transaction',transaction_id=r.id)}}" method="POST" style="display:inline;">
+                        <form action="{{url_for('transaction.reject_request',transaction_id=r.id)}}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-sm btn-danger">Reject</button>
                         </form>
                     {% endif %}
