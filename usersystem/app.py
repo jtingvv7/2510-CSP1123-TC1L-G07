@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, session
 import stripe
 from dotenv import load_dotenv
 
@@ -9,7 +9,10 @@ from models import User
 load_dotenv()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
+app.config["UPLOAD_FOLDER"] = os.path.join("static", "uploads")
+os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
+#upload photo
 order_data = {
     "order_id": "SECONDLOOP_123456",
     "amount": 99.90,
@@ -26,7 +29,8 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if user and user.password == password:
-            return  redirect(url_for('dashboard'))
+            session["user_id"] = user.id  #save login session
+            return  redirect(url_for('profile'))
         else:
             flash("Invalid email or password, please try again!", "invalid")
             return redirect(url_for('login'))
@@ -70,7 +74,37 @@ def register():
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html", order=order_data)
+    if "user_id" not in session: 
+        return redirect(url_for("login"))
+    
+    user = User.query.get_or_404(session["user_id"])
+    return render_template("profile.html", user=user)
+
+@app.route("/upload_photo", methods=["POST"])
+def upload_photo():
+    user = User.query.get_or_404(session["user_id"])
+
+    if "file" not in request.files:
+        flash("No file part")
+        return redirect(url_for("profile"))
+    
+    file = request.files["file"]
+    if file.filename == "":
+        flash("No file selected")
+        return redirect(url_for("profile"))
+
+    filename = f"user_{user.id}.jpg"
+    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(filepath)
+
+    user.profile_pic = filename
+    db.session.commit()
+
+    flash("Profile photo updated!", "sucess")
+    return redirect(url_for("profile"))
+
+
+
 
 @app.route("/create-checkout-session", methods=["POST"])
 def create_checkout_session():

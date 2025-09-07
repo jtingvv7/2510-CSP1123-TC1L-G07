@@ -21,11 +21,26 @@
 <!-- Profile photo -->
    <div class="profilecard">
     <div class="photo">
-        <img src="profile.jpg" id="photo">
-        <input type="file" id="file">
-        <label for="file" id="uploadbtn"><i class="camera"></i></label>
+        <img src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}" id="photo">
+       <form action="/upload_photo" method="post" enctype="multipart/form-data">
+  <!-- hidden file input -->
+  <input type="file" id="fileInput" name="file" accept="image/*" style="display:none;">
+  
+  <!-- custom button (this triggers file input) -->
+  <label for="fileInput" class="upload-btn">Choose Photo</label>
+  
+  <!-- upload button -->
+  <button type="submit">Upload</button>
+</form>
+
+<!-- current profile photo -->
+<img id="profilePic" src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+      </form>
     </div>
+      <h2>{{ user.name }}</h2>
+      <p>{{ user.email }}</p>
    </div>
+
 
    
 
