@@ -1,13 +1,63 @@
 import logging
 from flask import Blueprint, render_template, redirect, url_for , flash
-from flask_login import  login_required , current_user
+from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
-from models import Product, Transaction
+from models import User, Product, Transaction
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
+
+#clear fake transaction
+@transaction_bp.route("/clear_fake")
+def clear_fake():
+    Transaction.query.delete()
+    db.session.commit()
+    return " All transactions cleared ! "
+
+#use for test user login in transaction system !!!!!!!
+@transaction_bp.route("/fake_login")
+def fake_login():
+    user = User.query.first()
+    if not user:
+        user = User(name="test",password="123",email="test@gmail.com")
+        db.session.add(user)
+        db.session.commit()
+    login_user(user)
+    return f" You are now logged in as {user.name} "
+
+#use for test transaction history
+@transaction_bp.route("/fake_transactions")
+def fake_transaction():
+    buyer_id = current_user.id
+    seller_id = current_user.id
+    fake_data = [
+        Transaction(product_id="0619",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+        Transaction(product_id="201",buyer_id=buyer_id,seller_id=seller_id,status="completed"),
+        Transaction(product_id="333",buyer_id=buyer_id,seller_id=seller_id,status="cancelled"),
+    ]
+    db.session.add_all(fake_data)
+    db.session.commit()
+    return "Fake transactions inserted"
+
+#use for test view requests
+@transaction_bp.route("/fake_purchase")
+def fake_purchase():
+    buyer_id = 999
+    seller_id = current_user.id
+    fake_requests = [
+        Transaction(product_id="111",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+        Transaction(product_id="222",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+        Transaction(product_id="1018",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+    ]
+    db.session.add_all(fake_requests)
+    db.session.commit()
+    return "Fake purchase requests inserted"
+
+
+
+
 
 #buyer action
 
@@ -89,11 +139,11 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
     transaction = Transaction.query.get_or_404(transaction_id)
     if transaction.buyer_id != current_user.id :
         flash("You cannot cancel this transaction.","warning")
-        return redirect(url_for("transaction.my_transactions"))
+        return redirect(url_for("transaction.my_transaction"))
     
     if transaction.status != "pending": #only transaction in pending state can be cancelled
-        flash("Only pending requests can be cancelled,","warning")
-        return redirect(url_for("transaction.my_transactions"))
+        flash("Only pending requests can be cancelled.","warning")
+        return redirect(url_for("transaction.my_transaction"))
     
     try:
         transaction.status = "cancelled"
@@ -103,7 +153,7 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
         db.session.rollback()
         flash("Error cancelling transaction.","danger")
 
-    return redirect(url_for("transaction.my_transactions"))
+    return redirect(url_for("transaction.my_transaction"))
 
 
 #seller action
@@ -112,9 +162,9 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
 @transaction_bp.route("/view_requests")
 @login_required
 def view_requests():
-    requests = Transaction.query.join(Product).filter(
-        Product.seller_id == current_user.id,
-            Transaction.status =="pending"   ).all()
+    requests = Transaction.query.filter(
+        Transaction.seller_id == current_user.id,
+        Transaction.status == "pending"   ).all()
     return render_template("transaction/view_requests.html", requests = requests)
 
 

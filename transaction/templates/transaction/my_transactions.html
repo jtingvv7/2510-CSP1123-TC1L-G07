@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}My transaction {% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center">Welcome to my transaction</h1> 
+
+<!--bought product-->
+<h3>Bought Transactions</h3>
+{% if bought_transactions %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for t in bought_transactions %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.product_id }}</td>
+                <td>{{ t.status }}</td>
+                <td>
+                    {% if t.status == "pending" %}
+                        <form action = "{{ url_for('transaction.cancel_transaction', transaction_id =t.id) }}" method="POST">
+                            <button type ="submit" class="btn btn-danger btn-sm">Cancel</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You haven't bought anything yet.</p>
+{% endif %}
+
+<hr>
+
+<!--sold product-->
+<h3>Sold Transaction</h3>
+{% if sold_transaction %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for t in sold_transactions %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.product_id }}</td>
+                <td>{{ t.status }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You haven't sold anything yet.</p>
+{% endif %}
+
+
+{% endblock %}
