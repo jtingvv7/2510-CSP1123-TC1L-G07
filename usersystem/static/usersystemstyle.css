@@ -160,12 +160,89 @@ body {
   z-index: 500;   /* lower than sidebar */
 }
 
+.profilecard h2 {
+  margin: 0 0 5px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #1e2a47;
+  text-align: left;  
+}
+
+.profilecard p {
+  margin: 0 0 0 20px;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  opacity: 0.9;
+}
+
+/* Upload form container */
+.profilecard form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px; /* push it a bit to align with text */
+}
+
+/* File input */
+.profilecard input[type="file"] {
+ display: none;
+}
+
 .profilecard img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
+   width: 80px;
+   height: 80px; 
+   border-radius: 50%; 
+   object-fit: cover; 
+   cursor: pointer; 
+  }
+
+.profilecard label.upload-label {
+  background: #325896;    /* same as sidebar */
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 13px;
+  transition: 0.3s;
+  margin-left: 20px;
+}
+
+.profilecard label.upload-label:hover {
+  background: #2c21bb;
+}
+
+/* Upload submit button (separate from file choose) */
+.profilecard button {
+  background: #94bdf0;
+  color: #1e2a47;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.profilecard button:hover {
+  background: #2c21bb;
+  color: #fff;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #325896;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: #2c21bb;
 }
 
 .msg {
