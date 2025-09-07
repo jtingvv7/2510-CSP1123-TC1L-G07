@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %} Second Loop {% endblock %}
+{% block title %}Second Loop -Home {% endblock %}
 
 {% block content %}
-    <h1>Welcome to Second Loop</h1>
-    <p>haha</p>
-
+<div class="text-center">
+    <h1>Welcome to transaction home</h1>
+    <p class="lead">MMU second-hand trading platform</p>
+    <a href="{{ url_for('transaction.home') }}" class="btn btn-primary">Go to transaction system</a>
+</div>
 {% endblock %}
