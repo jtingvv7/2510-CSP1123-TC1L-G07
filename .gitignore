@@ -3,4 +3,4 @@ __pycache--/
 *.pyo
 *.pyd
 *.log
-
+instance/*.db
