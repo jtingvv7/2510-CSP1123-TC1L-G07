@@ -2,9 +2,12 @@ import os
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, session
 import stripe
 from dotenv import load_dotenv
-
+from sqlalchemy import func
+from models import Transaction, Review
 from main import app, db
-from models import User
+from models import User, Transaction, Review 
+import re #phonenum
+
 
 load_dotenv()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -70,6 +73,7 @@ def register():
 
     # if GET, just show the form
     return render_template("register.html")
+    
 
 
 @app.route("/profile")
@@ -78,31 +82,61 @@ def profile():
         return redirect(url_for("login"))
     
     user = User.query.get_or_404(session["user_id"])
-    return render_template("profile.html", user=user)
 
-@app.route("/upload_photo", methods=["POST"])
-def upload_photo():
+     # completed sales & purchases
+    completed_sales = Transaction.query.filter_by(seller_id=user.id, status="completed").count()
+    completed_purchases = Transaction.query.filter_by(buyer_id=user.id, status="completed").count()
+
+    # average rating
+    avg_rating = db.session.query(func.avg(Review.rating)).filter(Review.reviewed_id == user.id).scalar()
+
+    return render_template(
+        "profile.html",
+        user=user,
+        completed_sales=completed_sales,
+        completed_purchases=completed_purchases,
+        avg_rating=avg_rating
+    )
+
+
+
+@app.route("/editprofile", methods=["GET", "POST"])
+def editprofile():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
     user = User.query.get_or_404(session["user_id"])
 
-    if "file" not in request.files:
-        flash("No file part")
+    if request.method == "POST":
+        # Update name
+        name = request.form.get("name")
+        if name:
+            user.name = name
+
+        # Update phone
+        phone = request.form.get("phone")
+        if phone:  # only digits from input
+            full_phone = "+60" + phone.strip()  # build full phone number
+            if re.fullmatch(r"\+60\d{9}", full_phone):
+                user.phone = full_phone
+            else:
+                flash("Phone number must start with +60 and have exactly 9 digits.", "danger")
+                return redirect(url_for("editprofile"))
+
+        # Update profile photo
+        if "file" in request.files:
+            file = request.files["file"]
+            if file and file.filename != "":
+                filename = f"user_{user.id}.jpg"
+                filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(filepath)
+                user.profile_pic = filename
+
+        db.session.commit()
+        flash("Profile updated successfully!", "success")
         return redirect(url_for("profile"))
-    
-    file = request.files["file"]
-    if file.filename == "":
-        flash("No file selected")
-        return redirect(url_for("profile"))
 
-    filename = f"user_{user.id}.jpg"
-    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    file.save(filepath)
-
-    user.profile_pic = filename
-    db.session.commit()
-
-    flash("Profile photo updated!", "sucess")
-    return redirect(url_for("profile"))
-
+    return render_template("editprofile.html", user=user)
 
 
 

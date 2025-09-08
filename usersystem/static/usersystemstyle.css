@@ -142,7 +142,49 @@ body{
 body {
   background-color: rgb(240, 237, 183);
 }
-   
+
+/*profile page*/
+
+.content {
+  margin-left: 180px;  /* offset sidebar */
+  margin-top: 22vh;    /* offset profile header */
+  padding: 30px;
+}
+
+.stars-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  max-width: 700px;
+  margin: auto;
+}
+
+.stars-card h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #325896;
+  text-align: center;
+}
+
+.stars-grid {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.star h4 {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2c21bb;
+  margin-bottom: 5px;
+}
+
+.star p {
+  font-size: 14px;
+  color: #666;
+}
+
 .profilecard {
   position:fixed ;
   top: 0;
@@ -275,4 +317,73 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/*editprofile*/
+.edit-form {
+  max-width: 500px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.edit-form .input-box {
+  margin: 20px 0;
+}
+
+.edit-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #325896;
+}
+
+.edit-form input[type="text"],
+.edit-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #325896;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.edit-form button {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #325896;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-form button:hover {
+  background: #2c21bb;
+}
+
+.phone-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.phone-prefix {
+  padding: 8px 12px;
+  background: #ddd;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.phone-input {
+  flex: 1;
+  border-radius: 0 5px 5px 0;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 14px;
 }

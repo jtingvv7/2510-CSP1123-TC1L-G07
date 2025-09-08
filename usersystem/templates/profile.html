@@ -9,39 +9,50 @@
 
 <body>
 
-
-   <div class="sidebar">
-
-    <a  class="active" href="profile.html">Profile</a>
-    <a href="payment.html">Payment</a>
-    <a href="setting.html">Setting</a>
-    <a href="login.html">Log out</a>
-   </div>
+<div class="sidebar">
+    <a class="active" href="{{ url_for('profile') }}">Profile</a>
+    <a href="{{ url_for('create_checkout_session') }}">Payment</a>
+    <a href="{{ url_for('editprofile') }}" class="upload-btn">Edit Profile</a>
+    <a href="{{ url_for('login') }}">Log out</a>
+  </div>
 
 <!-- Profile photo -->
-   <div class="profilecard">
-    <div class="photo">
-        <img src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}" id="photo">
-       <form action="/upload_photo" method="post" enctype="multipart/form-data">
-  <!-- hidden file input -->
-  <input type="file" id="fileInput" name="file" accept="image/*" style="display:none;">
-  
-  <!-- custom button (this triggers file input) -->
-  <label for="fileInput" class="upload-btn">Choose Photo</label>
-  
-  <!-- upload button -->
-  <button type="submit">Upload</button>
-</form>
+    <div class="profilecard">
+      <img src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}" id="photo" alt="Profile Picture">
 
-<!-- current profile photo -->
-<img id="profilePic" src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
-      </form>
+      <div class="info">
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
+        <p><strong>Member since:</strong> {{ user.join_date.strftime('%B %Y') }}</p>
+        <p><strong>Phone number:</strong> {{ user.phone if user.phone else '--' }}</p>
+      </div>
     </div>
-      <h2>{{ user.name }}</h2>
-      <p>{{ user.email }}</p>
-   </div>
 
-
-   
-
+<!-- Main Content -->
+  <div class="content">
+    <div class="stars-card">
+      <h3>Account Overview</h3>
+      <div class="stars-grid">
+        <div class="star">
+          <h4>{{ completed_sales }}</h4>
+          <p>Completed Sales</p>
+        </div>
+        <div class="star">
+          <h4>{{ completed_purchases }}</h4>
+          <p>Completed Purchases</p>
+        </div>
+        <div class="star">
+          <h4>
+            {% if avg_rating %}
+              {{ "%.1f"|format(avg_rating) }} ⭐
+            {% else %}
+              -
+            {% endif %}
+          </h4>
+          <p>Average Rating</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+</html>
