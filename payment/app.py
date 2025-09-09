@@ -6,7 +6,6 @@ payment_bp = Blueprint('payment', __name__, template_folder='templates')
 
 
 
-
 # Main Page: Display Order ID and Payment Methods
 @payment_bp.route("/")
 def index():
