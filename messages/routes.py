@@ -12,10 +12,21 @@ messages_bp = Blueprint('messages', __name__, template_folder='templates', stati
 #view conversation
 @messages_bp.route("/chat/<int:user_id>",methods=["POST"])
 @login_required
-def chat(user_id):
+def chat_json(user_id):
     conversation = Messages.query.filter(
-        ((Message.sender_id == current_user.id)  )
-    ).order_by(Message.timestamp).all()
+        ((Messages.sender_id == current_user.id) & (Messages.receiver_id == user_id) |
+          (Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
+    ).order_by(Messages.timestamp).all()
+
+    #return JSON data to back end
+    return ([
+        {
+        "sender" : "Me" if msg.sender_id == current_user.id else "Them",
+        "content" : msg.content,
+        "time" : msg.timestamp.strftime("%H:%M:%S")
+    }for msg in conversation
+    ])   
+
 
 
 
