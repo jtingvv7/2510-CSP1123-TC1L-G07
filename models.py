@@ -74,9 +74,10 @@ class Messages(db.Model):
 #review & rating db
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
+    seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = True)
+    buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = True)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = True)
+    username = db.Column(db.String(50), nullable = True)
     rating= db.Column(db.Integer, nullable = False)
     comment = db.Column(db.Text, nullable = True)
     date_review = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
@@ -120,6 +121,17 @@ class Payment(db.Model):
     
     def __repr__(self):
         return f"<Payment {self.id} amount: {self.amount}>"
+
+
+class Order(db.Model):
+    id =db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.String(20), unique=True, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    order_id = db.Column(db.String(20), default="MYR")
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    
+    def __repr__(self):
+        return f"<Order {self.id} order_id: {self.order_id}>"
 
 
     
