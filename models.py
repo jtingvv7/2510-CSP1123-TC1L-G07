@@ -102,27 +102,6 @@ class SafeLocation(db.Model):
         return f"<Safe Location : {self.name}>"
 
 
-class Wallet(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    balance = db.Column(db.Float, default = 0.0)
-
-    def __repr__(self):
-        return f"<Wallet {self.user_id} balance {self.balance}>"
-    
-class Payment(db.Model):
-    id =db.Column(db.Integer, primary_key = True)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
-    payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    amount = db.Column(db.Float, nullable = False)
-    method =db.Column(db.String(20), nullable= False) #wallet / online / offline
-    status = db.Column(db.String(20), default = 'pending') #pending / success / fail
-    date_created = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
-    
-    def __repr__(self):
-        return f"<Payment {self.id} amount: {self.amount}>"
-
-
 class Order(db.Model):
     id =db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.String(20), unique=True, nullable=False)
