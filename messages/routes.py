@@ -1,5 +1,5 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for , flash, request
+from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify
 from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
@@ -10,7 +10,7 @@ logging.basicConfig(level = logging.INFO, filename = "app.log")
 messages_bp = Blueprint('messages', __name__, template_folder='templates', static_folder='static')
 
 #view conversation
-@messages_bp.route("/chat/<int:user_id>",methods=["POST"])
+@messages_bp.route("/chat/<int:user_id>/json",methods=["GET"])
 @login_required
 def chat_json(user_id):
     conversation = Messages.query.filter(
@@ -19,17 +19,13 @@ def chat_json(user_id):
     ).order_by(Messages.timestamp).all()
 
     #return JSON data to back end
-    return ([
+    return jsonify([
         {
         "sender" : "Me" if msg.sender_id == current_user.id else "Them",
         "content" : msg.content,
         "time" : msg.timestamp.strftime("%H:%M:%S")
     }for msg in conversation
     ])   
-
-
-
-
 
 
 #send messages
@@ -39,7 +35,12 @@ def send_messages(user_id):
     content = request.form.get("content") #use for get content from front end
     if content:
         new_msg = Messages(sender_id=current_user.id, receiver_id= user_id, content=content)
-        db.session.commit(new_msg)
+        db.session.add(new_msg)
         db.session.commit()
-    return redirect(url_for("messages.chat",user_id=user_id))
+        return jsonify({"status": "ok", "message": content})
+    return jsonify({"status": "error", "message": "empty content"})
 
+@messages_bp.route("/chat/<int:user_id>")
+@login_required
+def chat(user_id):
+    return render_template("chat.html", user_id = user_id)

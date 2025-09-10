@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %} Chat  {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Chat with User {{user_id}}</h2>
+
+    <!--chat history-->
+    <table class="table table-bordered">
+        <thead class="table light">
+            <tr>
+                <th style="width: 15%">Sender</th>
+                <th style="width: 70%">Message</th>
+                <th style="width: 15%">Time</th>
+            </tr>
+        </thead>
+        <tbody id="chat-box">
+            <!--AJAX will insert information at here-->
+        </tbody>
+    </table>
+    <!--send message-->
+    <form id="chat-form" class="mt-3">
+        <div class="input-group">
+            <textarea class="form-control" id="msg" name="content" rows="2" placeholder="Type your message..."></textarea>
+            <button class="btn btn-primary" type="submit">Send</button>
+        </div>
+    </form>
+</div>
+
+<script>
+const userId = parseInt ("{{ user_id }} "); //target chat partner
+
+//load data (from routes get JSON)
+function loadMessages(){
+    fetch(`/chat/${userId}/json`)
+    .then(response=> response.json())
+    .then(data=> {
+        let chatBox = document.getElementById("chat-box");
+        chatBox.innerHTML=""; //clear old content
+
+        data.forEach(msg => {
+            chatBox.innerHTML += `
+            <tr>
+                <td>${msg.sender}</td>
+                <td>${msg.content}</td>
+                <td>${msg.time}</td>
+            </tr>`;
+            
+        });
+    });
+}
+//
+loadMessages();
+
+// refresh 3s 1time
+setInterval(loadMessages, 3000);
+
+//
+document.getElementById("chat-form").addEventListener("submit", function(e){
+    e.preventDefault(); //prevent 
+    let content = document.getElementById("msg").value;
+
+    fetch(`/send/${userId}`,{
+        method:"POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body:`content=${encodeURIComponent(content)}`
+    })
+    .then(response=> response.json())
+    .then(data =>{
+        if(data.status === "ok"){
+            document.getElementById("msg").value = ""; //
+            loadMessages(); //after send refresh
+        }
+    });
+});
+</script>
+{% endblock %}
