@@ -54,5 +54,97 @@
     });
   }, 3000); // hides after 3 seconds
 </script>
+
+<style>
+    /* Shared styles for wrapper */
+    .wrapper {
+      width: 100%;
+      max-width: 900px;  
+      margin: 60px auto;
+      padding: 50px;         
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .wrapper h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #333;
+    }
+
+    .input-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 14px 45px 14px 15px; 
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .input-box i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #2c74b3;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #205295;
+    }
+
+    .msg {
+      text-align: center;
+      margin: 10px auto;
+      padding: 10px;
+      border-radius: 5px;
+      width: 90%;
+    }
+
+    .msg.success { background: #d4edda; color: #155724; }
+    .msg.error { background: #f8d7da; color: #721c24; }
+    .msg.warning { background: #fff3cd; color: #856404; }
+
+    /* Register page specific */
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #2c74b3;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .login-link p {
+      color: black;
+    }
+  </style>
 </body>
 </html>

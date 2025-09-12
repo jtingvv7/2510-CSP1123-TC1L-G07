@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from sqlalchemy import func
 from models import Transaction, Review
 from main import app, db
-from models import User, Transaction, Review 
+from models import User, Transaction, Review, SafeLocation
 import re #phonenum
 
 
@@ -90,12 +90,16 @@ def profile():
     # average rating
     avg_rating = db.session.query(func.avg(Review.rating)).filter(Review.reviewed_id == user.id).scalar()
 
+    # pickup
+    pickup_points = SafeLocation.query.all()
+
     return render_template(
         "profile.html",
         user=user,
         completed_sales=completed_sales,
         completed_purchases=completed_purchases,
-        avg_rating=avg_rating
+        avg_rating=avg_rating, 
+        pickup_points=pickup_points
     )
 
 
@@ -160,6 +164,37 @@ def create_checkout_session():
         metadata={"order_id": "SECONDLOOP_123456"}
     )
     return jsonify({"id": session.id, "url": session.url})
+
+@app.route("/map", methods=["GET", "POST"])
+def map():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        name = request.form.get("name")
+        address = request.form.get("address")
+        lat = request.form.get("latitude")
+        lng = request.form.get("longitude")
+        desc = request.form.get("description")
+
+        if not (name and address and lat and lng):
+            flash("All fields are required!", "danger")
+            return redirect(url_for("map"))
+
+        new_location = SafeLocation(
+            name=name,
+            address=address,
+            latitude=float(lat),
+            longitude=float(lng),
+            description=desc
+        )
+        db.session.add(new_location)
+        db.session.commit()
+
+        flash("Pickup point saved successfully!", "success")
+        return redirect(url_for("profile"))
+
+    return render_template("map.html")
 
 
 @app.route("/success")

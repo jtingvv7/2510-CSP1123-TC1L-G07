@@ -52,9 +52,10 @@ class SafeLocation(db.Model):
     __tablename__ = 'safelocation'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    latitude = db.Column(db.Float, nullable=True)
-    longitude = db.Column(db.Float, nullable=True)
+    address = db.Column(db.String(255), nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
-        return f"<Safe Location: {self.name}>"
+        return f"<Safe Location: {self.name} ({self.latitude}, {self.longitude})>"
