@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usersystemstyle.css') }}">
+</head>
+<body>
+
+  <div class="sidebar">
+    <a href="{{ url_for('profile') }}">Profile</a>
+    <a href="{{ url_for('create_checkout_session') }}">Payment</a>
+    <a class="active" href="{{ url_for('editprofile') }}">Edit Profile</a>
+    <a href="{{ url_for('login') }}">Log out</a>
+  </div>
+
+  <div class="edit-form">
+    <h3>Edit Profile</h3>
+
+    <form method="POST" action="{{ url_for('editprofile') }}" enctype="multipart/form-data">
+      <!-- Profile Picture -->
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}"
+             alt="Profile Picture"
+             style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+        <br><br>
+        <input type="file" name="file" accept="image/*">
+      </div>
+
+      <!-- Name -->
+      <div class="input-box">
+        <label>Name:</label>
+        <input type="text" name="name" value="{{ user.name }}" required>
+      </div>
+
+      <!-- Phone -->
+      <div class="input-box">
+  <label>Phone Number:</label>
+  <div class="phone-wrapper">
+    <span class="phone-prefix">+60</span>
+    <input type="text" name="phone"
+           class="phone-input"
+           value="{{ user.phone[3:] if user.phone else '' }}"
+           pattern="\d{9}" maxlength="9"
+           title="Enter exactly 9 digits" >
+  </div>
+</div>
+
+      <button type="submit" class="upload-btn">Save Changes</button>
+    </form>
+  </div>
+
+</body>
+</html>
