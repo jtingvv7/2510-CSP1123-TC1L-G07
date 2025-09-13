@@ -1,0 +1,1917 @@
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:42:51] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:42:51] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:42:51] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:42:51] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=79hyXVloNANFcOCSvegn HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:42:51] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:48:20] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:48:21] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:53:05] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:53:06] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:53:06] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:53:06] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:53:06] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:27] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:27] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:27] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:27] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:27] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:29] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:29] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:29] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:29] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:29] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:54:30] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:56:13] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:56:13] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:56:13] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:56:13] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:56:13] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:59:52] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:59:52] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:59:52] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:59:52] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 22:59:52] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:06:12] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:06:12] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:06:12] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:06:12] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:06:12] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:09:53] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:09:53] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:09:53] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:09:53] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:09:53] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:20] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:20] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:20] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:20] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:20] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:21] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:21] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:21] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:21] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:21] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:10:22] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:42:00] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:42:00] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:42:00] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:42:00] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [04/Sep/2025 23:42:00] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 00:22:23] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 00:22:23] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 00:22:23] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 00:22:23] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 00:22:23] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 18:54:01] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 18:54:01] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 18:54:01] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 18:54:01] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [05/Sep/2025 18:54:01] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:13] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:13] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:13] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:13] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:13] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:14] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:14] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:14] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:14] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:14] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:21:15] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:23:38] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:23:38] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:24:17] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:24:18] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:26:29] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:26:29] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:26:31] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:26:31] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:30] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:30] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:32] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:32] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:33] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:33] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:34] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:30:34] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:31:59] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:31:59] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:01] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:01] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:01] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:01] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:01] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:05] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:05] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:05] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:32:05] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:32] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:32] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:32] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:32] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:32] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:33] "[35m[1mGET / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:33] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:33] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:33] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:33:33] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:36:04] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:36:04] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:36:06] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:36:06] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:36:06] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:36:06] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=7TKYb5fdMY5NVTOLi8zM HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\extensions.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\extensions.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\extensions.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\extensions.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\extensions.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:41:34] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:41:34] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:41:34] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:41:34] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=jeVVSZ6uXwBnvRUY3lmd HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:41:34] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:38] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:38] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:38] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:38] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=djVLtIVlx4THBoqgEWAw HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:38] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=djVLtIVlx4THBoqgEWAw HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=djVLtIVlx4THBoqgEWAw HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=djVLtIVlx4THBoqgEWAw HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=djVLtIVlx4THBoqgEWAw HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:41] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:42] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:42] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:42] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:42] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=djVLtIVlx4THBoqgEWAw HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:49:42] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:53:57] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:53:57] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:53:57] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:53:57] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=qJKPONZZH5CVOe70Qb73 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:53:57] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:12] "[32mGET /transaction/my_transactions HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:12] "[35m[1mGET /transaction/fake_login?next=/transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:12] "GET /transaction/fake_login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:12] "GET /transaction/fake_login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:12] "GET /transaction/fake_login?__debugger__=yes&cmd=resource&f=console.png&s=zzBJyzreXp217b611dQG HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:12] "GET /transaction/fake_login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:54] "[35m[1mGET /transaction/fake_login?next=/transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:54] "[36mGET /transaction/fake_login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:54] "[36mGET /transaction/fake_login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:54] "GET /transaction/fake_login?__debugger__=yes&cmd=resource&f=console.png&s=oOil8GWa551s41owooCr HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:56:54] "[36mGET /transaction/fake_login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:58:38] "[35m[1mGET /transaction/fake_login?next=/transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:58:39] "[36mGET /transaction/fake_login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:58:39] "[36mGET /transaction/fake_login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:58:39] "GET /transaction/fake_login?__debugger__=yes&cmd=resource&f=console.png&s=txj9f2UOTmLPUdwkEEPO HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:58:39] "[36mGET /transaction/fake_login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:08] "GET /transaction/fake_login?next=/transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:51] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:51] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:54] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:54] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:55] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:56] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:56] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:56] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=C4tPvSMM5pCGcgCrtlOC HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:56] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:59] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 00:59:59] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:12] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:12] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:13] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:13] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:15] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:15] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:16] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:16] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:17] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:17] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:18] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:18] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:20] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:20] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:21] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:21] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:22] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:22] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:22] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:00:22] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=C4tPvSMM5pCGcgCrtlOC HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:01:52] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:01:52] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:01:55] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:01:55] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:03] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:03] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:04] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:04] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:05] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:05] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:05] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:02:05] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=C4tPvSMM5pCGcgCrtlOC HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:08] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:08] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:10] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:10] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:10] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:10] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:11] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:11] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:12] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:12] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:14] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:05:14] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:28:58] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:28:58] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:28:59] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:28:59] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:30:19] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:30:19] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:30:21] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:30:21] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:57:21] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:57:21] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:57:22] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [06/Sep/2025 01:57:22] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:06:07] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:06:07] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:20:52] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:20:52] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:01] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:01] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:02] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:02] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:29] "GET /transaction/fake_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:49] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:49] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:50] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:50] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:50] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:51] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=pMxkMW3I6Ak8SBrm6y1r HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:51] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:53] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:53] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:53] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:21:53] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=pMxkMW3I6Ak8SBrm6y1r HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:43] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:43] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:43] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:43] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=shR4jjfvj1RAcMRkUUxe HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:43] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=shR4jjfvj1RAcMRkUUxe HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=shR4jjfvj1RAcMRkUUxe HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=shR4jjfvj1RAcMRkUUxe HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=shR4jjfvj1RAcMRkUUxe HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:22:45] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:24:16] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:24:16] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:24:19] "[35m[1mPOST /transaction/cancel/1 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:24:19] "GET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:24:19] "GET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:24:19] "GET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=console.png&s=hBeCC2aliNStMKNpt5eh HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:24:19] "GET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:14] "[35m[1mPOST /transaction/cancel/1 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:14] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:14] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:14] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=console.png&s=hBeCC2aliNStMKNpt5eh HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:58] "[35m[1mPOST /transaction/cancel/1 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:58] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:58] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:28:58] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=console.png&s=hBeCC2aliNStMKNpt5eh HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:29:19] "[35m[1mPOST /transaction/cancel/1 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:29:19] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:29:19] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:29:19] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=console.png&s=hBeCC2aliNStMKNpt5eh HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:29:19] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:30:27] "[35m[1mPOST /transaction/cancel/1 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:30:27] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:30:27] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:30:27] "[36mGET /transaction/cancel/1?__debugger__=yes&cmd=resource&f=console.png&s=hBeCC2aliNStMKNpt5eh HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:32:13] "[32mPOST /transaction/cancel/1 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:32:13] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:32:13] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:34] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:34] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:38] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:38] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:39] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:39] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:44] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:44] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:45] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:45] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:48] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:48] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:50] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:50] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:52] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:52] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:53] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 02:33:53] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:36:39] "[32mGET /transaction/my_transactions HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:36:39] "GET /transaction/fake_login?next=/transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:36:39] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:37:03] "[33mGET /transaction/fake_login/clear_fake HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:39:24] "GET /transaction/clear_fake HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:39:50] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:39:50] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:41:28] "GET /transaction/fake_login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:41:36] "GET /transaction/fake_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:41:43] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:41:43] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:41:48] "[32mPOST /transaction/cancel/1 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:41:48] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:41:48] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:45] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:45] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:46] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:46] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:49] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:49] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:50] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 14:45:50] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:17:45] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:17:45] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:17:47] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:17:48] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:17:48] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:17:48] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=UNoGTSdYY51kOioyDnQa HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:17:48] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:46] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:46] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:48] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:48] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:49] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:49] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:50] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:50] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:51] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:51] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:53] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:21:53] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:39:04] "GET /transaction/clear_fake HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:39:07] "GET /transaction/clear_fake HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:39:11] "[33mGET /transaction/ HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:39:18] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:39:18] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:39:59] "[33mGET /trasaction/fake_login HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:07] "[33mGET /trasnaction/fake_login HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:17] "[33mGET /trasnaction/fake_login HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:19] "[33mGET /trasnaction/fake_login HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:19] "[33mGET /trasnaction/fake_login HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:20] "[33mGET /trasnaction/fake_login HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:28] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:28] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:30] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:30] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:31] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:31] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:32] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:32] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:42] "GET /transaction/fake_login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:52] "[35m[1mGET /transaction/fake_purchase HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:52] "GET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:52] "GET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:52] "GET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png&s=D4KcOdCRXiXzgr7dbk6A HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:40:52] "GET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:41:25] "GET /transaction/fake_transactions HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:42:28] "[35m[1mGET /transaction/fake_purchase HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:42:28] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:42:28] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:42:28] "GET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png&s=QvmTRWgytseD2bfrrhW1 HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:00] "[35m[1mGET /transaction/fake_purchase HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:00] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:00] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:00] "GET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png&s=dSX7hJscwGTi95ldMyrE HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:00] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:03] "[35m[1mGET /transaction/fake_purchase HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:03] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:03] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:03] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png&s=dSX7hJscwGTi95ldMyrE HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:03] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:04] "[35m[1mGET /transaction/fake_purchase HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:04] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:04] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:04] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png&s=dSX7hJscwGTi95ldMyrE HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:04] "[36mGET /transaction/fake_purchase?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:22] "GET /transaction/fake_purchase HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:28] "[33mGET /transaction HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:31] "[33mGET /transaction HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:33] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:33] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:35] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:35] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:41] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:41] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:45] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:45] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:46] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:46] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:48] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:48] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:49] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:49] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:53] "[32mPOST /transaction/cancel/1 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:53] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:53] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:56] "[32mPOST /transaction/cancel/4 HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:56] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:56] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:59] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:43:59] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:17] "GET /transaction/fake_purchase HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:19] "GET /transaction/fake_purchase HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:21] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:21] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:22] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:22] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:22] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:22] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:22] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:22] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:23] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:23] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:23] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:23] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:23] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:23] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:44:55] "GET /transaction/fake_purchase HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:45:06] "[33mGET /transaction/ HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:45:11] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:45:11] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:45:12] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:45:12] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:45:42] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:45:42] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:47:28] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:47:28] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:50:47] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:50:47] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:50:47] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:50:47] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=x2xbC7CjSmLW7ahnb4x4 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:50:47] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:54:57] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:54:57] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:54:57] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:54:57] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=Ubjjj86Oov4MYDHXnG2H HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:54:57] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:01] "[33mGET /transaction HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:06] "[33mGET /t HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:14] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:14] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:15] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:15] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:15] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:15] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=Ubjjj86Oov4MYDHXnG2H HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:15] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:32] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:32] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:32] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:55:32] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=Ubjjj86Oov4MYDHXnG2H HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:56:51] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:56:51] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:56:51] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:56:51] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=taI6sNSNGviea4uUiMmO HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 17:56:51] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\transaction\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:01:39] "[35m[1mGET /transaction/view_requests HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:01:39] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:01:39] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:01:39] "GET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png&s=28C5HpTqTKGfdq48Dkcq HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:01:39] "[36mGET /transaction/view_requests?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:02:58] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:02:58] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:04] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:04] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:08] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:08] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:11] "[35m[1mPOST /transaction/accept/5 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:11] "GET /transaction/accept/5?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:11] "GET /transaction/accept/5?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:11] "GET /transaction/accept/5?__debugger__=yes&cmd=resource&f=console.png&s=28C5HpTqTKGfdq48Dkcq HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 18:03:11] "GET /transaction/accept/5?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+5
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\reset_db.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:48:49] "[35m[1mPOST /transaction/accept/5 HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:48:49] "[36mGET /transaction/accept/5?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:48:49] "[36mGET /transaction/accept/5?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:48:49] "GET /transaction/accept/5?__debugger__=yes&cmd=resource&f=console.png&s=ThHX9OGWXirFxAqNOFCc HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:48:49] "[36mGET /transaction/accept/5?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\models.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\models.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\models.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\models.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:31] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:31] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:33] "[32mGET /transaction/my_transactions HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:33] "GET /transaction/fake_login?next=/transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:37] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:37] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:39] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:39] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:41] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:41] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:42] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:42] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:43] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:43] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:44] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:44] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:46] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:46] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:46] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:46] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:47] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:47] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:58:53] "GET /transaction/fake_purchase HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:59:04] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:59:04] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:59:07] "[33mPOST /transaction/accept/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 22:59:12] "[33mPOST /transaction/reject/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:07] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:07] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:15] "GET /transaction/fake_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:18] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:18] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:18] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:18] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:20] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:20] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:21] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:21] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:26] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:26] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:29] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:00:29] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:02:08] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:02:08] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:02:09] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [07/Sep/2025 23:02:09] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\extensions.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:25] "[32mGET /transaction/view_requests HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:25] "GET /transaction/fake_login?next=/transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:26] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:27] "GET /transaction/fake_login?next=/transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:32] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:32] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:42] "GET /transaction/fake_login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:49] "GET /transaction/fake_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:38:56] "GET /transaction/fake_purchase HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:00] "[33mGET /transaction/ HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:03] "[33mGET /transaction HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:07] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:07] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:08] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:08] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:17] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:17] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:25] "[33mPOST /transaction/reject/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:29] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 02:39:29] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\messages\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\messages\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\messages\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:01:51] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:01:51] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:01:51] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:01:52] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=FMHLUstxrk8ncJdyQRIl HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:01:52] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\messages\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\messages\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:07] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:07] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:07] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:08] "GET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=ffx2whZhd55HKowsXqow HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:08] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:08] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=ffx2whZhd55HKowsXqow HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[35m[1mGET /transaction/my_transactions HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png&s=ffx2whZhd55HKowsXqow HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:04:09] "[36mGET /transaction/my_transactions?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\messages\\routes.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:07:51] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:07:51] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:08:33] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:08:33] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:08:34] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:08:34] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:11:49] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:11:49] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:11:51] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:11:51] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:11:51] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:11:54] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:11:57] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:00] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:01] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:03] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:03] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:03] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:03] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:06] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:10] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:10] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:10] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:12] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:12] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:12] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:19] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:19] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:19] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:22] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:25] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:28] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:29] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:30] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:30] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:30] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:31] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:31] "[33mPOST /send/1 HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:31] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:34] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:12:34] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:14] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:14] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:17] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:17] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:20] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:20] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:20] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:22] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:22] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:24] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:24] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:25] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:25] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:49] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:49] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:55] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:53:55] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:54:02] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:54:02] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:54:03] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:54:03] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:56:59] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:56:59] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:01] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:01] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:03] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:03] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:05] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:05] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:06] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:06] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:35] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:35] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:36] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:36] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:41] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:41] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:41] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:44] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:44] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:44] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:52] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:58:52] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:02] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:02] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:03] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:03] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:10] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:10] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:12] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 15:59:12] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:07] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:07] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:09] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:09] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:13] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:13] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:18] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:18] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:36] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:00:36] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:01:06] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:01:07] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:01:08] "GET /transaction/home HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:01:08] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:01:10] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:01:10] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:05] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:05] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:06] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:06] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:12] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:12] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:15] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:15] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:16] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:16] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:22] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:22] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:23] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:23] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:25] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:25] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:26] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:26] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:47] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:02:47] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:03:13] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:03:13] "[33mGET /transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:03:14] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:03:14] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:05:25] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:05:25] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:05:26] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:05:26] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:05:28] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:05:28] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:29] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:29] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:29] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:32] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:32] "GET /transaction/view_requests HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:32] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:36] "GET /transaction/my_transactions HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:07:36] "[33mGET /transaction/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:11:32] "GET /messaging/chat/1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:11:32] "[33mGET /messaging/chat/transaction.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Sep/2025 16:11:32] "[33mGET /chat/1/json HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\usersystem\\models.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\usersystem\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
