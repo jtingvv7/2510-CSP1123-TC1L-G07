@@ -8,25 +8,75 @@
 </head>
 
 <body>
-
-
-   <div class="sidebar">
-
-    <a  class="active" href="profile.html">Profile</a>
-    <a href="payment.html">Payment</a>
-    <a href="setting.html">Setting</a>
-    <a href="login.html">Log out</a>
-   </div>
-
-<!-- Profile photo -->
-   <div class="profilecard">
-    <div class="photo">
-        <img src="profile.jpg" id="photo">
-        <input type="file" id="file">
-        <label for="file" id="uploadbtn"><i class="camera"></i></label>
+<div class="container">
+  <div class="sidebar">
+    <div class="profilepic">
+      <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+        <label for="file-upload">
+          <img src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}" id="photo" alt="Profile Picture">
+        </label>
+        <input id="file-upload" type="file" name="profile_pic" onchange="this.form.submit()">
+      </form>
     </div>
-   </div>
 
-   
+    <a class="active" href="{{ url_for('profile') }}">Profile</a>
+    <a href="{{ url_for('create_checkout_session') }}">Payment</a>
+    <a href="{{ url_for('editprofile') }}" class="upload-btn">Edit Profile</a>
+    <a href="{{ url_for('map') }}">Select Pickup Point</a>
+    <a href="{{ url_for('login') }}">Log out</a>
+  </div>
 
+   <!-- Main Content -->
+    <div class="content">
+       <!-- Profile photo -->
+      <div class="profilecard">
+        <div class="info">
+          <h2>{{ user.name }}</h2>
+          <p>{{ user.email }}</p>
+          <p><strong>Member since:</strong> {{ user.join_date.strftime('%B %Y') }}</p>
+          <p><strong>Phone number:</strong> {{ user.phone if user.phone else '--' }}</p>
+          <p><strong>Prefer pickup Point</strong></p>
+          {% if pickup_points %}
+            <ul>
+              {% for point in pickup_points %}
+              <li>
+                {{ point.name }} - {{ point.address }}
+                (<a href="https://www.google.com/maps?q={{ point.latitude }},{{ point.longitude }}" target="_blank">View Map</a>)
+              </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>No pickup point saved yet.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="stars-card">
+        <h3>Account Overview</h3>
+        <div class="stars-grid">
+          <div class="star">
+            <h4>{{ completed_sales }}</h4>
+            <p>Completed Sales</p>
+          </div>
+          <div class="star">
+            <h4>{{ completed_purchases }}</h4>
+            <p>Completed Purchases</p>
+          </div>
+          <div class="star">
+            <h4>
+              {% if avg_rating %}
+                {{ "%.1f"|format(avg_rating) }} ⭐
+              {% else %}
+                -
+              {% endif %}
+            </h4>
+            <p>Average Rating</p>
+          </div>
+        </div>
+      </div>
+ </div>
+
+
+</div>
 </body>
+</html>

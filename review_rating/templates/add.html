@@ -20,7 +20,7 @@
 <body>
     <div class="container">
     <h2>Add a Reviews</h2>
-    <form action="/add" method="POST" class="review-form">
+    <form action="{{ url_for('review.add') }}" method="POST" class="review-form">
         <label for="username">User Name</label>
         <input type="text" id="username" name="username" placeholder="Your name" required>
 
