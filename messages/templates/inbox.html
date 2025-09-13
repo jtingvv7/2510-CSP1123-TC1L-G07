@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Inbox</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for u in users %} 
+            <tr>
+                <td>
+                    <a href="{{ url_for('messages.chat', user_id = u.id)}}" class="text-decoration-none">
+                        {{ u.username }}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -44,3 +44,15 @@ def send_messages(user_id):
 @login_required
 def chat(user_id):
     return render_template("chat.html", user_id = user_id)
+
+#inbox
+@messages_bp.route("/inbox")
+@login_required
+def inbox():
+    #find all 
+    sent = db.session.query(Messages.receiver_id).filter_by(sender_id=current_user)
+    received = db.session.query(Messages.sender_id).filter_by(received_id=current_user)
+    user_ids = {uid for (uid,) in sent.union(received).all()} #
+
+    users = User.query.filter(User.id.in_(user_ids)).all()
+    return render_template("inbox.html", users=users)
