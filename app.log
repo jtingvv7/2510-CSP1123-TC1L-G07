@@ -1915,3 +1915,25 @@ INFO:werkzeug: * Restarting with stat
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\main.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\review_rating\\app.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\review_rating\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\review_rating\\app.py', reloading
+INFO:werkzeug: * Detected change in 'D:\\Mini IT project\\models.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-870-435
