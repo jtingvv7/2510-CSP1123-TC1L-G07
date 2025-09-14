@@ -1,21 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %} Chat {% endblock %}
+{% block title %} Chat with {{ user.username }} {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('messages.static', filename='chat.css') }}">
+{% endblock %}
 
 {% block content %}
-<h3>Chat with User {{ user.username }}</h3>
-<!--chat box-->
-<div id="chatbox"></div>
+<div class="container mt-4">
+    <h3>Chat with {{ user.username }}</h3>
 
-<div class="input-group mt-3">
-    <input type="text" id="message-input" class="form-control" placeholder="Type your message...">
-    <button class="btn btn-primary" onclick="sendMessage({{ user.id }})">Send</button>
+    <!--chat box-->
+    <div id="chat-box"></div>
+
+    <!--input box-->
+    <div class="input-group mt-3">
+        <input type="text" id="message-input" class="form-control" placeholder="Type your message...">
+        <button class="btn btn-primary" onclick="sendMessage({{ user.id }})">Send</button>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('messages.static'),filename='chat.js' }}"></script>
 <script>
     const CURRENT_USER_ID = {{ current_user.id }};
+    const USER_ID = {{ user.id }};
 </script>
+<script src="{{ url_for('messages.static', filename='chat.js') }}"></script>
 {% endblock %}

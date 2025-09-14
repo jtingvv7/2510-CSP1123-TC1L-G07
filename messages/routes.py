@@ -80,7 +80,8 @@ def send_messages(user_id):
 @messages_bp.route("/chat/<int:user_id>")
 @login_required
 def chat(user_id):
-    return render_template("chat.html", user_id = user_id)
+    user = User.query.get_or_404(user_id)
+    return render_template("chat.html", user=user, user_id=user_id)
 
 #inbox
 @messages_bp.route("/inbox")

@@ -1,9 +1,9 @@
 //load data (from routes get JSON)
 function loadMessages(){
-    fetch(`messages/chat/${userId}/json`) //send request to backend
+    fetch(`/chat/${USER_ID}/json`) //send request to backend
     .then(response=> response.json()) //convert the returned data into js obect
     .then(data=> {
-        let chatBox = document.getElementById("chatbox");
+        let chatBox = document.getElementById("chat-box");
         chatBox.innerHTML=""; //clear old content
         data.messages.forEach(msg => {
             let msgDiv = document.createElement("div");
@@ -20,17 +20,17 @@ function loadMessages(){
     });
 }
 //load chat history once when page loads
-loadMessages();
+loadMessages(USER_ID);
 
 // refresh 3s 1time
-setInterval(() => loadMessages(userId), 3000);
+setInterval(() => loadMessages(USER_ID), 3000);
 
 //sent message when button
-function sendMessage(userId) {
+function sendMessage(USER_ID) {
     let content = document.getElementById("message-input").value;
     if (!content.trim()) return;
 
-    fetch(`/messages/send/${userId}`,{
+    fetch(`/send/${USER_ID}`,{
         method: "POST",
         headers:{
             "Content-Type": "application/json"
@@ -41,7 +41,7 @@ function sendMessage(userId) {
     .then(data => {
         if(data.success){
             document.getElementById("message-input").value = "";
-            loadMessages(userId); //refresh
+            loadMessages(USER_ID); //refresh
         }
     })
 }
