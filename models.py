@@ -12,8 +12,8 @@ class User(db.Model,UserMixin):
 #relationship of user
     #backref = can find user through transactions , lazy = lazy loading
     products = db.relationship('Product',backref ='product_posted',lazy = True)
-    wallet = db.relationship('Wallet', backref = 'wallet_owner', uselist = False, lazy = True)
-    payment = db.relationship('Payment', backref = 'payment', lazy = True)
+    #wallet = db.relationship('Wallet', backref = 'wallet_owner', uselist = False, lazy = True)
+    #payment = db.relationship('Payment', backref = 'payment', lazy = True)
 
 
     def __repr__(self): #automatically called when you print an object or view it in the python console so more readable
