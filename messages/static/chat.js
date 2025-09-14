@@ -1,47 +1,67 @@
 //load data (from routes get JSON)
 function loadMessages(){
-    fetch(`/chat/${USER_ID}/json`) //send request to backend
+    fetch(`/messages/chat/${USER_ID}/json`) //send request to backend
     .then(response=> response.json()) //convert the returned data into js obect
     .then(data=> {
         let chatBox = document.getElementById("chat-box");
         chatBox.innerHTML=""; //clear old content
-        data.messages.forEach(msg => {
+
+        data.forEach(msg => {
             let msgDiv = document.createElement("div");
-            if (msg.sender_id === CURRENT_USER_ID){
+            msgDiv.classList.add("message-bubble");
+
+            if (msg.sender_id === "Me"){
                 msgDiv.classList.add("my-message");
             } else{
                 msgDiv.classList.add("their-message");
             }
-            msgDiv.textContent = msg.content;
+            msgDiv.innerHTML=`
+            <div>${msg.content}</div>
+            <span class="timestamp">${msg.time}</span>
+            `;
             chatBox.appendChild(msgDiv);
         });
         //scroll to the bottom
         chatBox.scrollTop = chatBox.scrollHeight;
-    });
+    })
+    .catch(err => console.error("Error loading messages:", err));
 }
+
 //load chat history once when page loads
-loadMessages(USER_ID);
+loadMessages();
 
 // refresh 3s 1time
-setInterval(() => loadMessages(USER_ID), 3000);
+setInterval(loadMessages, 3000);
 
-//sent message when button
+//sent message 
 function sendMessage(USER_ID) {
-    let content = document.getElementById("message-input").value;
-    if (!content.trim()) return;
+    let input = document.getElementById("message-input");
+    let content = input.value.trim();
+    if (!content) return;
 
-    fetch(`/send/${USER_ID}`,{
+    fetch(`/messages/send/${USER_ID}`,{
         method: "POST",
         headers:{
-            "Content-Type": "application/json"
+            "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: JSON.stringify({ content: content })
+        body: `content=${encodeURIComponent(content)}`
     })
     .then(response => response.json())
     .then(data => {
-        if(data.success){
-            document.getElementById("message-input").value = "";
-            loadMessages(USER_ID); //refresh
+        if(data.status === "ok"){
+            input.value = ""; //clear input box
+            loadMessages(); //refresh
         }
     })
+    .catch(err => console.error("Error sending message:", err));
 }
+//support enter to send message
+document.addEventListener("DOMContentLoaded",() =>{
+    let input = document.getElementById("message-input");
+    input.addEventListener("keypress",(e) => {
+        if(e.key === "Enter"){
+            e.preventDefault(); //prevent line breaks
+            sendMessage(USER_ID);
+        }
+    });
+});
