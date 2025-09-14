@@ -24,10 +24,14 @@ def create_app():
     login_manager.login_view = "transaction.fake_login" #(joan test) tell flasklogin login page
 
     from transaction.routes import transaction_bp
+    from payment.app import payment_bp
+    from review_rating.app import review_bp
     from messages.routes import messages_bp
     # register blueprint
     app.register_blueprint(transaction_bp, url_prefix="/transaction")
     app.register_blueprint(messages_bp, url_prefix="/messaging")
+    app.register_blueprint(payment_bp, url_prefix="/payment")
+    app.register_blueprint(review_bp, url_prefix="/review")
     
     @app.route("/")
     def index():
