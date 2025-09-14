@@ -1,0 +1,26 @@
+#chatbox {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    height: 400px;
+    overflow-y: auto;
+    background: #f9f9f9;
+}
+.my-message {
+    text-align: right;
+    background: hsl(211, 76%, 71%);
+    color: white;
+    margin: 5px;
+    padding: 8px;
+    border-radius: 8px;
+    display: inline-block;
+}
+.their-message {
+    text-align: left;
+    background: #e5e5ea;
+    color: black;
+    margin: 5px;
+    padding: 8px;
+    border-radius: 8px;
+    display: inline-block;
+}
