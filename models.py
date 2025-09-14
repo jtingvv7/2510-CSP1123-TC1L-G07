@@ -1,6 +1,7 @@
 from extensions import db
 from datetime import datetime, timezone
 from flask_login import UserMixin
+from datetime import datetime, timezone
 
 #user db
 class User(db.Model,UserMixin):
@@ -9,6 +10,9 @@ class User(db.Model,UserMixin):
     name = db.Column (db.String(30), nullable = False, unique = True) #nullable = cannot be empty, unique = cannot same with others
     email = db.Column (db.String(150), nullable = False, unique = True)
     password = db.Column (db.String(80), nullable = False)
+    profile_pic = db.Column(db.String(200), default="profile.jpg")
+    join_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    phone = db.Column(db.String(20), nullable=True)
 #relationship of user
     #backref = can find user through transactions , lazy = lazy loading
     products = db.relationship('Product',backref ='product_posted',lazy = True)
@@ -22,6 +26,7 @@ class User(db.Model,UserMixin):
 
 #product db
 class Product(db.Model):
+    __tablename__ = 'product'
     id = db.Column (db.Integer, primary_key = True) 
     seller_id = db.Column (db.Integer, db.ForeignKey('user.id'), nullable = False)
     name = db.Column(db.String(30), nullable = False, unique = True) #product name
@@ -29,8 +34,11 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable = True) #can be empty
     is_sold = db.Column(db.Boolean, default = True)
     date_posted = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    image = db.Column(db.String(200), default="default_product.jpg")  # image filename
+    pickup_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'), nullable=True)  # optional location
 
 #relationship
+    pickup_location = db.relationship("SafeLocation", backref="products")
     transactions = db.relationship('Transaction', backref = 'product',lazy = True)
 
     def __repr__(self):
@@ -93,13 +101,15 @@ class Review(db.Model):
 class SafeLocation(db.Model):
     __tablename__ = 'safelocation'
     id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(100), nullable = False)
+    address = db.Column(db.String(255), nullable=False)
     latitude = db.Column(db.Float, nullable = True)
     longitude = db.Column(db.Float, nullable = True)
     description = db.Column(db.Text, nullable = True)
 
-    def __repr__(self):
-        return f"<Safe Location : {self.name}>"
+     def __repr__(self):
+        return f"<Safe Location: {self.name} ({self.latitude}, {self.longitude})>"
     
 
 class Wallet(db.Model):
