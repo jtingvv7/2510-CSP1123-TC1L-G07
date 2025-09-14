@@ -16,6 +16,7 @@ function loadMessages(){
                 msgDiv.classList.add("their-message");
             }
             msgDiv.innerHTML=`
+            <strong>${msg.sender_name}</strong><br>
             <div>${msg.content}</div>
             <span class="timestamp">${msg.time}</span>
             `;

@@ -58,6 +58,7 @@ def chat_json(user_id):
     return jsonify([
         {
         "sender_id" : msg.sender_id,
+        "sender_name": msg.sender.name,
         "content" : msg.content,
         "time" : (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S") #convert to MYT
     }for msg in conversation

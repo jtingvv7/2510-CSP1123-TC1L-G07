@@ -1,7 +1,7 @@
 #chat-box {
     height: 400px;
     overflow-y: auto;
-    background-color: hsl(210, 89%, 71%); 
+    background-color: hwb(210 43% 10%); 
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
@@ -26,7 +26,7 @@
 }
 
 .their-message {
-    background-color: #e9ecef; 
+    background-color: hsl(210, 3%, 73%); 
     color: black;
     float: left;
     text-align: left;
