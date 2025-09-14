@@ -3,25 +3,26 @@
 {% block title %}Inbox{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Inbox</h2>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>User</th>
-            </tr>
-        </thead>
-        <tbody>
-           {% for u in users %} 
-            <tr>
-                <td>
-                    <a href="{{ url_for('messages.chat', user_id = u.id)}}" class="text-decoration-none">
-                        {{ u.username }}
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="container mt-4" style="max-width: 700px;">
+    <h3 class="mb-3">Inbox</h3>
+
+    {% if users %}
+    <ul class="list-group">
+        {% for u in users %}
+        <li class="list-group-item d-flex align-items-center">
+            <!--user avatar-->
+            <img src="{{ url_for('static',filename='profile_pics/' ~ (u.profile_image or 'default.png')) }}"
+                alt="avatar" class="rounded-circle me-3" width="40" height="40">
+                
+            <!--user name-->
+            <a href="{{ url_for('messages.chat', user_id=u.id) }}" class="fw-bold text-decoration-none">
+                {{ u.username }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-muted">You have no conversation yet.</p>
+    {% endif %}
 </div>
 {% endblock %}

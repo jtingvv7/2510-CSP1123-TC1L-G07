@@ -9,13 +9,16 @@ from sqlalchemy.exc import SQLAlchemyError
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 messages_bp = Blueprint('messages', __name__, template_folder='templates', static_folder='static')
 
+#fake inbox
+
+
 #view conversation
 @messages_bp.route("/chat/<int:user_id>/json",methods=["GET"])
 @login_required
 def chat_json(user_id):
     conversation = Messages.query.filter(
-        ((Messages.sender_id == current_user.id) & (Messages.receiver_id == user_id) |
-          (Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
+        ((Messages.sender_id == current_user.id) & (Messages.receiver_id == user_id)) |
+          ((Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
     ).order_by(Messages.timestamp).all()
 
     #return JSON data to back end
@@ -40,6 +43,7 @@ def send_messages(user_id):
         return jsonify({"status": "ok", "message": content})
     return jsonify({"status": "error", "message": "empty content"})
 
+#chat page
 @messages_bp.route("/chat/<int:user_id>")
 @login_required
 def chat(user_id):
@@ -50,9 +54,9 @@ def chat(user_id):
 @login_required
 def inbox():
     #find all user relationship with current user
-    sent = db.session.query(Messages.receiver_id).filter_by(sender_id=current_user)
-    received = db.session.query(Messages.sender_id).filter_by(received_id=current_user)
+    sent = db.session.query(Messages.receiver_id).filter_by(sender_id=current_user.id)
+    received = db.session.query(Messages.sender_id).filter_by(receiver_id=current_user.id)
     user_ids = {uid for (uid,) in sent.union(received).all()} #prevent repeat
 
-    users = User.query.filter(User.id.in_(user_ids)).all()
+    users = User.query.filter(User.id.in_(user_ids)).all() if user_ids else[]
     return render_template("inbox.html", users=users)
