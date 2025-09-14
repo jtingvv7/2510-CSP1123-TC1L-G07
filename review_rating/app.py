@@ -34,5 +34,5 @@ def add():
 
 @review_bp.route("/success")
 def success():
-    return render_template("success.html")
+    return render_template("review_success.html")
 
