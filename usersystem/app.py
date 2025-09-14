@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from sqlalchemy import func
 from models import Transaction, Review
 from main import app, db
-from models import User, Transaction, Review, SafeLocation
+from models import User, Transaction, Review, SafeLocation, Product
 import re #phonenum
 
 
@@ -22,8 +22,14 @@ order_data = {
     "currency": "myr"
 }
 
+@app.route("/")
+def home():
+    # Show latest 6 products for homepage
+    latest_products = Product.query.order_by(Product.date_posted.desc()).limit(6).all()
+    return render_template("home.html", products=latest_products)
+
 #render first page(login)
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -33,7 +39,9 @@ def login():
 
         if user and user.password == password:
             session["user_id"] = user.id  #save login session
-            return  redirect(url_for('profile'))
+            session["user_name"] = user.name
+            session["user_profile_pic"] = user.profile_pic
+            return  redirect(url_for('home'))
         else:
             flash("Invalid email or password, please try again!", "invalid")
             return redirect(url_for('login'))
@@ -76,30 +84,43 @@ def register():
     
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
     if "user_id" not in session: 
         return redirect(url_for("login"))
     
     user = User.query.get_or_404(session["user_id"])
 
-     # completed sales & purchases
+    if request.method == "POST":
+        if "profile_pic" in request.files:
+            file = request.files["profile_pic"]
+            if file and file.filename != "":
+                filename = f"user_{user.id}.jpg"
+                filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(filepath)
+                user.profile_pic = filename
+                session["user_profile_pic"] = filename
+                db.session.commit()
+                flash("Profile picture updated!", "success")
+        return redirect(url_for("profile"))
+
+    # completed sales & purchases
     completed_sales = Transaction.query.filter_by(seller_id=user.id, status="completed").count()
     completed_purchases = Transaction.query.filter_by(buyer_id=user.id, status="completed").count()
 
     # average rating
     avg_rating = db.session.query(func.avg(Review.rating)).filter(Review.reviewed_id == user.id).scalar()
 
-    # pickup
-    pickup_points = SafeLocation.query.all()
+    # ✅ Only get the first pickup point (or None if not set)
+    pickup_point = SafeLocation.query.filter_by(user_id=user.id).first()
 
     return render_template(
         "profile.html",
         user=user,
         completed_sales=completed_sales,
         completed_purchases=completed_purchases,
-        avg_rating=avg_rating, 
-        pickup_points=pickup_points
+        avg_rating=avg_rating,
+        pickup_point=pickup_point  
     )
 
 
@@ -136,6 +157,9 @@ def editprofile():
                 file.save(filepath)
                 user.profile_pic = filename
 
+                # ⚡ Update session so it reflects immediately
+                session["user_profile_pic"] = filename
+
         db.session.commit()
         flash("Profile updated successfully!", "success")
         return redirect(url_for("profile"))
@@ -171,31 +195,111 @@ def map():
         return redirect(url_for("login"))
 
     if request.method == "POST":
-        name = request.form.get("name")
-        address = request.form.get("address")
-        lat = request.form.get("latitude")
-        lng = request.form.get("longitude")
-        desc = request.form.get("description")
+        name = request.form["name"]
+        address = request.form["address"]
 
-        if not (name and address and lat and lng):
-            flash("All fields are required!", "danger")
-            return redirect(url_for("map"))
+        # ✅ check if user already has one pickup point
+        pickup_point = SafeLocation.query.filter_by(user_id=session["user_id"]).first()
 
-        new_location = SafeLocation(
-            name=name,
-            address=address,
-            latitude=float(lat),
-            longitude=float(lng),
-            description=desc
-        )
-        db.session.add(new_location)
+        if pickup_point:
+            # update existing
+            pickup_point.name = name
+            pickup_point.address = address
+        else:
+            # create new
+            new_point = SafeLocation(user_id=session["user_id"], name=name, address=address)
+            db.session.add(new_point)
+
         db.session.commit()
-
-        flash("Pickup point saved successfully!", "success")
+        flash("Pickup point updated successfully!", "success")
         return redirect(url_for("profile"))
 
     return render_template("map.html")
 
+@app.route("/product")
+def product():
+    """
+    Show all products to users.
+    """
+    all_products = Product.query.all()  # Fetch all products
+    return render_template("product.html", products=all_products)
+
+
+# Add or edit a product
+@app.route("/product/manage", methods=["GET", "POST"])
+@app.route("/product/manage/<int:product_id>", methods=["GET", "POST"])
+def product_manage(product_id=None):
+    """
+    Add a new product or edit an existing product.
+    - If product_id is provided, edit the product.
+    - Otherwise, create a new product.
+    """
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user = User.query.get(session["user_id"])
+    locations = SafeLocation.query.filter_by(user_id=user.id).all()  # Pickup locations for dropdown
+    product_item = Product.query.get(product_id) if product_id else None
+
+    if request.method == "POST":
+        # --- Form Input ---
+        name = request.form.get("name")
+        price_str = request.form.get("price")
+        description = request.form.get("description")
+        pickup_location_id = request.form.get("pickup_location")
+        image_file = request.files.get("image")
+
+        # --- Validation ---
+        if not name or not price_str:
+            flash("Product name and price are required!", "danger")
+            return redirect(request.url)
+
+        try:
+            price = float(price_str)
+        except ValueError:
+            flash("Invalid price format!", "danger")
+            return redirect(request.url)
+
+        # Check duplicate name
+        existing_product = Product.query.filter_by(name=name).first()
+        if existing_product and (not product_item or existing_product.id != product_item.id):
+            flash("Product name already exists!", "danger")
+            return redirect(request.url)
+
+        # Handle image upload
+        filename = "default_product.jpg"
+        if image_file and image_file.filename != "":
+            filename = f"product_{user.id}_{image_file.filename}"
+            image_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+        if product_item:
+            # Edit existing product
+            product_item.name = name
+            product_item.price = price
+            product_item.description = description
+            product_item.pickup_location_id = int(pickup_location_id) if pickup_location_id else None
+            product_item.image = filename
+            flash("Product updated successfully!", "success")
+        else:
+            # Add new product
+            new_product = Product(
+                seller_id=user.id,
+                name=name,
+                price=price,
+                description=description,
+                pickup_location_id=int(pickup_location_id) if pickup_location_id else None,
+                image=filename
+            )
+            db.session.add(new_product)
+            flash("Product added successfully!", "success")
+
+        db.session.commit()
+
+        # ✅ Redirect to product listing after submission
+        return redirect(url_for("product"))
+
+    # GET request → show form
+    return render_template("product_manage.html", product=product_item, locations=locations)
 
 @app.route("/success")
 def success():

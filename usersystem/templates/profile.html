@@ -20,7 +20,7 @@
     </div>
 
     <a class="active" href="{{ url_for('profile') }}">Profile</a>
-    <a href="{{ url_for('create_checkout_session') }}">Payment</a>
+    <a href="{{ url_for('home') }}">home</a>
     <a href="{{ url_for('editprofile') }}" class="upload-btn">Edit Profile</a>
     <a href="{{ url_for('map') }}">Select Pickup Point</a>
     <a href="{{ url_for('login') }}">Log out</a>
@@ -36,15 +36,8 @@
           <p><strong>Member since:</strong> {{ user.join_date.strftime('%B %Y') }}</p>
           <p><strong>Phone number:</strong> {{ user.phone if user.phone else '--' }}</p>
           <p><strong>Prefer pickup Point</strong></p>
-          {% if pickup_points %}
-            <ul>
-              {% for point in pickup_points %}
-              <li>
-                {{ point.name }} - {{ point.address }}
-                (<a href="https://www.google.com/maps?q={{ point.latitude }},{{ point.longitude }}" target="_blank">View Map</a>)
-              </li>
-              {% endfor %}
-            </ul>
+          {% if pickup_point %}
+            <p><strong>{{ pickup_point.name }}</strong><br>{{ pickup_point.address }}</p>
           {% else %}
             <p>No pickup point saved yet.</p>
           {% endif %}

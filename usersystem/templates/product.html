@@ -1,0 +1,43 @@
+{% extends "home.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">All Products</h2>
+
+<!-- Add new product button -->
+<a href="{{ url_for('product_manage') }}" class="btn btn-primary mb-3">Add New Product</a>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <!-- Product image -->
+            <img src="{{ url_for('static', filename='uploads/' + product.image) }}" class="card-img-top" alt="{{ product.name }}">
+            
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description[:100] }}{% if product.description|length > 100 %}...{% endif %}</p>
+                <p><strong>Price:</strong> MYR {{ "%.2f"|format(product.price) }}</p>
+                
+                {% if product.pickup_location %}
+                <p><strong>Pickup:</strong> {{ product.pickup_location.name }}</p>
+                {% endif %}
+
+                <div class="mt-auto">
+                    <a href="{{ url_for('product', product_id=product.id) }}" class="btn btn-info btn-sm">View Details</a>
+
+                    <!-- Edit/Delete buttons for seller only -->
+                    {% if session.get('user_id') == product.seller_id %}
+                    <a href="{{ url_for('product_manage', product_id=product.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{{ url_for('product_manage', product_id=product.id) }}" method="POST" style="display:inline-block;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
