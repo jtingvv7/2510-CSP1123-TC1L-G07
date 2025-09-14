@@ -29,7 +29,7 @@ def create_app():
     from messages.routes import messages_bp
     # register blueprint
     app.register_blueprint(transaction_bp, url_prefix="/transaction")
-    app.register_blueprint(messages_bp, url_prefix="/messaging")
+    app.register_blueprint(messages_bp, url_prefix="/messages")
     app.register_blueprint(payment_bp, url_prefix="/payment")
     app.register_blueprint(review_bp, url_prefix="/review")
     

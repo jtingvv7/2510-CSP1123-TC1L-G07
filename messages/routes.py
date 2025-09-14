@@ -1,7 +1,7 @@
 import logging
 from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify
 from flask_login import  login_required , current_user, login_user
-from datetime import datetime, timezone
+from datetime import timedelta
 from models import db
 from models import User, Product, Transaction, Messages
 from sqlalchemy.exc import SQLAlchemyError
@@ -10,6 +10,39 @@ logging.basicConfig(level = logging.INFO, filename = "app.log")
 messages_bp = Blueprint('messages', __name__, template_folder='templates', static_folder='static')
 
 #fake inbox
+@messages_bp.route("/test_inbox")
+@login_required
+def test_inbox():
+    user1 = User.query.get(1)
+    user2 = User.query.get(2)
+    if not user1 or not user2 :
+        return"create at least 2 user in database",400
+    
+    #insert test message
+    test_msg = Messages(sender_id=user1.id, receiver_id=user2.id, content="hello from user1")
+    db.session.add(test_msg)
+    db.session.commit()
+    
+    return"already insert test message"
+
+#fake messages
+@messages_bp.route("/fake_messages")
+@login_required
+def fake_messages():
+    # confirm user1 and user2 is exist
+    user1 = User.query.filter_by(email="test1@gmail.com").first()
+    user2 = User.query.filter_by(email="test2@gmail.com").first()
+
+    if not user1 or not user2:
+        return "Please run /transaction/fake_login first", 400
+
+    # insert fake messages
+    msg1 = Messages(sender_id=user1.id, receiver_id=user2.id, content="Hello from test1")
+    msg2 = Messages(sender_id=user2.id, receiver_id=user1.id, content="Hi, this is test2")
+    db.session.add_all([msg1, msg2])
+    db.session.commit()
+
+    return "Fake messages inserted. Now go check /messages/inbox"
 
 
 #view conversation
@@ -24,9 +57,10 @@ def chat_json(user_id):
     #return JSON data to back end
     return jsonify([
         {
-        "sender" : "Me" if msg.sender_id == current_user.id else "Them",
+        "sender_id" : msg.sender_id,
+        "sender_name": msg.sender.name,
         "content" : msg.content,
-        "time" : msg.timestamp.strftime("%H:%M:%S")
+        "time" : (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S") #convert to MYT
     }for msg in conversation
     ])   
 
@@ -47,7 +81,8 @@ def send_messages(user_id):
 @messages_bp.route("/chat/<int:user_id>")
 @login_required
 def chat(user_id):
-    return render_template("chat.html", user_id = user_id)
+    user = User.query.get_or_404(user_id)
+    return render_template("chat.html", user=user, user_id=user_id)
 
 #inbox
 @messages_bp.route("/inbox")
