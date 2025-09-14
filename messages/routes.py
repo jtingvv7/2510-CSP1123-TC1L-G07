@@ -1,7 +1,7 @@
 import logging
 from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify
 from flask_login import  login_required , current_user, login_user
-from datetime import datetime, timezone
+from datetime import timedelta
 from models import db
 from models import User, Product, Transaction, Messages
 from sqlalchemy.exc import SQLAlchemyError
@@ -57,9 +57,9 @@ def chat_json(user_id):
     #return JSON data to back end
     return jsonify([
         {
-        "sender" : "Me" if msg.sender_id == current_user.id else "Them",
+        "sender_id" : msg.sender_id,
         "content" : msg.content,
-        "time" : msg.timestamp.strftime("%H:%M:%S")
+        "time" : (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S") #convert to MYT
     }for msg in conversation
     ])   
 

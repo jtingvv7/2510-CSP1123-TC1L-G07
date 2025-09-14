@@ -10,7 +10,7 @@ function loadMessages(){
             let msgDiv = document.createElement("div");
             msgDiv.classList.add("message-bubble");
 
-            if (msg.sender_id === "Me"){
+            if (msg.sender_id === CURRENT_USER_ID){
                 msgDiv.classList.add("my-message");
             } else{
                 msgDiv.classList.add("their-message");
