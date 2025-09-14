@@ -49,10 +49,10 @@ def chat(user_id):
 @messages_bp.route("/inbox")
 @login_required
 def inbox():
-    #find all 
+    #find all user relationship with current user
     sent = db.session.query(Messages.receiver_id).filter_by(sender_id=current_user)
     received = db.session.query(Messages.sender_id).filter_by(received_id=current_user)
-    user_ids = {uid for (uid,) in sent.union(received).all()} #
+    user_ids = {uid for (uid,) in sent.union(received).all()} #prevent repeat
 
     users = User.query.filter(User.id.in_(user_ids)).all()
     return render_template("inbox.html", users=users)
