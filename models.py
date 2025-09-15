@@ -1,19 +1,23 @@
 from extensions import db
 from datetime import datetime, timezone
 from flask_login import UserMixin
+from datetime import datetime, timezone
 
 #user db
 class User(db.Model,UserMixin):
-    #__tablename__ = 'user'
+    __tablename__ = 'user'
     id = db.Column (db.Integer, primary_key = True) #primary key
     name = db.Column (db.String(30), nullable = False, unique = True) #nullable = cannot be empty, unique = cannot same with others
     email = db.Column (db.String(150), nullable = False, unique = True)
     password = db.Column (db.String(80), nullable = False)
+    profile_pic = db.Column(db.String(200), default="profile.jpg")
+    join_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    phone = db.Column(db.String(20), nullable=True)
 #relationship of user
     #backref = can find user through transactions , lazy = lazy loading
-    products = db.relationship('Product',backref ='product_posted',lazy = True)
-    wallet = db.relationship('Wallet', backref = 'wallet_owner', uselist = False, lazy = True)
-    payment = db.relationship('Payment', backref = 'payment', lazy = True)
+    products = db.relationship("Product", back_populates="seller", lazy=True)
+    wallet = db.relationship("Wallet", backref="wallet_owner", uselist=False, lazy=True)
+    payment = db.relationship("Payment", backref="payment_user", lazy=True)
 
 
     def __repr__(self): #automatically called when you print an object or view it in the python console so more readable
@@ -22,6 +26,7 @@ class User(db.Model,UserMixin):
 
 #product db
 class Product(db.Model):
+    __tablename__ = 'product'
     id = db.Column (db.Integer, primary_key = True) 
     seller_id = db.Column (db.Integer, db.ForeignKey('user.id'), nullable = False)
     name = db.Column(db.String(30), nullable = False, unique = True) #product name
@@ -29,9 +34,13 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable = True) #can be empty
     is_sold = db.Column(db.Boolean, default = True)
     date_posted = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    image = db.Column(db.String(200), default="default_product.jpg") 
+    pickup_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'), nullable=True)
 
 #relationship
     transactions = db.relationship('Transaction', backref = 'product',lazy = True)
+    pickup_location = db.relationship("SafeLocation", backref="products")
+    seller = db.relationship("User", back_populates="products")
 
     def __repr__(self):
         return f"<Product {self.id}  {self.name}>"
@@ -92,13 +101,15 @@ class Review(db.Model):
 class SafeLocation(db.Model):
     __tablename__ = 'safelocation'
     id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
     name = db.Column(db.String(100), nullable = False)
+    address = db.Column(db.String(255), nullable=False)
     latitude = db.Column(db.Float, nullable = True)
     longitude = db.Column(db.Float, nullable = True)
     description = db.Column(db.Text, nullable = True)
 
     def __repr__(self):
-        return f"<Safe Location : {self.name}>"
+        return f"<Safe Location: {self.name} ({self.latitude}, {self.longitude})>"
 
 
 class Wallet(db.Model):
@@ -122,4 +133,12 @@ class Payment(db.Model):
         return f"<Payment {self.id} amount: {self.amount}>"
 
 
+class Order(db.Model):
+    id =db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.String(20), unique=True, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(20), default="MYR")
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     
+    def __repr__(self):
+        return f"<Order {self.id} order_id: {self.order_id}>"

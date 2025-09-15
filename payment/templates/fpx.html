@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pay with GrabPay</title>
+    <title>Pay with FPX</title>
     <style>
         body {font-family: Arial, Helvetica, sans-serif; background: #f5f5f5; margin: 0; padding: 40px;}
         .container {max-height: 400px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0, 0, 0, 1);}
@@ -17,18 +17,28 @@
 <body>
     <div class="container">
     <h2>{{ order.order_id }} - MYR {{ '%.2f' |format(order.amount) }}</h2>
-    <form action="/success" method="POST">
+    <form action="{{ url_for('payment.fpx') }}" method="POST">
         <label>Email</label>
         <input type="email" name="email" required>
         
+        <label>FPX Bank</label>
+        <select name="bank" required>
+            <option value=" ">Select bank</option>
+            <option>Maybank</option>
+            <option>CIMB Bank</option>
+            <option>Public Bank</option>
+            <option>RHB Bank</option>
+            <option>Hong Leong Bank</option>
+        </select>
+
         <label>Name</label>
         <input type="text" name="name" required>
 
         <p>After submission, you will be redirected to securely complete next step</p>
 
-        <button type="submit"><a href="/success">Pay</a></button>
+        <button type="submit">Pay</button>
     </form>
-    <a href="/cancel">Cancel Payment</a>
+    <a href="{{ url_for('payment.cancel') }}">Cancel Payment</a>
     </div>
 </body>
 </html>

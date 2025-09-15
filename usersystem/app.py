@@ -1,314 +1,291 @@
 import os
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, session
-import stripe
-from dotenv import load_dotenv
-from sqlalchemy import func
-from models import Transaction, Review
-from main import app, db
+import re
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
+from werkzeug.utils import secure_filename
+from main import db
 from models import User, Transaction, Review, SafeLocation, Product
-import re #phonenum
+
+usersystem_bp = Blueprint(
+    "usersystem",
+    __name__,
+    template_folder="templates",
+    static_folder="static",
+    static_url_path="/usersystem/static"
+)
 
 
-load_dotenv()
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
-app.config["UPLOAD_FOLDER"] = os.path.join("static", "uploads")
-os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-#upload photo
-order_data = {
-    "order_id": "SECONDLOOP_123456",
-    "amount": 99.90,
-    "currency": "myr"
-}
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/")
+
+# ----------------- HOME -----------------
+@usersystem_bp.route("/")
 def home():
-    # Show latest 6 products for homepage
-    latest_products = Product.query.order_by(Product.date_posted.desc()).limit(6).all()
-    return render_template("home.html", products=latest_products)
+    return render_template("home_index.html")
 
-#render first page(login)
-@app.route('/login', methods=['GET', 'POST'])
+
+# ----------------- LOGIN -----------------
+@usersystem_bp.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        #check database
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
         user = User.query.filter_by(email=email).first()
 
         if user and user.password == password:
-            session["user_id"] = user.id  #save login session
+            session["user_id"] = user.id
             session["user_name"] = user.name
             session["user_profile_pic"] = user.profile_pic
-            return  redirect(url_for('home'))
+            return redirect(url_for("usersystem.home"))
         else:
-            flash("Invalid email or password, please try again!", "invalid")
-            return redirect(url_for('login'))
+            flash("Invalid email or password, please try again!", "danger")
+            return redirect(url_for("usersystem.login"))
+
     return render_template("login.html")
 
-@app.route("/register", methods=["GET", "POST"])
+
+# ----------------- REGISTER -----------------
+@usersystem_bp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        # handle form submission
         name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
 
-        from main import db
-        from models import User
-
-        #limit for student
+        # 1️⃣ Validate email domain
         if not email.endswith("@student.mmu.edu.my"):
-            flash("Please register with your student email", "invalid")
-            return redirect(url_for('register'))
-        
-        # --- Check if user already exists ---
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            flash("Account already exists. Please log in instead.", "invalid")
-            return redirect(url_for("login"))
-        
-        # save user into db 
-        from main import db
-        from models import User
-        new_user = User(name=name, email=email, password=password)
-        db.session.add(new_user)
+            flash("Only @student.mmu.edu.my emails are allowed to register!", "danger")
+            return redirect(url_for("usersystem.register"))
+
+        # 2️⃣ Check if email or username already exists
+        if User.query.filter_by(email=email).first() or User.query.filter_by(name=name).first():
+            flash("Email or username already exists!", "danger")
+            return redirect(url_for("usersystem.register"))
+
+        # 3️⃣ Create new user
+        user = User(name=name, email=email, password=password)
+        db.session.add(user)
         db.session.commit()
+        flash("Account created successfully! Please login.", "success")
+        return redirect(url_for("usersystem.login"))
 
-        flash(" Registration successful! Welcome, " + name, "success")
-        return redirect(url_for("login"))  # redirect to login
-
-    # if GET, just show the form
     return render_template("register.html")
-    
 
-
-@app.route("/profile", methods=["GET", "POST"])
-def profile():
-    if "user_id" not in session: 
-        return redirect(url_for("login"))
-    
-    user = User.query.get_or_404(session["user_id"])
+# ----------------- FORGOT / RESET PASSWORD -----------------
+@usersystem_bp.route("/forgot_reset_password", methods=["GET", "POST"])
+def forgot_reset_password():
+    step = request.args.get("step", "email")  # "email" or "reset"
 
     if request.method == "POST":
-        if "profile_pic" in request.files:
-            file = request.files["profile_pic"]
-            if file and file.filename != "":
-                filename = f"user_{user.id}.jpg"
-                filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-                file.save(filepath)
-                user.profile_pic = filename
-                session["user_profile_pic"] = filename
-                db.session.commit()
-                flash("Profile picture updated!", "success")
-        return redirect(url_for("profile"))
+        if step == "email":
+            # Step 1: Submit email
+            email = request.form.get("email")
+            user = User.query.filter_by(email=email).first()
+            if not user:
+                flash("Email not found. Please try again.", "danger")
+                return redirect(url_for("usersystem.forgot_reset_password"))
+            
+            session["reset_user_id"] = user.id
+            flash("Email verified. Please reset your password.", "info")
+            return redirect(url_for("usersystem.forgot_reset_password", step="reset"))
 
-    # completed sales & purchases
-    completed_sales = Transaction.query.filter_by(seller_id=user.id, status="completed").count()
-    completed_purchases = Transaction.query.filter_by(buyer_id=user.id, status="completed").count()
+        elif step == "reset":
+            # Step 2: Reset password
+            if "reset_user_id" not in session:
+                flash("Unauthorized access.", "danger")
+                return redirect(url_for("usersystem.login"))
 
-    # average rating
-    avg_rating = db.session.query(func.avg(Review.rating)).filter(Review.reviewed_id == user.id).scalar()
+            user = User.query.get(session["reset_user_id"])
+            new_password = request.form.get("password")
+            confirm_password = request.form.get("confirm_password")
 
-    # ✅ Only get the first pickup point (or None if not set)
-    pickup_point = SafeLocation.query.filter_by(user_id=user.id).first()
+            if new_password != confirm_password:
+                flash("Passwords do not match.", "danger")
+                return redirect(url_for("usersystem.forgot_reset_password", step="reset"))
+
+            user.password = new_password
+            db.session.commit()
+            session.pop("reset_user_id", None)
+            flash("Password reset successfully! Please login.", "success")
+            return redirect(url_for("usersystem.login"))
+
+    return render_template("forgot_reset_password.html", step=step)
+
+# ----------------- PROFILE -----------------
+@usersystem_bp.route("/profile", methods=["GET"])
+def profile():
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("Please login first!", "danger")
+        return redirect(url_for("usersystem.login"))
+
+    user = User.query.get(session.get("user_id"))
+    if not user:   # <-- NEW: user not found in DB
+        flash("User not found. Please login again.", "danger")
+        session.clear()
+        return redirect(url_for("usersystem.login"))
+
+    completed_sales = Transaction.query.filter_by(seller_id=user_id, status="completed").all()
+    completed_purchases = Transaction.query.filter_by(buyer_id=user_id, status="completed").all()
+    avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user_id).scalar()
+    pickup_points = SafeLocation.query.filter_by(user_id=user_id).all()
 
     return render_template(
         "profile.html",
         user=user,
-        completed_sales=completed_sales,
-        completed_purchases=completed_purchases,
+        completed_sales=len(completed_sales),
+        completed_purchases=len(completed_purchases),
         avg_rating=avg_rating,
-        pickup_point=pickup_point  
+        pickup_points=pickup_points
     )
 
-
-
-@app.route("/editprofile", methods=["GET", "POST"])
+# ----------------- EDIT PROFILE -----------------
+@usersystem_bp.route("/editprofile", methods=["GET", "POST"])
 def editprofile():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("Please login first!", "danger")
+        return redirect(url_for("usersystem.login"))
 
-    user = User.query.get_or_404(session["user_id"])
+    user = User.query.get(user_id)
+    if not user:
+        flash("User not found. Please login again.", "danger")
+        session.clear()
+        return redirect(url_for("usersystem.login"))
 
     if request.method == "POST":
-        # Update name
+        # ✅ Name
         name = request.form.get("name")
-        if name:
-            user.name = name
+        user.name = name
 
-        # Update phone
+        # ✅ Phone
         phone = request.form.get("phone")
-        if phone:  # only digits from input
-            full_phone = "+60" + phone.strip()  # build full phone number
-            if re.fullmatch(r"\+60\d{9}", full_phone):
-                user.phone = full_phone
-            else:
-                flash("Phone number must start with +60 and have exactly 9 digits.", "danger")
-                return redirect(url_for("editprofile"))
+        if phone and not re.match(r"^\d{9}$", phone):  
+            flash("Phone number must be 9 digits!", "danger")
+            return redirect(url_for("usersystem.editprofile"))
+        user.phone = f"+60{phone}" if phone else None
 
-        # Update profile photo
-        if "file" in request.files:
-            file = request.files["file"]
-            if file and file.filename != "":
-                filename = f"user_{user.id}.jpg"
-                filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-                file.save(filepath)
-                user.profile_pic = filename
-
-                # ⚡ Update session so it reflects immediately
-                session["user_profile_pic"] = filename
+        # ✅ Profile Picture
+        file = request.files.get("file")
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            upload_path = os.path.join(current_app.root_path, "static", "uploads")
+            os.makedirs(upload_path, exist_ok=True)
+            filepath = os.path.join(upload_path, filename)
+            file.save(filepath)
+            user.profile_pic = filename
+            session["user_profile_pic"] = filename
 
         db.session.commit()
         flash("Profile updated successfully!", "success")
-        return redirect(url_for("profile"))
+        return redirect(url_for("usersystem.profile"))
 
     return render_template("editprofile.html", user=user)
 
-
-
-@app.route("/create-checkout-session", methods=["POST"])
-def create_checkout_session():
-    payment_method = request.json.get("payment_method", "card")
-    
-    session = stripe.checkout.Session.create(
-        mode="payment",
-        payment_method_types=[payment_method],
-        line_items=[{
-            "price_data": {
-                "currency": "myr",
-                "product_data": {"name": "Test Order"},
-                "unit_amount": 5000, #50.00 
-            },
-            "quantity": 1,
-        }],
-        success_url=os.getenv("BASE_URL") + "/success?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url=os.getenv("BASE_URL") + "/cancel",
-        metadata={"order_id": "SECONDLOOP_123456"}
-    )
-    return jsonify({"id": session.id, "url": session.url})
-
-@app.route("/map", methods=["GET", "POST"])
+# ----------------- MAP -----------------
+@usersystem_bp.route("/map", methods=["GET", "POST"])
 def map():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
+    if not session.get("user_id"):
+        flash("Please login first!", "danger")
+        return redirect(url_for("usersystem.login"))
+
+    user_id = session["user_id"]
 
     if request.method == "POST":
-        name = request.form["name"]
-        address = request.form["address"]
+        name = request.form.get("name")
+        address = request.form.get("address")
+        latitude = request.form.get("latitude")
+        longitude = request.form.get("longitude")
+        description = request.form.get("description")
 
-        # ✅ check if user already has one pickup point
-        pickup_point = SafeLocation.query.filter_by(user_id=session["user_id"]).first()
+        if not all([name, address, latitude, longitude]):
+            flash("Please fill all required fields.", "danger")
+            return redirect(url_for("usersystem.map"))
 
-        if pickup_point:
-            # update existing
-            pickup_point.name = name
-            pickup_point.address = address
+        existing_location = SafeLocation.query.filter_by(user_id=user_id).first()
+        if existing_location:
+            existing_location.name = name
+            existing_location.address = address
+            existing_location.latitude = latitude
+            existing_location.longitude = longitude
+            existing_location.description = description
         else:
-            # create new
-            new_point = SafeLocation(user_id=session["user_id"], name=name, address=address)
-            db.session.add(new_point)
+            new_location = SafeLocation(
+                user_id=user_id,
+                name=name,
+                address=address,
+                latitude=latitude,
+                longitude=longitude,
+                description=description
+            )
+            db.session.add(new_location)
 
         db.session.commit()
-        flash("Pickup point updated successfully!", "success")
-        return redirect(url_for("profile"))
+        flash("Pickup point saved successfully!", "success")
+        return redirect(url_for("usersystem.profile"))
 
     return render_template("map.html")
 
-@app.route("/product")
+
+# ----------------- PRODUCT LIST -----------------
+@usersystem_bp.route("/product")
 def product():
-    """
-    Show all products to users.
-    """
-    all_products = Product.query.all()  # Fetch all products
-    return render_template("product.html", products=all_products)
+    products = Product.query.all()
+    return render_template("product.html", products=products)
 
 
-# Add or edit a product
-@app.route("/product/manage", methods=["GET", "POST"])
-@app.route("/product/manage/<int:product_id>", methods=["GET", "POST"])
+# ----------------- PRODUCT MANAGE -----------------
+@usersystem_bp.route("/product/manage", methods=["GET", "POST"])
+@usersystem_bp.route("/product/manage/<int:product_id>", methods=["GET", "POST"])
 def product_manage(product_id=None):
-    """
-    Add a new product or edit an existing product.
-    - If product_id is provided, edit the product.
-    - Otherwise, create a new product.
-    """
     if "user_id" not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for("usersystem.login"))
 
-    user = User.query.get(session["user_id"])
-    locations = SafeLocation.query.filter_by(user_id=user.id).all()  # Pickup locations for dropdown
-    product_item = Product.query.get(product_id) if product_id else None
+    product = Product.query.get(product_id) if product_id else None
+    locations = SafeLocation.query.filter_by(user_id=session["user_id"]).all()
 
     if request.method == "POST":
-        # --- Form Input ---
+        # handle delete
+        if "delete" in request.form:
+            if product and product.seller_id == session["user_id"]:
+                db.session.delete(product)
+                db.session.commit()
+                flash("Product deleted successfully!", "success")
+            return redirect(url_for("usersystem.product"))
+
         name = request.form.get("name")
-        price_str = request.form.get("price")
+        price = float(request.form.get("price"))
         description = request.form.get("description")
-        pickup_location_id = request.form.get("pickup_location")
-        image_file = request.files.get("image")
+        pickup_location_id = request.form.get("pickup_location") or None
 
-        # --- Validation ---
-        if not name or not price_str:
-            flash("Product name and price are required!", "danger")
-            return redirect(request.url)
-
-        try:
-            price = float(price_str)
-        except ValueError:
-            flash("Invalid price format!", "danger")
-            return redirect(request.url)
-
-        # Check duplicate name
-        existing_product = Product.query.filter_by(name=name).first()
-        if existing_product and (not product_item or existing_product.id != product_item.id):
-            flash("Product name already exists!", "danger")
-            return redirect(request.url)
-
-        # Handle image upload
-        filename = "default_product.jpg"
-        if image_file and image_file.filename != "":
-            filename = f"product_{user.id}_{image_file.filename}"
-            image_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-
-        if product_item:
-            # Edit existing product
-            product_item.name = name
-            product_item.price = price
-            product_item.description = description
-            product_item.pickup_location_id = int(pickup_location_id) if pickup_location_id else None
-            product_item.image = filename
-            flash("Product updated successfully!", "success")
+        if product_id:
+            product.name = name
+            product.price = price
+            product.description = description
+            product.pickup_location_id = pickup_location_id
         else:
-            # Add new product
-            new_product = Product(
-                seller_id=user.id,
+            product = Product(
                 name=name,
                 price=price,
                 description=description,
-                pickup_location_id=int(pickup_location_id) if pickup_location_id else None,
-                image=filename
+                seller_id=session["user_id"],
+                pickup_location_id=pickup_location_id
             )
-            db.session.add(new_product)
-            flash("Product added successfully!", "success")
+            db.session.add(product)
 
         db.session.commit()
+        flash("Product saved successfully!", "success")
+        return redirect(url_for("usersystem.product"))
 
-        # ✅ Redirect to product listing after submission
-        return redirect(url_for("product"))
+    return render_template("product_manage.html", product=product, locations=locations)
 
-    # GET request → show form
-    return render_template("product_manage.html", product=product_item, locations=locations)
 
-@app.route("/success")
+# ----------------- SUCCESS -----------------
+@usersystem_bp.route("/success")
 def success():
     return render_template("success.html")
-
-
-@app.route("/cancel")
-def cancel():
-    return render_template("cancel.html")
-
-if __name__ == "__main__":
-    app.run(debug=True)

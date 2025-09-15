@@ -19,6 +19,7 @@
 <body>
   <div class="checkout-box">
     <h2>Checkout</h2>
+    <p><a href="{{ url_for('index') }}" style="color: #ee4d2d; text-decoration: none;">← Back to Home</a></p>
     <p>Order: <b>{{ order.order_id }}</b></p>
     <p>Total: <b>RM {{ '%.2f' |format(order.amount) }}</b></p>
     
@@ -53,11 +54,11 @@
         e.preventDefault();
         const choice = document.querySelector('input[name="payment_method"]:checked').value;
         if (choice === "card") {
-          this.action = "/card";
+          this.action = "{{ url_for('payment.card') }}";
         } else if (choice === "grabpay") {
-          this.action = "/grabpay";
+          this.action = "{{ url_for('payment.grabpay') }}";
         } else if (choice === "fpx") {
-          this.action = "/fpx";
+          this.action = "{{ url_for('payment.fpx') }}";
         }
         this.submit();
       });

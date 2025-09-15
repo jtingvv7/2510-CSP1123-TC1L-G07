@@ -9,6 +9,7 @@
   box-sizing: border-box;
 }
 
+
 /* Sidebar */
 .sidebar {
   width: 220px;
@@ -52,7 +53,7 @@
 }
 
 body {
-  background-color: rgb(240, 237, 183);
+  background-color: rgb(255, 255, 255);
   margin: 0;
   font-family: Arial, sans-serif;
 }

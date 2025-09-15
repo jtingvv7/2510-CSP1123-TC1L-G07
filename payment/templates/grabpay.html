@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pay with Card</title>
+    <title>Pay with GrabPay</title>
     <style>
         body {font-family: Arial, Helvetica, sans-serif; background: #f5f5f5; margin: 0; padding: 40px;}
-        .container {max-height: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0, 0, 0, 1);}
+        .container {max-height: 400px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0, 0, 0, 1);}
         h2 {text-align: center; margin-bottom: 20px;}
         label {display: block; margin: 10px 0 5px; font-weight: bold;}
         input {width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;}
@@ -17,30 +17,18 @@
 <body>
     <div class="container">
     <h2>{{ order.order_id }} - MYR {{ '%.2f' |format(order.amount) }}</h2>
-    <form action="/card" method="POST">
-        <input type="hidden" name="order_id" value="{{ order.order_id }}">
-        <input type="hidden" name="amount" value="{{ order.amount }}">
+    <form action="{{ url_for('payment.grabpay') }}" method="POST">
         <label>Email</label>
-
         <input type="email" name="email" required>
         
-        <label>Card Number</label>
-        <input type="text" name="card_number" placeholder="1234 1234 1234 1234" required>
-
-        <label>Expiry</label>
-        <input type="text" name="expiry" placeholder="MM/YY" required>
-
-        <label>CVV</label>
-        <input type="text" name="cvv" placeholder="123" required>
-
-        <label>Cardholder Name</label>
-        <input type="text" name="cardholder" required>
+        <label>Name</label>
+        <input type="text" name="name" required>
 
         <p>After submission, you will be redirected to securely complete next step</p>
 
-        <button type="submit"><a href="/success">Pay</a></button>
+        <button type="submit">Pay</button>
     </form>
-    <a href="/cancel">Cancel Payment</a>
+    <a href="{{ url_for('payment.cancel') }}">Cancel Payment</a>
     </div>
 </body>
 </html>

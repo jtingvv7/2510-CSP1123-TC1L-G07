@@ -22,13 +22,19 @@
         <h1>All Reviews</h1>
     </header>
     <div class="container">
-        <a href="/add" class="button">Add a Review</a>
+        <a href="{{ url_for('review.add') }}" class="button">Add a Review</a>
         <ul>
             {% for review in reviews %}
             <li>
-                <strong>{{ review.username }}</strong>({{ review.ratign }}/5)<br>
+                <strong>{{ review.username }}</strong> 
+                {% if review.rating == 5 %}⭐️⭐️⭐️⭐️⭐️
+                {% elif review.rating == 4 %}⭐️⭐️⭐️⭐️
+                {% elif review.rating == 3 %}⭐️⭐️⭐️
+                {% elif review.rating == 2 %}⭐️⭐️
+                {% elif review.rating == 1 %}⭐️
+                {% endif %}<br>
                 <p>{{ review.comment }}</p>
-                <small>{{ review.create_at }}</small>
+                <small>{{ review.date_review }}</small>
 
             </li>
             {% endfor %}
