@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
 from models import User, Transaction, Review, SafeLocation, Product
+from flask_login import login_user, logout_user
 
 usersystem_bp = Blueprint(
     "usersystem",
@@ -38,15 +39,18 @@ def login():
         password_input = request.form.get('password')
 
         user = User.query.filter_by(email=email).first()
-
         if not user:
             flash("Email not registered.", "error")
             return redirect(url_for('usersystem.login'))
-
+        
         if check_password_hash(user.password, password_input):
             # Successful login
-            session['user_id'] = user.id
-            return redirect(url_for('index'))  
+            login_user(user) #let flask-login remember user
+
+            session["user_id"] = user.id
+            session["user_name"] = user.name
+            session["user_profile_pic"] = user.profile_pic
+            return redirect(url_for("usersystem.home"))
         else:
             flash("Invalid password.", "error")
             return redirect(url_for('usersystem.login'))
@@ -61,18 +65,21 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # 1️⃣ Validate email domain
+        # Validate email domain
         if not email.endswith("@student.mmu.edu.my"):
             flash("Only @student.mmu.edu.my emails are allowed to register!", "danger")
             return redirect(url_for("usersystem.register"))
 
-        # 2️⃣ Check if email or username already exists
+        # Check if email or username already exists
         if User.query.filter_by(email=email).first() or User.query.filter_by(name=name).first():
             flash("Email or username already exists!", "danger")
             return redirect(url_for("usersystem.register"))
+        
+        # Hash password before storing
+        hashed_password = generate_password_hash(password)
 
-        # 3️⃣ Create new user
-        user = User(name=name, email=email, password=password)
+        # Create new user
+        user = User(name=name, email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash("Account created successfully! Please login.", "success")
@@ -284,3 +291,10 @@ def product_manage(product_id=None):
 @usersystem_bp.route("/success")
 def success():
     return render_template("success.html")
+
+# ----------------- LOGOUT -----------------
+@usersystem_bp.route("/logout")
+def logout():
+    logout_user() #clear current_user
+    session.clear() 
+    return redirect(url_for("index"))

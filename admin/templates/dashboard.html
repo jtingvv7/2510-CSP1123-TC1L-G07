@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %} Admin Dashboard {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">Admin Dashboard</h2>
+  <div class="row">
+    <!--number of users-->
+    <div class="col-md-3">
+        <div class="card text-bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Users</h5>
+                <p class="card-text">{{ user_count }}</p>
+            </div>
+        </div>
+    </div>
+    <!--number of products-->
+    <div class="col-md-3">
+        <div class="card text-bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Products</h5>
+                <p class="card-text">{{ product_count }}</p>
+            </div>
+        </div>
+    </div>
+    <!--number of transactions-->
+    <div class="col-md-3">
+        <div class="card text-bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Transactions</h5>
+                <p class="card-text">{{ transaction_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--link to management -->
+<h3 class="mt-4">Management</h3>
+<ul>
+    <li><a href="{{ url_for('admin.manage_users') }}"> Manage Users</a></li>
+    <!--<li><a href="{{ url_for('admin.manage_products') }}"> Manage Products</a></li>
+    <li><a href="{{ url_for('admin.manage_transactions') }}"> Manage Transactions</a></li>-->
+</ul>
+
+
+
+{% endblock %}
