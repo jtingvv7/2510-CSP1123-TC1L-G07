@@ -3,13 +3,17 @@
 {% block title %}My transaction {% endblock %}
 
 {% block content %}
-<h1 class="mb-4 text-center">Welcome to my transaction</h1> 
+<div class="container mt-4">
 
-<!--bought product-->
-<h3>Bought Transactions</h3>
-{% if bought_transactions %}
-    <table class="table table-bordered">
-        <thead>
+<!--Bought Transaction-->
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white text-center">
+        <h5 class="mb-0">Bought Transactions</h5>
+    </div> 
+    <div class="card-body">
+        {% if bought_transactions %}
+        <table class="table table-hover text-center align-middle">
+        <thead class="table-light">
             <tr>
                 <th>ID</th>
                 <th>Product</th>
@@ -19,58 +23,107 @@
             </tr>
         </thead>
         <tbody>
-        {% for t in bought_transactions %}
+            {% for t in bought_transactions %}
             <tr>
                 <td>{{ t.id }}</td>
                 <td>{{ t.product_id }}</td>
-                <td>{{ t.status }}</td>
                 <td>
                     {% if t.status == "pending" %}
-                        <form action = "{{ url_for('transaction.cancel_transaction', transaction_id =t.id) }}" method="POST">
-                            <button type ="submit" class="btn btn-danger btn-sm">Cancel</button>
+                        <span class="badge bg-secondary">Pending</span>
+                    {% elif t.status == "shipped" %}
+                        <span class="badge bg-warning text-dark">Shipped</span>
+                    {% elif t.status == "completed" %}
+                        <span class="badge bg-success">Completed</span>
+                    {% elif t.status in ["cancelled","rejected"] %}
+                        <span class="badge bg-danger">{{ t.status|capitalize }}</span>
+                    {% endif %}
+                    </td>
+                    <td>  
+                    {% if t.status == "pending" %}
+                        <form action = "{{ url_for('transaction.cancel_transaction', transaction_id=t.id) }}" method="POST">
+                            <button type ="submit" class="btn btn-sm btn-danger ">Cancel</button>
+                        </form>
+                    {% elif t.status == "shipped" %}
+                        <form action = "{{ url_for('transaction.confirm_receipt', transaction_id=t.id) }}" method="POST">
+                            <button type ="submit" class="btn  btn-sm btn-success">Confirm</button>
                         </form>
                     {% endif %}
                 </td>
                 <td>
                     <!--contact seller-->
-                    <a href="{{url_for('messages.chat', user_id = t.seller_id) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ url_for('messages.chat', user_id = t.seller_id) }}" class="btn btn-primary btn-sm">
                         Contact Seller
                     </a>
                 </td>
             </tr>
-        {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
-{% else %}
-    <p>You haven't bought anything yet.</p>
-{% endif %}
-
-<hr>
-
-<!--sold product-->
-<h3>Sold Transaction</h3>
-{% if sold_transaction %}
-    <table class="table table-bordered">
-        <thead>
+    {% else %}
+    <p class="text-muted">You haven't bought anything yet.</p>
+    {% endif %}
+    </div>
+</div>
+    
+<!--Sold Transactions-->
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white text-center">
+    <h5 class="mb-0">Sold Transactions</h5>
+    </div>
+    <div class="card-body">
+        {% if sold_transactions %}
+        <table class="table table-hover text-center aligh-middle">
+        <thead class="table-light">
             <tr>
                 <th>ID</th>
                 <th>Product</th>
                 <th>Status</th>
+                <th>Action</th>
+                <th>Contact</th>
             </tr>
         </thead>
         <tbody>
-        {% for t in sold_transactions %}
-            <tr>
-                <td>{{ t.id }}</td>
-                <td>{{ t.product_id }}</td>
-                <td>{{ t.status }}</td>
+            {% for tx in sold_transactions %}
+             <tr>
+                <td>{{ tx.id }}</td>
+                <td>{{ tx.product_id }}</td>
+                <td>
+                    {% if tx.status == "pending" %}
+                        <span class="badge bg-secondary">Pending</span>
+                    {% elif tx.status == "accepted" %}
+                        <span class="badge bg-primary">Accepted</span>
+                    {% elif tx.status == "shipped" %}
+                        <span class="badge bg-warning text-dark">Shipped</span>
+                    {% elif tx.status == "completed" %}
+                        <span class="badge bg-success">Completed</span>
+                    {% elif tx.status in ["cancelled","rejected"] %}
+                        <span class="badge bg-danger">{{ tx.status|capitalize }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if tx.status == "accepted" %}
+                    <form action="{{ url_for('transaction.ship_transaction',transaction_id=tx.id) }}" method="POST">
+                        <button type="submit" class="btn btn-warning btn-sm">Ship</button>
+                    </form>
+                    {% elif tx.status == "shipped" %}
+                        <span class="badge bg-info">Awaiting Buyer</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <!--contact buyer-->
+                    <a href="{{ url_for('messages.chat', user_id = tx.buyer_id) }}" class="btn btn-primary btn-sm">
+                        Contact Buyer
+                    </a>
+                </td>
             </tr>
-        {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
-{% else %}
+    {% else %}
     <p>You haven't sold anything yet.</p>
 {% endif %}
+    </div>
+</div>
 
-
+</div>           
 {% endblock %}
