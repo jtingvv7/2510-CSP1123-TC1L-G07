@@ -34,6 +34,7 @@ def users():
     all_users = User.query.all()
     return render_template("admin/users.html", users=all_users)
 
+#make other user become admin
 @admin_bp.route("/make_admin/<int:user_id>")
 @login_required
 @admin_required
@@ -45,4 +46,22 @@ def make_admin(user_id):
     user.role = "admin"
     db.session.commit()
     flash(f"{user.name} is now an admin", "success")
+    return redirect(url_for("admin.users"))
+
+#delete user
+@admin_bp.route("/delete_user/<int:user_id>")
+@login_required
+@admin_required
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        flash("User not found","danger")
+        return redirect(url_for("admin.users"))
+    #prevent admin delete own acc
+    if user.id == current_user.id:
+        flash("You cannot delete your own account!","warning")
+        return redirect(url_for("admin.users"))
+    db.session.delete(user)
+    db.session.commit()
+    flash(f"User {user.name} has been deleted!","success")
     return redirect(url_for("admin.users"))
