@@ -380,3 +380,37 @@ gap: 20px;
     height: 150px;
   }
 }
+.reset-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    max-width: 450px;
+    width: 100%;
+    margin: 60px auto;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.flash-message.error { background-color: #ffe0e0; color: #d93025; border: 1px solid #d93025; }
+.flash-message.success { background-color: #e0f7ff; color: #007acc; border: 1px solid #007acc; }
+
+.reset-card input[type="email"],
+.reset-card input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #325896;
+    border-radius: 8px;
+}
+
+.reset-card input[type="email"]:focus,
+.reset-card input[type="password"]:focus { border-color: #2c21bb; }
+
+.reset-card button {
+    padding: 12px;
+    background: #325896;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+.reset-card button:hover { background: #2c21bb; }
