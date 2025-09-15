@@ -268,4 +268,3 @@ def my_transaction():#check all owner by current user transaction record
 @transaction_bp.route("/home")
 def home():
     return render_template("transaction/home.html")
-
