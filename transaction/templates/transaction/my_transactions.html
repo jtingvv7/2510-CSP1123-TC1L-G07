@@ -48,8 +48,8 @@
 <hr>
 
 <!--sold product-->
-<h3>Sold Transaction</h3>
-{% if sold_transaction %}
+<h3>Sold Transactions</h3>
+{% if sold_transactions %}
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -59,11 +59,22 @@
             </tr>
         </thead>
         <tbody>
-        {% for t in sold_transactions %}
+        {% for tx in sold_transactions %}
             <tr>
-                <td>{{ t.id }}</td>
-                <td>{{ t.product_id }}</td>
-                <td>{{ t.status }}</td>
+                <td>{{ tx.id }}</td>
+                <td>{{ tx.product_id }}</td>
+                <td>{{ tx.status }}</td>
+                <td>
+                    {% if tx.status == "accepted" %}
+                    <form action="{{ url_for('transaction.ship_transaction',transaction_id=tx.id) }}" method="POST">
+                        <button type="submit" class="btn btn-warning btn-sm">Ship</button>
+                    </form>
+                    {% elif tx.status == "shipped" %}
+                        <span class="badge bg-info">Waiting for buyer confirmation</span>
+                    {% elif tx.status == "completed" %}
+                        <span class="badge bg-success">Completed</span>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
