@@ -2,6 +2,7 @@ import os
 import re
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
 from models import User, Transaction, Review, SafeLocation, Product
 from flask_login import login_user, logout_user
@@ -31,27 +32,30 @@ def home():
 
 
 # ----------------- LOGIN -----------------
-@usersystem_bp.route("/login", methods=["GET", "POST"])
+@usersystem_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
-        user = User.query.filter_by(email=email).first()
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password_input = request.form.get('password')
 
-        if user and user.password == password:
-            #let flask-login remember user(joan add)
-            login_user(user)
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            flash("Email not registered.", "error")
+            return redirect(url_for('usersystem.login'))
+        
+        if check_password_hash(user.password, password_input):
+            # Successful login
+            login_user(user) #let flask-login remember user(joan add)
 
             session["user_id"] = user.id
             session["user_name"] = user.name
             session["user_profile_pic"] = user.profile_pic
             return redirect(url_for("usersystem.home"))
         else:
-            flash("Invalid email or password, please try again!", "danger")
-            return redirect(url_for("usersystem.login"))
+            flash("Invalid password.", "error")
+            return redirect(url_for('usersystem.login'))
 
-    return render_template("login.html")
-
+    return render_template('login.html')
 
 # ----------------- REGISTER -----------------
 @usersystem_bp.route("/register", methods=["GET", "POST"])
@@ -81,45 +85,36 @@ def register():
     return render_template("register.html")
 
 # ----------------- FORGOT / RESET PASSWORD -----------------
-@usersystem_bp.route("/forgot_reset_password", methods=["GET", "POST"])
+@usersystem_bp.route('/forgot_reset_password', methods=['GET', 'POST'])
 def forgot_reset_password():
-    step = request.args.get("step", "email")  # "email" or "reset"
+    email_verified = False  # to show/hide password fields
 
-    if request.method == "POST":
-        if step == "email":
-            # Step 1: Submit email
-            email = request.form.get("email")
-            user = User.query.filter_by(email=email).first()
-            if not user:
-                flash("Email not found. Please try again.", "danger")
-                return redirect(url_for("usersystem.forgot_reset_password"))
-            
-            session["reset_user_id"] = user.id
-            flash("Email verified. Please reset your password.", "info")
-            return redirect(url_for("usersystem.forgot_reset_password", step="reset"))
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
 
-        elif step == "reset":
-            # Step 2: Reset password
-            if "reset_user_id" not in session:
-                flash("Unauthorized access.", "danger")
-                return redirect(url_for("usersystem.login"))
+        if not user:
+            flash("Email not registered. Please register first.", "error")
+            return render_template('forgot_reset_password.html', email_verified=False)
 
-            user = User.query.get(session["reset_user_id"])
-            new_password = request.form.get("password")
-            confirm_password = request.form.get("confirm_password")
+        # Email exists → show password fields
+        email_verified = True
+        flash("Email verified! You can now reset your password.", "success")
 
-            if new_password != confirm_password:
-                flash("Passwords do not match.", "danger")
-                return redirect(url_for("usersystem.forgot_reset_password", step="reset"))
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
 
-            user.password = new_password
-            db.session.commit()
-            session.pop("reset_user_id", None)
-            flash("Password reset successfully! Please login.", "success")
-            return redirect(url_for("usersystem.login"))
+        # Only update password if both password fields are filled
+        if password and confirm_password:
+            if password != confirm_password:
+                flash("Passwords do not match.", "error")
+            else:
+                user.password = generate_password_hash(password)
+                db.session.commit()
+                flash("Password successfully reset!", "success")
+                return redirect(url_for('usersystem.login'))
 
-    return render_template("forgot_reset_password.html", step=step)
-
+    return render_template('forgot_reset_password.html', email_verified=email_verified)
 # ----------------- PROFILE -----------------
 @usersystem_bp.route("/profile", methods=["GET"])
 def profile():
