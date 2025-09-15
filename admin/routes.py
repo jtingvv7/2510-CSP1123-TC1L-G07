@@ -26,15 +26,21 @@ def admin_required(func):
 @login_required
 @admin_required
 def dashboard():
-    return render_template("dashboard.html")
+    user_count = User.query.count()
+    product_count = Product.query.count()
+    transaction_count = Transaction.query.count()
+    return render_template("dashboard.html",
+                           user_count = user_count,
+                           product_count = product_count,
+                           transaction_count = transaction_count)
 
 #check all users
-@admin_bp.route("/users")
+@admin_bp.route("/manage_users")
 @login_required
 @admin_required
-def users():
+def manage_users():
     all_users = User.query.all()
-    return render_template("users.html", users=all_users)
+    return render_template("manage_users.html", users=all_users)
 
 #make other user become admin
 @admin_bp.route("/make_admin/<int:user_id>")
