@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Second Loop</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usersystemstyle.css') }}">
+  <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
@@ -19,7 +19,7 @@
     {% endif %}
   {% endwith %}
   <div class="wrapper">
-    <form action="{{ url_for('login')}}" method="POST">
+    <form action="{{ url_for('usersystem.login')}}" method="POST">
       <h1>Login</h1>
 
       {% if request.args.get('msg') %}
@@ -36,12 +36,12 @@
       </div>
       <div class="remember-forgot">
         <label><input type="checkbox">Remember me</label>
-        <a href="changepassword.html">Forgot password?</a>
+        <a href="{{ url_for('usersystem.forgot_reset_password') }}">Forgot password?</a>
       </div>
       <button type="submit" class="btn">Login</button>
 
       <div class="register-link">
-        <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a>
+        <p>Don't have an account? <a href="{{ url_for('usersystem.register') }}">Register</a>
       </div>
 
     </form>
