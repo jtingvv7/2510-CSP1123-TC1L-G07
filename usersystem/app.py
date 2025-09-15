@@ -45,7 +45,7 @@ def login():
         
         if check_password_hash(user.password, password_input):
             # Successful login
-            login_user(user) #let flask-login remember user(joan add)
+            login_user(user) #let flask-login remember user
 
             session["user_id"] = user.id
             session["user_name"] = user.name
@@ -65,18 +65,21 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        # 1️⃣ Validate email domain
+        # Validate email domain
         if not email.endswith("@student.mmu.edu.my"):
             flash("Only @student.mmu.edu.my emails are allowed to register!", "danger")
             return redirect(url_for("usersystem.register"))
 
-        # 2️⃣ Check if email or username already exists
+        # Check if email or username already exists
         if User.query.filter_by(email=email).first() or User.query.filter_by(name=name).first():
             flash("Email or username already exists!", "danger")
             return redirect(url_for("usersystem.register"))
+        
+        # Hash password before storing
+        hashed_password = generate_password_hash(password)
 
-        # 3️⃣ Create new user
-        user = User(name=name, email=email, password=password)
+        # Create new user
+        user = User(name=name, email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash("Account created successfully! Please login.", "success")
