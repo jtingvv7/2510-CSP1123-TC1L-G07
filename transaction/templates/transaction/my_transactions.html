@@ -26,14 +26,19 @@
                 <td>{{ t.status }}</td>
                 <td>
                     {% if t.status == "pending" %}
-                        <form action = "{{ url_for('transaction.cancel_transaction', transaction_id =t.id) }}" method="POST">
+                        <form action = "{{ url_for('transaction.cancel_transaction', transaction_id=t.id) }}" method="POST">
                             <button type ="submit" class="btn btn-danger btn-sm">Cancel</button>
                         </form>
+                    {% elif t.status == "shipped" %}
+                        <form action = "{{ url_for('transaction.confirm_receipt', transaction_id=t.id) }}" method="POST">
+                            <button type ="submit" class="btn btn-danger btn-sm">Confirm</button>
+                    {% elif t.status == "completed" %}
+                        <span class="badge bg-success">Completed</span>
                     {% endif %}
                 </td>
                 <td>
                     <!--contact seller-->
-                    <a href="{{url_for('messages.chat', user_id = t.seller_id) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ url_for('messages.chat', user_id = t.seller_id) }}" class="btn btn-primary btn-sm">
                         Contact Seller
                     </a>
                 </td>
@@ -56,6 +61,7 @@
                 <th>ID</th>
                 <th>Product</th>
                 <th>Status</th>
+                <th>Contact</th>
             </tr>
         </thead>
         <tbody>
@@ -75,6 +81,11 @@
                         <span class="badge bg-success">Completed</span>
                     {% endif %}
                 </td>
+                <td>
+                    <!--contact buyer-->
+                    <a href="{{ url_for('messages.chat', user_id = tx.buyer_id) }}" class="btn btn-primary btn-sm">
+                        Contact Buyer
+                    </a>
             </tr>
         {% endfor %}
         </tbody>
