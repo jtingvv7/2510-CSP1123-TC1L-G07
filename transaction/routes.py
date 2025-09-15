@@ -13,19 +13,26 @@ transaction_bp = Blueprint('transaction', __name__, template_folder='templates',
 @transaction_bp.route("/clear_fake")
 def clear_fake():
     Transaction.query.delete()
+    User.query.delete()
     db.session.commit()
     return " All transactions cleared ! "
 
 #use for test user login in transaction system !!!!!!!
 @transaction_bp.route("/fake_login")
 def fake_login():
-    user = User.query.first()
-    if not user:
-        user = User(name="test",password="123",email="test@gmail.com")
-        db.session.add(user)
-        db.session.commit()
-    login_user(user)
-    return f" You are now logged in as {user.name} "
+    user1 = User.query.filter_by(email="test1@gmail.com").first()
+    if not user1:
+        user1 = User(name="test1",password="123",email="test1@gmail.com")
+        db.session.add(user1)
+
+    user2 = User.query.filter_by(email="test2@gmail.com").first()
+    if not user2:
+        user2 = User(name="test2",password="123",email="test2@gmail.com")
+        db.session.add(user2)
+    
+    db.session.commit()
+    login_user(user1)
+    return f" Fake users created. You are now logged in as {user1.name} "
 
 #use for test transaction history
 @transaction_bp.route("/fake_transactions")
