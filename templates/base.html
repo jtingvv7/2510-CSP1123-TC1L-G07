@@ -39,7 +39,13 @@
                                 alt="Profile" class="rounded-circle"
                                 style="width:40px; height:40px; object-fit:cover; margin-right:10px;">
                         </a>
+                        <!--inbox-->
+                        <a class="nav-link me-2" href="{{ url_for('messages.inbox') }}">
+                            <i class="bi bi-envelope-fill"></i>
+                        </a>
+                        <!--Hello Username-->
                         <span class="navbar-text me-2">Hello, {{ session.get('user_name', '') }}</span>
+                        <!--Logout-->
                         <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('usersystem.login') }}">Logout</a>
                     {% else %}
                         <a class="btn btn-outline-light btn-sm" href="{{ url_for('usersystem.login') }}">Login</a>
