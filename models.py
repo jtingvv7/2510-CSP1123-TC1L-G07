@@ -13,6 +13,8 @@ class User(db.Model,UserMixin):
     profile_pic = db.Column(db.String(200), default="profile.jpg")
     join_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     phone = db.Column(db.String(20), nullable=True)
+    role = db.Column(db.String(20), default="user")
+    
 #relationship of user
     #backref = can find user through transactions , lazy = lazy loading
     products = db.relationship("Product", back_populates="seller", lazy=True)
