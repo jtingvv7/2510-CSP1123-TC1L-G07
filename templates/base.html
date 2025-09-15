@@ -43,11 +43,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('payment.index') }}"> Payment System</a>
                     </li>
+                    <!--only admin can see-->
+                    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-bold" href="{{ url_for('admin.dashboard') }}"> Admin Dashboard</a>
+                    </li>
+                    {% endif %}
                 </ul>
 
                 <!-- User auth buttons with profile picture -->
                 <div class="d-flex align-items-center">
-                    {% if session.get('user_id') %}
+                    {% if current_user.is_authenticated %}
                         <!-- Profile picture button with fallback -->
                         <a href="{{ url_for('usersystem.profile') }}">
                             <img src="{{ url_for('static', filename='uploads/' + session.get('user_profile_pic', 'default.png')) }}"
@@ -61,9 +67,10 @@
                         <!--Hello Username-->
                         <span class="navbar-text me-2">Hello, {{ session.get('user_name', '') }}</span>
                         <!--Logout-->
-                        <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('usersystem.login') }}">Logout</a>
+                        <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('usersystem.logout') }}">Logout</a>
                     {% else %}
                         <a class="btn btn-outline-light btn-sm" href="{{ url_for('usersystem.login') }}">Login</a>
+                        <a class="btn btn-outline-light btn-sm" href="{{ url_for('usersystem.register') }}">Register</a>
                     {% endif %}
                 </div>
             </div>

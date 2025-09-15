@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.utils import secure_filename
 from main import db
 from models import User, Transaction, Review, SafeLocation, Product
+from flask_login import login_user, logout_user
 
 usersystem_bp = Blueprint(
     "usersystem",
@@ -38,6 +39,9 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if user and user.password == password:
+            #let flask-login remember user(joan add)
+            login_user(user)
+
             session["user_id"] = user.id
             session["user_name"] = user.name
             session["user_profile_pic"] = user.profile_pic
@@ -289,3 +293,10 @@ def product_manage(product_id=None):
 @usersystem_bp.route("/success")
 def success():
     return render_template("success.html")
+
+# ----------------- LOGOUT -----------------
+@usersystem_bp.route("/logout")
+def logout():
+    logout_user() #clear current_user
+    session.clear() 
+    return redirect(url_for("index"))

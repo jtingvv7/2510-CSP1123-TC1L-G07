@@ -1,6 +1,7 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for , flash
-from flask_login import  login_required , current_user, login_user
+from flask import Blueprint, render_template, redirect, url_for , flash, abort
+from functools import wraps
+from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
 from models import User, Product, Transaction, Messages
@@ -10,13 +11,14 @@ admin_bp = Blueprint("admin", __name__, template_folder="templates", static_fold
 
 #ensure only admin can enter
 def admin_required(func):
-    from functools import wraps
-    from flask import abort
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if not current_user.is_authenticated or current_user.role != "admin":
-            abort(403) #insufficient permissions return http 403
-            return func(*args, **kwargs)
+        user = User.query.get(current_user.id)
+        print("DEBUG: admin_required called,user=",current_user)
+        if not user or user.role != "admin":
+            abort(403)
+        print("DEBUG: user is admin,continue")
+        return func(*args, **kwargs)
     return wrapper
 
 #dashboard html
@@ -24,7 +26,7 @@ def admin_required(func):
 @login_required
 @admin_required
 def dashboard():
-    return render_template("admin/dashboard.html")
+    return render_template("dashboard.html")
 
 #check all users
 @admin_bp.route("/users")
@@ -32,7 +34,7 @@ def dashboard():
 @admin_required
 def users():
     all_users = User.query.all()
-    return render_template("admin/users.html", users=all_users)
+    return render_template("users.html", users=all_users)
 
 #make other user become admin
 @admin_bp.route("/make_admin/<int:user_id>")
