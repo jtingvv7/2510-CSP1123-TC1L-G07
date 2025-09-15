@@ -180,19 +180,21 @@ def view_requests():
 @login_required
 def accept_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
-    product = Product.query.get_or_404(tx.product_id)
+    #product = Product.query.get_or_404(tx.product_id)
 
-    if product.seller_id != current_user.id:
-        flash("You do not have permission to perform this request.","danger")
-        return redirect(url_for("transaction.view_requests"))
+    #if product.seller_id != current_user.id:
+        #flash("You do not have permission to perform this request.","danger")
+        #return redirect(url_for("transaction.view_requests"))
     
     try:
+        print(f"Before: {tx.status}")
         tx.status = "accepted"
         db.session.commit()
+        print(f"After: {tx.status}")
         flash("You have accepted the purchase request.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
-        logging.error( f"Transaction accept failed, buyer_id ={current_user.id},product_id = {tx.product_id}. Error:{e}",
+        logging.error( f"Transaction accept failed, tx_id{tx.id},buyer_id ={current_user.id}. Error:{e}",
                       exc_info = True )
         flash("Error accept the purchase request.","danger")
 
@@ -204,21 +206,49 @@ def accept_transaction(transaction_id):
 @login_required
 def reject_request(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
-    product = Product.query.get_or_404(tx.product_id)
+    #product = Product.query.get_or_404(tx.product_id)
 
-    if product.seller_id != current_user.id:
-        flash("You do not have permission to perform this request.","danger")
-        return redirect(url_for("transaction.view_requests"))
+    #if product.seller_id != current_user.id:
+        #flash("You do not have permission to perform this request.","danger")
+        #return redirect(url_for("transaction.view_requests"))
     
     try:
         tx.status = "rejected"
         db.session.commit()
         flash("You have rejected the purchase request.","success")
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
         db.session.rollback()
-        flash("Error to reject the purchase request.","danger")
+        logging.error( f"Transaction reject failed, tx_id={tx.id}, buyer_id ={current_user.id}. Error:{e}",
+                      exc_info = True )
+        flash("Error reject the purchase request.","danger")
 
     return redirect(url_for("transaction.view_requests"))
+
+
+#marks transaction as shipped
+@transaction_bp.route("/ship/<int:transaction_id>",methods = ["POST"])
+@login_required
+def ship_transaction(transaction_id):
+    tx = Transaction.query.get_or_404(transaction_id)
+    #only seller can ship
+    if tx.seller_id != current_user.id:
+        flash("You do not have permission to ship this order.","danger")
+        return redirect(url_for("transaction.my_transaction"))
+    
+    if tx.status !="accepted":
+        flash("Only accepted orders can be shipped.","warning")
+        return redirect(url_for("transaction.my_transaction"))
+    
+    try:
+        tx.status = "shipped"
+        db.session.commit()
+        flash("Order marked as shipped.","success")
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logging.error( f"Transaction ship failed, tx_id={tx.id}, error={e}", exc_info = True )
+        flash("Error marking as shipped.","danger")
+    
+    return redirect(url_for("transaction.my_transaction"))
 
 
 #check transaction records  (buyer/seller) 
