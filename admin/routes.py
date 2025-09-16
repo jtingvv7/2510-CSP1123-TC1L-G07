@@ -1,11 +1,11 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for , flash, abort
+from flask import Blueprint, render_template, redirect, url_for , flash, abort, request
 from functools import wraps
 from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
 from models import User, Product, Transaction, Messages
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
 
@@ -59,6 +59,8 @@ def manage_transactions():
     return render_template("manage_transactions.html", transactions = all_transactions)
 
 
+################## user management #####################
+
 #make other user become admin
 @admin_bp.route("/make_admin/<int:user_id>")
 @login_required
@@ -90,3 +92,50 @@ def delete_user(user_id):
     db.session.commit()
     flash(f"User {user.name} has been deleted!","success")
     return redirect(url_for("admin.users"))
+
+################## product management #####################
+
+#add product
+@admin_bp.route("/product/add", methods=["GET","POST"])
+@login_required
+@admin_required
+def add_product():
+    if request.method == "POST":
+        name = request.form["name"]
+        price = request.form["price"]
+        description = request.form["description"]
+
+        new_product = Product(name=name, price=price, description=description)
+        db.session.add(new_product)
+        db.session.commit()
+
+        flash("Product added successfully!","success")
+        return redirect(url_for("product.list_products"))
+    return render_template("product/add.html")
+
+#edit product
+@admin_bp.route("/products/edit/<int:product_id>", methods=["GET","POST"])
+@login_required
+@admin_required
+def edit_product(product_id):
+    product = Product.query.get_or_404(product_id)
+
+    if request.method =="POST":
+        product.name = request.form["name"]
+        product.price = request.form["price"]
+        product.description = request.form["description"]
+        db.session.commit()
+        flash("Product update successfully!","success")
+        return redirect(url_for("product.list_products"))
+    return render_template("products/edit.html",product = product)
+
+#delete product
+@admin_bp.route("/products/delete/<int:product_id>", methods=["GET","POST"])
+@login_required
+@admin_required
+def delete_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    db.session.delete(product)
+    db.session.commit()
+    flash("Product deleted successfully!","success")
+    return redirect(url_for("product.list_products"))
