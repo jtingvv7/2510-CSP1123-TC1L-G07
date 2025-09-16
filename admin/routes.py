@@ -69,11 +69,11 @@ def make_admin(user_id):
     user = User.query.get(user_id)
     if not user:
         flash("User not found","danger")
-        return redirect(url_for("admin.users"))
+        return redirect(url_for("manage_users"))
     user.role = "admin"
     db.session.commit()
     flash(f"{user.name} is now an admin", "success")
-    return redirect(url_for("admin.users"))
+    return redirect(url_for("manage_users"))
 
 #delete user
 @admin_bp.route("/delete_user/<int:user_id>")
@@ -83,15 +83,15 @@ def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
         flash("User not found","danger")
-        return redirect(url_for("admin.users"))
+        return redirect(url_for("manage_users"))
     #prevent admin delete own acc
     if user.id == current_user.id:
         flash("You cannot delete your own account!","warning")
-        return redirect(url_for("admin.users"))
+        return redirect(url_for("manage_users"))
     db.session.delete(user)
     db.session.commit()
     flash(f"User {user.name} has been deleted!","success")
-    return redirect(url_for("admin.users"))
+    return redirect(url_for("manage_users"))
 
 ################## product management #####################
 
@@ -111,7 +111,7 @@ def add_product():
 
         flash("Product added successfully!","success")
         return redirect(url_for("product.list_products"))
-    return render_template("product/add.html")
+    return render_template("manage_products")
 
 #edit product
 @admin_bp.route("/products/edit/<int:product_id>", methods=["GET","POST"])
@@ -151,7 +151,7 @@ def delete_transaction(transaction_id):
     db.session.delete(tx)
     db.session.commit()
     flash("Transaction deleted successfully","success")
-    return redirect(url_for("admin.manage_trasactions"))
+    return redirect(url_for("manage_trasactions"))
 
 
 #update transacton status(when error)
@@ -163,4 +163,4 @@ def update_transaction(transaction_id, new_status):
     tx.status = new_status
     db.session.commit()
     flash(f"Transaction status updated to {new_status}","success")
-    return redirect(url_for("admin.manage_trasactions"))
+    return redirect(url_for("manage_trasactions"))
