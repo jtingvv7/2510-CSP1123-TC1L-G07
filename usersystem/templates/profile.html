@@ -11,12 +11,14 @@
 
   <div class="sidebar">
     <div class="profilepic">
-      <img src="{{ url_for('static', filename='uploads/' + (user.profile_pic or 'default.png')) }}" alt="Profile Picture">
+      <img src="{{ url_for('static', filename='uploads/' ~ (user.profile_pic if user.profile_pic else 'default.png')) }}" 
+           alt="Profile Picture">
     </div>
     <a href="{{ url_for('usersystem.editprofile') }}" class="upload-btn">Edit Profile</a>
     <a href="{{ url_for('index') }}">Home</a>
     <a href="{{ url_for('usersystem.map') }}">Select Pickup Point</a>
-    <a href="{{ url_for('usersystem.login') }}">Log out</a>
+    <a href="{{ url_for('usersystem.product_manage') }}">Product</a>
+    <a href="{{ url_for('usersystem.logout') }}">Log out</a>
   </div>
 
   <div class="content">
@@ -58,8 +60,33 @@
         </div>
       </div>
     </div>
-  </div>
 
+    <!-- My Products -->
+    <div class="profilecard">
+      <h3>My Products</h3>
+
+      {% if products %}
+      <div class="product-grid">
+        {% for product in products %}
+          <div class="product-card">
+           <img src="{{ url_for('static', filename='uploads/' ~ (product.image if product.image else 'default_product.jpg')) }}?v={{ product.id }}" 
+             alt="{{ product.name }}">
+            <h5>{{ product.name }}</h5>
+            <p>{{ product.description[:80] }}{% if product.description|length > 80 %}...{% endif %}</p>
+            <p><strong>MYR {{ "%.2f"|format(product.price) }}</strong></p>
+            {% if product.pickup_location %}
+              <p><small>Pickup: {{ product.pickup_location.name }}</small></p>
+            {% endif %}
+            <a href="{{ url_for('usersystem.product_manage', product_id=product.id) }}" class="btn btn-sm btn-info">Edit</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>You haven’t listed any products yet.</p>
+    {% endif %}
+    </div>
+
+  </div>
 </div>
 </body>
 </html>

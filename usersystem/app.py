@@ -1,4 +1,5 @@
 import os
+import time
 import re
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 from werkzeug.utils import secure_filename
@@ -16,21 +17,81 @@ usersystem_bp = Blueprint(
 )
 
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# ----------------- HOME -----------------
-@usersystem_bp.route("/")
-def home():
-    return render_template("home_index.html")
+# ----------------- PRODUCT MANAGEMENT -----------------
+@usersystem_bp.route("/product_manage", methods=["GET", "POST"])
+@usersystem_bp.route("/product_manage/<int:product_id>", methods=["GET", "POST"])
+def product_manage(product_id=None):
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("Please login first!", "danger")
+        return redirect(url_for("usersystem.login"))
 
+    product = Product.query.get(product_id) if product_id else None
+    locations = SafeLocation.query.filter_by(user_id=user_id).all()
 
+    if request.method == "POST":
+        # DELETE product
+        if "delete" in request.form and product:
+            if product.seller_id == user_id:
+                db.session.delete(product)
+                db.session.commit()
+                flash("Product deleted successfully!", "success")
+            else:
+                flash("Cannot delete this product.", "danger")
+            return redirect(url_for("usersystem.profile"))
+
+        # Collect form data
+        name = request.form.get("name")
+        description = request.form.get("description")
+        price = float(request.form.get("price", 0))
+        pickup_location_id = request.form.get("pickup_location") or None
+
+        # Handle image upload
+        file = request.files.get("image")
+        filename = None
+        if file and allowed_file(file.filename):
+            filename = f"{int(time.time())}_{secure_filename(file.filename)}"
+            upload_path = os.path.join(current_app.root_path, "static", "uploads")
+            os.makedirs(upload_path, exist_ok=True)
+            file.save(os.path.join(upload_path, filename))
+
+        if product:
+            # EDIT existing product
+            if product.seller_id != user_id:
+                flash("You don’t have permission to edit this product.", "danger")
+                return redirect(url_for("usersystem.profile"))
+
+            product.name = name
+            product.description = description
+            product.price = price
+            product.pickup_location_id = pickup_location_id
+            if filename:  # only overwrite image if new file uploaded
+                product.image = filename
+        else:
+            # ADD new product
+            product = Product(
+                name=name,
+                description=description,
+                price=price,
+                seller_id=user_id,
+                pickup_location_id=pickup_location_id,
+                image=filename if filename else "default_product.jpg"
+            )
+            db.session.add(product)
+
+        db.session.commit()
+        flash("Product saved successfully!", "success")
+        return redirect(url_for("usersystem.profile"))
+
+    return render_template("product_manage.html", product=product, locations=locations)
 # ----------------- LOGIN -----------------
 @usersystem_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -41,7 +102,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if not user:
             flash("Email not registered.", "error")
-            return redirect(url_for('usersystem.login'))
+            return redirect(url_for('usersystem.register'))
         
         if check_password_hash(user.password, password_input):
             # Successful login
@@ -50,7 +111,7 @@ def login():
             session["user_id"] = user.id
             session["user_name"] = user.name
             session["user_profile_pic"] = user.profile_pic
-            return redirect(url_for("usersystem.home"))
+            return redirect(url_for("index"))
         else:
             flash("Invalid password.", "error")
             return redirect(url_for('usersystem.login'))
@@ -73,7 +134,7 @@ def register():
         # Check if email or username already exists
         if User.query.filter_by(email=email).first() or User.query.filter_by(name=name).first():
             flash("Email or username already exists!", "danger")
-            return redirect(url_for("usersystem.register"))
+            return redirect(url_for("usersystem.login"))
         
         # Hash password before storing
         hashed_password = generate_password_hash(password)
@@ -126,11 +187,14 @@ def profile():
         flash("Please login first!", "danger")
         return redirect(url_for("usersystem.login"))
 
-    user = User.query.get(session.get("user_id"))
-    if not user:   # <-- NEW: user not found in DB
+    user = User.query.get(user_id)
+    if not user:
         flash("User not found. Please login again.", "danger")
         session.clear()
         return redirect(url_for("usersystem.login"))
+
+    # Get products of this user
+    products = Product.query.filter_by(seller_id=user.id).all()
 
     completed_sales = Transaction.query.filter_by(seller_id=user_id, status="completed").all()
     completed_purchases = Transaction.query.filter_by(buyer_id=user_id, status="completed").all()
@@ -140,6 +204,7 @@ def profile():
     return render_template(
         "profile.html",
         user=user,
+        products=products,
         completed_sales=len(completed_sales),
         completed_purchases=len(completed_purchases),
         avg_rating=avg_rating,
@@ -161,25 +226,24 @@ def editprofile():
         return redirect(url_for("usersystem.login"))
 
     if request.method == "POST":
-        # ✅ Name
+        # Update name
         name = request.form.get("name")
         user.name = name
 
-        # ✅ Phone
+        # Update phone
         phone = request.form.get("phone")
-        if phone and not re.match(r"^\d{9}$", phone):  
+        if phone and not re.match(r"^\d{9}$", phone):
             flash("Phone number must be 9 digits!", "danger")
             return redirect(url_for("usersystem.editprofile"))
         user.phone = f"+60{phone}" if phone else None
 
-        # ✅ Profile Picture
+        # Update profile picture
         file = request.files.get("file")
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             upload_path = os.path.join(current_app.root_path, "static", "uploads")
             os.makedirs(upload_path, exist_ok=True)
-            filepath = os.path.join(upload_path, filename)
-            file.save(filepath)
+            file.save(os.path.join(upload_path, filename))
             user.profile_pic = filename
             session["user_profile_pic"] = filename
 
@@ -228,63 +292,10 @@ def map():
             db.session.add(new_location)
 
         db.session.commit()
-        flash("Pickup point saved successfully!", "success")
         return redirect(url_for("usersystem.profile"))
 
     return render_template("map.html")
 
-
-# ----------------- PRODUCT LIST -----------------
-@usersystem_bp.route("/product")
-def product():
-    products = Product.query.all()
-    return render_template("product.html", products=products)
-
-
-# ----------------- PRODUCT MANAGE -----------------
-@usersystem_bp.route("/product/manage", methods=["GET", "POST"])
-@usersystem_bp.route("/product/manage/<int:product_id>", methods=["GET", "POST"])
-def product_manage(product_id=None):
-    if "user_id" not in session:
-        return redirect(url_for("usersystem.login"))
-
-    product = Product.query.get(product_id) if product_id else None
-    locations = SafeLocation.query.filter_by(user_id=session["user_id"]).all()
-
-    if request.method == "POST":
-        # handle delete
-        if "delete" in request.form:
-            if product and product.seller_id == session["user_id"]:
-                db.session.delete(product)
-                db.session.commit()
-                flash("Product deleted successfully!", "success")
-            return redirect(url_for("usersystem.product"))
-
-        name = request.form.get("name")
-        price = float(request.form.get("price"))
-        description = request.form.get("description")
-        pickup_location_id = request.form.get("pickup_location") or None
-
-        if product_id:
-            product.name = name
-            product.price = price
-            product.description = description
-            product.pickup_location_id = pickup_location_id
-        else:
-            product = Product(
-                name=name,
-                price=price,
-                description=description,
-                seller_id=session["user_id"],
-                pickup_location_id=pickup_location_id
-            )
-            db.session.add(product)
-
-        db.session.commit()
-        flash("Product saved successfully!", "success")
-        return redirect(url_for("usersystem.product"))
-
-    return render_template("product_manage.html", product=product, locations=locations)
 
 
 # ----------------- SUCCESS -----------------
