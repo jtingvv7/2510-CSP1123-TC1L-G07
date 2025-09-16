@@ -127,7 +127,7 @@ def edit_product(product_id):
         db.session.commit()
         flash("Product update successfully!","success")
         return redirect(url_for("product.list_products"))
-    return render_template("products/edit.html",product = product)
+    return render_template("manage_products",product = product)
 
 #delete product
 @admin_bp.route("/products/delete/<int:product_id>", methods=["GET","POST"])

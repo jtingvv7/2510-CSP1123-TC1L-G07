@@ -58,8 +58,9 @@ def product_manage(product_id=None):
         file = request.files.get("image")
         filename = None
         if file and allowed_file(file.filename):
-            filename = f"{int(time.time())}_{secure_filename(file.filename)}"
-            upload_path = os.path.join(current_app.root_path, "static", "uploads")
+            ext = file.filename.rsplit(".",1)[-1] #extension name
+            filename = f"product_{int(time.time())}.{ext}" #product_time.jpg
+            upload_path = os.path.join(current_app.root_path, "static", "uploads","products")
             os.makedirs(upload_path, exist_ok=True)
             file.save(os.path.join(upload_path, filename))
 
