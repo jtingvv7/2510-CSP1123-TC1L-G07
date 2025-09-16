@@ -241,8 +241,9 @@ def editprofile():
         # Update profile picture
         file = request.files.get("file")
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            upload_path = os.path.join(current_app.root_path, "static", "uploads")
+            ext = file.filename.rsplit(".",1)[-1]  #extension name
+            filename = f"profile_{int(time.time())}.{ext}" #profile_time.png
+            upload_path = os.path.join(current_app.root_path, "static", "uploads","profiles")
             os.makedirs(upload_path, exist_ok=True)
             file.save(os.path.join(upload_path, filename))
             user.profile_pic = filename
