@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
 from models import User, Transaction, Review, SafeLocation, Product
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 
 usersystem_bp = Blueprint(
     "usersystem",
@@ -242,11 +242,11 @@ def editprofile():
         file = request.files.get("file")
         if file and allowed_file(file.filename):
             ext = file.filename.rsplit(".",1)[-1]  #extension name
-            filename = f"profile_{int(time.time())}.{ext}" #profile_time.png
+            filename = f"user{current_user.id}_{int(time.time())}.{ext}" #profile_time.png
             upload_path = os.path.join(current_app.root_path, "static", "uploads","profiles")
             os.makedirs(upload_path, exist_ok=True)
             file.save(os.path.join(upload_path, filename))
-            user.profile_pic = filename
+            current_user.profile_pic = filename
             session["user_profile_pic"] = filename
 
         db.session.commit()

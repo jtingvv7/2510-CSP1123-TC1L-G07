@@ -11,9 +11,15 @@
 
   <div class="sidebar">
     <div class="profilepic">
-      <img src="{{ url_for('static', filename='uploads/' ~ (user.profile_pic if user.profile_pic else 'default.png')) }}" 
-           alt="Profile Picture">
+      {% if user.profile_pic %}
+        <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
+            alt="Profile Picture">
+      {% else %}
+        <img src="https://i.pravatar.cc/100?u={{ user.id }}"
+            alt="Random Profile Picture">  <!--can random profile picture-->
+      {% endif %}
     </div>
+
     <a href="{{ url_for('usersystem.editprofile') }}" class="upload-btn">Edit Profile</a>
     <a href="{{ url_for('index') }}">Home</a>
     <a href="{{ url_for('usersystem.map') }}">Select Pickup Point</a>
@@ -69,8 +75,13 @@
       <div class="product-grid">
         {% for product in products %}
           <div class="product-card">
-           <img src="{{ url_for('static', filename='uploads/' ~ (product.image if product.image else 'default_product.jpg')) }}?v={{ product.id }}" 
-             alt="{{ product.name }}">
+           {% if product.image %}
+            <img src="{{ url_for('static', filename='uploads/products/' ~ product.image) }}?v={{ product.id }}"
+                alt="{{ product.name }}">
+            {% else %}
+              <img src="{{ url_for('static', filename='uploads/products/default_product.jpg') }}"
+                alt="Default Product">
+            {% endif %}
             <h5>{{ product.name }}</h5>
             <p>{{ product.description[:80] }}{% if product.description|length > 80 %}...{% endif %}</p>
             <p><strong>MYR {{ "%.2f"|format(product.price) }}</strong></p>
