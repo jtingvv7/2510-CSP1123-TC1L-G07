@@ -21,7 +21,7 @@ def admin_required(func):
         return func(*args, **kwargs)
     return wrapper
 
-#dashboard html
+#dashboard html 
 @admin_bp.route("/dashboard")
 @login_required
 @admin_required
@@ -41,6 +41,23 @@ def dashboard():
 def manage_users():
     all_users = User.query.all()
     return render_template("manage_users.html", users=all_users)
+
+#check all products
+@admin_bp.route("/manage_products")
+@login_required
+@admin_required
+def manage_products():
+    all_products = Product.query.all()
+    return render_template("manage_products.html", products = all_products)
+
+#check all transactions
+@admin_bp.route("/manage_transactions")
+@login_required
+@admin_required
+def manage_transactions():
+    all_transactions = Transaction.query.all()
+    return render_template("manage_transactions.html", transactions = all_transactions)
+
 
 #make other user become admin
 @admin_bp.route("/make_admin/<int:user_id>")
