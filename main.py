@@ -1,8 +1,8 @@
 import logging
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from extensions import db, login_manager
-from models import User
+from models import User, Product, SafeLocation
 
 
 def create_app():
@@ -40,7 +40,14 @@ def create_app():
     # Home route
     @app.route("/")
     def index():
-        return render_template("home_index.html")
+        # Fetch all products from DB
+        products = Product.query.order_by(Product.id.desc()).all()  # latest first
+
+        # Optional: fetch user locations if user logged in
+        user_id = session.get("user_id")
+        locations = SafeLocation.query.filter_by(user_id=user_id).all() if user_id else []
+
+        return render_template("home_index.html", products=products, locations=locations)
 
     return app
 
