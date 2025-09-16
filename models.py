@@ -10,7 +10,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(30), nullable=False, unique=False)
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
-    profile_pic = db.Column(db.String(200), default="profile.jpg")
+    profile_pic = db.Column(db.String(200), nullable=True)
     join_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     phone = db.Column(db.String(20), nullable=True)
     role = db.Column(db.String(20), default="user")
