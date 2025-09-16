@@ -139,3 +139,28 @@ def delete_product(product_id):
     db.session.commit()
     flash("Product deleted successfully!","success")
     return redirect(url_for("product.list_products"))
+
+################## transactions management #####################
+
+#delete transaction
+@admin_bp.route("/delete_transactions/<int:transaction_id>", methods=["POST"])
+@login_required
+@admin_required
+def delete_transaction(transaction_id):
+    tx = Transaction.query.get_or_404(transaction_id)
+    db.session.delete(tx)
+    db.session.commit()
+    flash("Transaction deleted successfully","success")
+    return redirect(url_for("admin.manage_trasactions"))
+
+
+#update transacton status(when error)
+@admin_bp.route("/update_transaction/<int:transaction_id>/<string:new_status>", methods=["POST"])
+@login_required
+@admin_required
+def update_transaction(transaction_id, new_status):
+    tx = Transaction.query.get_or_404(transaction_id)
+    tx.status = new_status
+    db.session.commit()
+    flash(f"Transaction status updated to {new_status}","success")
+    return redirect(url_for("admin.manage_trasactions"))
