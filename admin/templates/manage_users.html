@@ -25,10 +25,17 @@
                     <tr>
                         <td>{{ u.id }}</td>
                         <td>
-                            <img src="{{ url_for('static', filename='uploads/ ~ u.profile_pic') }}"
-                                alt="{{ u.name }}"
-                                class="rounded-circle border"
-                                width="40" height="40">
+                            {% if u.profile_pic %}
+                                <img src="{{ url_for('static', filename='uploads/profiles/' ~ u.profile_pic) }}"
+                                    alt="{{ u.name }}"
+                                    class="rounded-circle border"
+                                    width="40" height="40">
+                            {% else %}
+                                <img src="https://i.pravatar.cc/100?u={{ u.id }}"
+                                    alt="Random Avatar"
+                                    class="rounded-circle border"
+                                    width="40" height="40">
+                            {% endif %}
                         </td>
                         <td>
                             <strong>{{ u.name }}</strong>

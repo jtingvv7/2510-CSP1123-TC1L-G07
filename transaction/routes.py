@@ -9,6 +9,8 @@ from sqlalchemy.exc import SQLAlchemyError
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
 
+
+''' for test
 #clear fake transaction
 @transaction_bp.route("/clear_fake")
 def clear_fake():
@@ -62,9 +64,7 @@ def fake_purchase():
     db.session.commit()
     return "Fake purchase requests inserted"
 
-
-
-
+'''
 
 #buyer action
 
