@@ -23,7 +23,7 @@
                     <td>{{ p.id }}</td>
                     <td>
                         {% if p.image %}
-                            <img src="{{ url_for('static', filename='uploads/products/ ~ p.image') }}" 
+                            <img src="{{ url_for('static', filename='uploads/' + p.image) }}" 
                                 width="60" class="img-thumbnail">
                         {% else %}
                             <img src="{{ url_for('static', filename='uploads/products/default_product.jpg') }}" 
@@ -31,6 +31,9 @@
                         {% endif %}
                     </td>
                     <td>{{ p.name }}</td>
+                    <td>{{ "%.2f"|format(p.price) }}</td>
+                    <td>{{ p.description[:30] }}{% if p.description|length > 30 %}...{% endif %}</td>
+
                 </tr>
                 {% endfor %}
             </tbody>
