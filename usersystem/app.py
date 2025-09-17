@@ -54,15 +54,15 @@ def product_manage(product_id=None):
         price = float(request.form.get("price", 0))
         pickup_location_id = request.form.get("pickup_location") or None
 
-        # Handle image upload
         file = request.files.get("image")
         filename = None
         if file and allowed_file(file.filename):
-            ext = file.filename.rsplit(".",1)[-1] #extension name
-            filename = f"product_{int(time.time())}.{ext}" #product_time.jpg
-            upload_path = os.path.join(current_app.root_path, "static", "uploads","products")
+            ext = file.filename.rsplit(".", 1)[-1]  # extension name
+            filename = f"product_{int(time.time())}.{ext}"  # product_time.jpg
+            upload_path = os.path.join(current_app.root_path, "static", "uploads", "products")
             os.makedirs(upload_path, exist_ok=True)
             file.save(os.path.join(upload_path, filename))
+            filename = f"products/{filename}"  # ✅ store relative path (with products/)
 
         if product:
             # EDIT existing product
@@ -84,7 +84,7 @@ def product_manage(product_id=None):
                 price=price,
                 seller_id=user_id,
                 pickup_location_id=pickup_location_id,
-                image=filename if filename else "default_product.jpg"
+                image=filename if filename else "products/default_product.jpg"
             )
             db.session.add(product)
 
@@ -298,6 +298,49 @@ def map():
 
     return render_template("map.html")
 
+# ----------------- SHOPPING CART -----------------
+@usersystem_bp.route("/add_to_cart/<int:product_id>")
+def add_to_cart(product_id):
+    if "cart" not in session:
+        session["cart"] = {}
+
+    cart = session["cart"]
+    cart[str(product_id)] = cart.get(str(product_id), 0) + 1
+    session["cart"] = cart  # save back
+    flash("Product added to cart!", "success")
+    return redirect(request.referrer or url_for("index"))
+
+
+@usersystem_bp.route("/cart")
+def view_cart():
+    cart = session.get("cart", {})
+    products = []
+    total = 0
+
+    for pid, qty in cart.items():
+        product = Product.query.get(int(pid))
+        if product:
+            subtotal = product.price * qty
+            products.append({
+                "id": product.id,
+                "name": product.name,
+                "price": product.price,
+                "quantity": qty,
+                "subtotal": subtotal,
+                "image": product.image
+            })
+            total += subtotal
+
+    return render_template("cart.html", products=products, total=total)
+
+
+@usersystem_bp.route("/remove_from_cart/<int:product_id>")
+def remove_from_cart(product_id):
+    cart = session.get("cart", {})
+    cart.pop(str(product_id), None)
+    session["cart"] = cart
+    flash("Product removed from cart.", "info")
+    return redirect(url_for("usersystem.view_cart"))
 
 
 # ----------------- SUCCESS -----------------

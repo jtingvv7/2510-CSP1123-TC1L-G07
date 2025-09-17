@@ -140,3 +140,20 @@ class Order(db.Model):
     
     def __repr__(self):
         return f"<Order {self.id} order_id: {self.order_id}>"
+    
+
+class GameRecord(db.Model):
+    __tablename__ = 'game_record'
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
+    reward_type = db.Column(db.String(50), nullable=False)
+    reward_value = db.Column(db.Integer, nullable=True)
+    coupon_code = db.Column(db.String(20), nullable=True)
+    play_date = db.Column(db.Date, nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda : datetime.now(timezone.utc))
+
+    user = db.relationship('User', backref='game_records')
+
+    def __ref__(self):
+        return f"<GameRecord {self.id} user:{self.user_id} reward: {self.reward_type}>"
+    
