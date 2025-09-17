@@ -34,7 +34,7 @@
       <p><strong>Member since:</strong> {{ user.join_date.strftime('%B %Y') }}</p>
       <p><strong>Phone number:</strong> {{ user.phone or '--' }}</p>
 
-      <h4>Pickup Points</h4>
+      <h4>Prefer Pickup Points</h4>
       {% if pickup_points %}
         <ul>
           {% for point in pickup_points %}
@@ -76,10 +76,12 @@
         {% for product in products %}
           <div class="product-card">
            {% if product.image %}
-            <img src="{{ url_for('static', filename='uploads/products/' ~ product.image) }}?v={{ product.id }}"
-                alt="{{ product.name }}">
+            <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}?v={{ product.id }}"
+              class="img-fluid rounded"
+              alt="{{ product.name }}">
             {% else %}
               <img src="{{ url_for('static', filename='uploads/products/default_product.jpg') }}"
+                class="img-fluid rounded"
                 alt="Default Product">
             {% endif %}
             <h5>{{ product.name }}</h5>
