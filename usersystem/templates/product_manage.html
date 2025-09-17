@@ -28,11 +28,12 @@
 
     <div class="mb-3">
       <label for="image" class="form-label">Product Image</label>
-      <input type="file" class="form-control" id="image" name="image">
+      <input type="file" class="form-control" id="image" name="image"
+            {% if not product or not product.image %}required{% endif %}>
       {% if product and product.image %}
         <p class="mt-2">Current Image:</p>
         <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" 
-             alt="Product Image" width="150">
+            alt="Product Image" width="150">
       {% endif %}
     </div>
 

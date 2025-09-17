@@ -55,7 +55,8 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="#" class="btn btn-success">Add to Cart</a>
+                <a href="{{ url_for('usersystem.add_to_cart', product_id=product.id) }}" 
+                class="btn btn-success">Add to Cart</a>
               </div>
             </div>
           </div>
