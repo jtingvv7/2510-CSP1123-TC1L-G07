@@ -33,7 +33,11 @@
                     <td>{{ p.name }}</td>
                     <td>{{ "%.2f"|format(p.price) }}</td>
                     <td>{{ p.description[:30] }}{% if p.description|length > 30 %}...{% endif %}</td>
-
+                    <td>
+                        {% if p.is_sold = true %}
+                        <span class="badge bg-success">Active</span>
+                        
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

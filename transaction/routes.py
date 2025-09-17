@@ -94,11 +94,14 @@ def buy_product(product_id):
 
     #save in database
     try:
+        product = Product.query.get(product_id)
+        product.is_sold = True
         new_transaction = Transaction (buyer_id = current_user.id,
                                    product_id = product_id,
                                    seller_id =product.seller_id,
                                    status = "pending")
         db.session.add(new_transaction)
+        db.session.add(product)
         db.session.commit()
         flash("Purchase request send! Waiting for seller confirmation","success")
         return redirect(url_for("transaction.home"))

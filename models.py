@@ -31,7 +31,7 @@ class Product(db.Model):
     name = db.Column(db.String(30), nullable=False, unique=False)
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=True)
-    is_sold = db.Column(db.Boolean, default=True)
+    is_sold = db.Column(db.Boolean, default=False)
     date_posted = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     image = db.Column(db.String(200), default="default_product.jpg")
     pickup_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'), nullable=True)
