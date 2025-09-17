@@ -100,6 +100,7 @@ def delete_user(user_id):
 @login_required
 @admin_required
 def add_product():
+    '''
     if request.method == "POST":
         name = request.form["name"]
         price = request.form["price"]
@@ -110,8 +111,9 @@ def add_product():
         db.session.commit()
 
         flash("Product added successfully!","success")
-        return redirect(url_for("product.list_products"))
-    return render_template("manage_products")
+        '''
+    return redirect(url_for("usersystem.product_manage"))
+    #return render_template("manage_products")
 
 #edit product
 @admin_bp.route("/products/edit/<int:product_id>", methods=["GET","POST"])
@@ -126,8 +128,8 @@ def edit_product(product_id):
         product.description = request.form["description"]
         db.session.commit()
         flash("Product update successfully!","success")
-        return redirect(url_for("product.list_products"))
-    return render_template("manage_products",product = product)
+        return redirect(url_for("admin.manage_products",))
+    return render_template("edit_product.html",product = product)
 
 #delete product
 @admin_bp.route("/products/delete/<int:product_id>", methods=["GET","POST"])
@@ -138,7 +140,7 @@ def delete_product(product_id):
     db.session.delete(product)
     db.session.commit()
     flash("Product deleted successfully!","success")
-    return redirect(url_for("product.list_products"))
+    return redirect(url_for("usersystem.manage_products"))
 
 ################## transactions management #####################
 

@@ -34,15 +34,20 @@
                     <td>{{ "%.2f"|format(p.price) }}</td>
                     <td>{{ p.description[:30] }}{% if p.description|length > 30 %}...{% endif %}</td>
                     <td>
-                        {% if p.is_sold = true %}
-                        <span class="badge bg-success">Active</span>
-                        
+                        {% if p.is_sold == false %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-success">Inactive</span>
+                        {% endif %}
                     </td>
-                </tr>
+                    <td>
+                        <form action="{{ url_for('admin.add_product', product_id=p.id)}}" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-outline-primary">Add product</button>
+                            </form>
+                        <form action="{{ url_for('admin.edit_product', product_id=p.id)}}" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-outline-primary">Edit Product</button>
+                            </form>
+                    </td>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
 
 {% endblock %}
