@@ -69,11 +69,11 @@ def make_admin(user_id):
     user = User.query.get(user_id)
     if not user:
         flash("User not found","danger")
-        return redirect(url_for("admin.users"))
+        return redirect(url_for("manage_users"))
     user.role = "admin"
     db.session.commit()
     flash(f"{user.name} is now an admin", "success")
-    return redirect(url_for("admin.users"))
+    return redirect(url_for("manage_users"))
 
 #delete user
 @admin_bp.route("/delete_user/<int:user_id>")
@@ -83,15 +83,15 @@ def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
         flash("User not found","danger")
-        return redirect(url_for("admin.users"))
+        return redirect(url_for("manage_users"))
     #prevent admin delete own acc
     if user.id == current_user.id:
         flash("You cannot delete your own account!","warning")
-        return redirect(url_for("admin.users"))
+        return redirect(url_for("manage_users"))
     db.session.delete(user)
     db.session.commit()
     flash(f"User {user.name} has been deleted!","success")
-    return redirect(url_for("admin.users"))
+    return redirect(url_for("manage_users"))
 
 ################## product management #####################
 
@@ -111,7 +111,7 @@ def add_product():
 
         flash("Product added successfully!","success")
         return redirect(url_for("product.list_products"))
-    return render_template("product/add.html")
+    return render_template("manage_products")
 
 #edit product
 @admin_bp.route("/products/edit/<int:product_id>", methods=["GET","POST"])
@@ -127,7 +127,7 @@ def edit_product(product_id):
         db.session.commit()
         flash("Product update successfully!","success")
         return redirect(url_for("product.list_products"))
-    return render_template("products/edit.html",product = product)
+    return render_template("manage_products",product = product)
 
 #delete product
 @admin_bp.route("/products/delete/<int:product_id>", methods=["GET","POST"])
@@ -139,3 +139,28 @@ def delete_product(product_id):
     db.session.commit()
     flash("Product deleted successfully!","success")
     return redirect(url_for("product.list_products"))
+
+################## transactions management #####################
+
+#delete transaction
+@admin_bp.route("/delete_transactions/<int:transaction_id>", methods=["POST"])
+@login_required
+@admin_required
+def delete_transaction(transaction_id):
+    tx = Transaction.query.get_or_404(transaction_id)
+    db.session.delete(tx)
+    db.session.commit()
+    flash("Transaction deleted successfully","success")
+    return redirect(url_for("manage_trasactions"))
+
+
+#update transacton status(when error)
+@admin_bp.route("/update_transaction/<int:transaction_id>/<string:new_status>", methods=["POST"])
+@login_required
+@admin_required
+def update_transaction(transaction_id, new_status):
+    tx = Transaction.query.get_or_404(transaction_id)
+    tx.status = new_status
+    db.session.commit()
+    flash(f"Transaction status updated to {new_status}","success")
+    return redirect(url_for("manage_trasactions"))

@@ -20,9 +20,14 @@
     <form method="POST" action="{{ url_for('usersystem.editprofile') }}" enctype="multipart/form-data">
       <!-- Profile Picture -->
       <div style="text-align: center; margin-bottom: 20px;">
-        <img src="{{ url_for('static', filename='uploads/' + user.profile_pic) }}"
+        {% if user.profile_pic %}
+          <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
              alt="Profile Picture"
              style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+        {% else %}
+          <img src="https://i.pravatar.cc/100?u={{ user.id }}"
+            alt="Random Profile Picture">  <!--can random profile picture-->
+        {% endif %}
         <br><br>
         <input type="file" name="file" accept="image/*">
       </div>

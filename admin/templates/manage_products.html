@@ -1,6 +1,40 @@
 {% extends "base.html" %}
-{% block title %} Products {% endblock %}
+{% block title %} Manage Products {% endblock %}
 
 {% block content %}
-xixi
+<div class="container mt-4">
+    <h3>Manage Products</h3>
+    <div class="card-body">
+        <table class="table table-bordered table-hover text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th> </th>
+                    <th>Name</th>
+                    <th>Price(RM)</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>
+                        {% if p.image %}
+                            <img src="{{ url_for('static', filename='uploads/products/ ~ p.image') }}" 
+                                width="60" class="img-thumbnail">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='uploads/products/default_product.jpg') }}" 
+                                width="60" class="img-thumbnail">
+                        {% endif %}
+                    </td>
+                    <td>{{ p.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {% endblock %}
