@@ -23,7 +23,7 @@
                     <td>{{ p.id }}</td>
                     <td>
                         {% if p.image %}
-                            <img src="{{ url_for('static', filename='uploads/products/ ~ p.image') }}" 
+                            <img src="{{ url_for('static', filename='uploads/' + p.image) }}" 
                                 width="60" class="img-thumbnail">
                         {% else %}
                             <img src="{{ url_for('static', filename='uploads/products/default_product.jpg') }}" 
@@ -31,10 +31,23 @@
                         {% endif %}
                     </td>
                     <td>{{ p.name }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+                    <td>{{ "%.2f"|format(p.price) }}</td>
+                    <td>{{ p.description[:30] }}{% if p.description|length > 30 %}...{% endif %}</td>
+                    <td>
+                        {% if p.is_sold == false %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-success">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('admin.edit_product', product_id=p.id)}}" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-outline-primary">Edit Product</button>
+                            </form>
+                        <form action="{{ url_for('admin.add_product', product_id=p.id)}}" method="POST" class="d-inline">
+                            <button class="btn btn-sm btn-outline-primary">Add product</button>
+                            </form>
+                    </td>
+                {% endfor %}
 
 {% endblock %}

@@ -1,6 +1,94 @@
 {% extends "base.html" %}
-{% block title %} Transactons {% endblock %}
+{% block title %} Manage Transactons {% endblock %}
 
 {% block content %}
-haha
+
+<div class="container mt-4">
+    <h2 class="mb-4">Manage Transactions</h2>
+
+    <table class="table table-bordered table-hover text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Buyer</th>
+                <th>Seller</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tx in transactions %}
+            <tr>
+                <td>{{ tx.id }}</td>
+                <td>{{ tx.product.name }}</td>
+                <td>{{ tx.buyer.username }}</td>
+                <td>{{ tx.seller.username }}</td>
+                <td>
+                    {% if tx.status == "pending" %}
+                        <span class="badge bg-warning text-dark">{{ tx.status }}</span>
+                    {% elif tx.status == "accepted" %}
+                        <span class="badge bg-primary">{{ tx.status }}</span>
+                    {% elif tx.status == "shipped" %}
+                        <span class="badge bg-info text-dark">{{ tx.status }}</span>
+                    {% elif tx.status == "completed" %}
+                        <span class="badge bg-success">{{ tx.status }}</span>
+                    {% elif tx.status == "cancelled" %}
+                        <span class="badge bg-danger">{{ tx.status }}</span>
+                    {% else %}
+                        {{ tx.status }}
+                    {% endif %}
+                </td>
+                <td>{{ tx.created_at.strftime('%Y-%m-%d') if tx.created_at else '-' }}</td>
+                <td>
+                    <!-- Update Status with Dropdown -->
+                    <form action="{{ url_for('admin.update_transaction', transaction_id=tx.id) }}" 
+                          method="POST" class="d-inline">
+                        <select name="new_status" class="form-select form-select-sm d-inline w-auto">
+                            {% if tx.status == "pending" %}
+                                <option value="pending" selected>Pending</option>
+                        {% else %}
+                                <option value="pending">Pending</option>
+                        {% endif %}
+
+                        {% if tx.status == "accepted" %}
+                            <option value="accepted" selected>Accepted</option>
+                        {% else %}
+                            <option value="accepted">Accepted</option>
+                        {% endif %}
+
+                        {% if tx.status == "shipped" %}
+                            <option value="shipped" selected>Shipped</option>
+                        {% else %}
+                            <option value="shipped">Shipped</option>
+                        {% endif %}
+
+                        {% if tx.status == "completed" %}
+                            <option value="completed" selected>Completed</option>
+                        {% else %}
+                            <option value="completed">Completed</option>
+                        {% endif %}
+
+                        {% if tx.status == "cancelled" %}
+                            <option value="cancelled" selected>Cancelled</option>
+                        {% else %}
+                            <option value="cancelled">Cancelled</option>
+                        {% endif %}
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Update Status</button>
+                    </form>
+
+                    <!-- Delete Transaction -->
+                    <form action="{{ url_for('admin.delete_transaction', transaction_id=tx.id) }}" 
+                          method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock %}
