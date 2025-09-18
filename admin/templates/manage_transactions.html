@@ -42,10 +42,17 @@
                 </td>
                 <td>{{ tx.created_at.strftime('%Y-%m-%d') if tx.created_at else '-' }}</td>
                 <td>
-                    <!-- Update Status -->
-                    <form action="{{ url_for('admin.update_transaction', transaction_id=tx.id, new_status='completed') }}" 
-                          method="POST" style="display:inline;">
-                        <button type="submit" class="btn btn-success btn-sm">Mark Completed</button>
+                    <!-- Update Status with Dropdown -->
+                    <form action="{{ url_for('admin.update_transaction', transaction_id=tx.id) }}" 
+                          method="POST" class="d-inline">
+                        <select name="new_status" class="form-select form-select-sm d-inline w-auto">
+                            <option value="pending" {% if tx.status == "pending" %} selected{% endif %}>Pending</option>
+                            <option value="accepted" {% if tx.status == "accepted" %}selected{% endif %}>Accepted</option>
+                            <option value="shipped" {% if tx.status == "shipped" %}selected{% endif %}>Shipped</option>
+                            <option value="completed" {% if tx.status == "completed" %}selected{% endif %}>Completed</option>
+                            <option value="cancelled" {% if tx.status == "cancelled" %}selected{% endif %}>Cancelled</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Update Status</button>
                     </form>
 
                     <!-- Delete Transaction -->
