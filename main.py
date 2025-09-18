@@ -28,6 +28,7 @@ def create_app():
     from messages.routes import messages_bp
     from usersystem.app import usersystem_bp
     from admin.routes import admin_bp
+    from ranking.app import ranking_bp
 
     #register blueprint
     app.register_blueprint(transaction_bp, url_prefix="/transaction")
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(review_bp, url_prefix="/review")
     app.register_blueprint(usersystem_bp, url_prefix="/usersystem")
     app.register_blueprint(admin_bp, url_prefix="/admin")
+    app.register_blueprint(ranking_bp, url_prefix="/ranking")
 
     # Home route
     @app.route("/")
