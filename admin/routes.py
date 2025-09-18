@@ -157,12 +157,16 @@ def delete_transaction(transaction_id):
 
 
 #update transacton status(when error)
-@admin_bp.route("/update_transaction/<int:transaction_id>/<string:new_status>", methods=["POST"])
+@admin_bp.route("/update_transaction/<int:transaction_id>", methods=["POST"])
 @login_required
 @admin_required
-def update_transaction(transaction_id, new_status):
+def update_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
-    tx.status = new_status
-    db.session.commit()
-    flash(f"Transaction status updated to {new_status}","success")
+    new_status = request.form.get("new_status")
+    if new_status:
+        tx.status = new_status
+        db.session.commit()
+        flash(f"Transaction status updated to {new_status}","success")
+    else:
+        flash("Invalid status", "danger")
     return redirect(url_for("manage_trasactions"))

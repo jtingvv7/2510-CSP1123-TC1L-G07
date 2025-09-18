@@ -46,11 +46,35 @@
                     <form action="{{ url_for('admin.update_transaction', transaction_id=tx.id) }}" 
                           method="POST" class="d-inline">
                         <select name="new_status" class="form-select form-select-sm d-inline w-auto">
-                            <option value="pending" {% if tx.status == "pending" %} selected{% endif %}>Pending</option>
-                            <option value="accepted" {% if tx.status == "accepted" %}selected{% endif %}>Accepted</option>
-                            <option value="shipped" {% if tx.status == "shipped" %}selected{% endif %}>Shipped</option>
-                            <option value="completed" {% if tx.status == "completed" %}selected{% endif %}>Completed</option>
-                            <option value="cancelled" {% if tx.status == "cancelled" %}selected{% endif %}>Cancelled</option>
+                            {% if tx.status == "pending" %}
+                                <option value="pending" selected>Pending</option>
+                        {% else %}
+                                <option value="pending">Pending</option>
+                        {% endif %}
+
+                        {% if tx.status == "accepted" %}
+                            <option value="accepted" selected>Accepted</option>
+                        {% else %}
+                            <option value="accepted">Accepted</option>
+                        {% endif %}
+
+                        {% if tx.status == "shipped" %}
+                            <option value="shipped" selected>Shipped</option>
+                        {% else %}
+                            <option value="shipped">Shipped</option>
+                        {% endif %}
+
+                        {% if tx.status == "completed" %}
+                            <option value="completed" selected>Completed</option>
+                        {% else %}
+                            <option value="completed">Completed</option>
+                        {% endif %}
+
+                        {% if tx.status == "cancelled" %}
+                            <option value="cancelled" selected>Cancelled</option>
+                        {% else %}
+                            <option value="cancelled">Cancelled</option>
+                        {% endif %}
                         </select>
                         <button type="submit" class="btn btn-primary btn-sm">Update Status</button>
                     </form>
