@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, render_template, request, jsonify, session
 from sqlalchemy import func, desc, case
 from extensions import db
@@ -5,7 +6,7 @@ from models import User, Transaction, Review, Product
 from datetime import datetime, timedelta
 import logging
 
-ranking_bp = Blueprint('ranking', __name__, template_folder='templates')
+ranking_bp = Blueprint('ranking', __name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 
 logger = logging.getLogger(__name__)
 
@@ -18,20 +19,26 @@ def index():
         # Get review rating ranking
         review_rankings = get_review_rankings()
 
-        return render_template('ranking/index.html', transaction_rankings=transaction_rankings, review_rankings=review_rankings)
+        return render_template('ranking_index.html', transaction_rankings=transaction_rankings, review_rankings=review_rankings)
     
     except Exception as e:
         logger.error(f"Error in ranking index: {str(e)}")
-        return render_template('ranking/index.html', transaction_rankings=[], review_rankings=[])
+        return render_template('ranking_index.html', transaction_rankings=[], review_rankings=[])
 
 
 def get_transaction_rankings():
     try:
         # Count transactions of buyer
-        buyer_counts = db.session.query(Transaction.buyer_id.label('user_id'), func.count(Transaction.id).label('buyer_count')).group_by(Transaction.buyer_id).subquery()
+        buyer_counts = db.session.query(
+            Transaction.buyer_id.label('user_id'), 
+            func.count(Transaction.id).label('buyer_count')
+        ).group_by(Transaction.buyer_id).subquery()
 
         # Count transactions of seller
-        seller_counts = db.session.query(Transaction.seller_id.label('user_id'), func.count(Transaction.id).label('seller_count')).group_by(Transaction.seller_id).subquery()
+        seller_counts = db.session.query(
+            Transaction.seller_id.label('user_id'), 
+            func.count(Transaction.id).label('seller_count')
+        ).group_by(Transaction.seller_id).subquery()
 
         # Combine buyer and seller count
         rankings_query = db.session.query(
@@ -76,7 +83,7 @@ def get_transaction_rankings():
 def get_review_rankings():
     try:
         # Query to get review statistics for each user
-        review_stats = (
+        review_stats = db.session.query(
             Review.seller_id.label('user_id'),
             func.count(Review.id).label('total_reviews'),
             func.avg(Review.rating).label('average_rating'),
@@ -92,12 +99,12 @@ def get_review_rankings():
             review_stats.c.total_reviews,
             review_stats.c.average_rating,
             review_stats.c.positive_reviews,
-            (review_stats.c.positive_reviews * 100.0 / review_stats.c.total.reviews).label('positive_perccentage')
+            (review_stats.c.positive_reviews * 100.0 / review_stats.c.total_reviews).label('positive_percentage')
             ).join(
                 review_stats, User.id == review_stats.c.user_id
             ).filter(
                 review_stats.c.total_reviews >= 3  # Minimum 3 reviews to be ranked
-            ).order_by(desc('total_transactions')).limit(50)
+            ).order_by(desc('average_rating')).limit(50)
         
         rankings = []
         for rank, user_data in enumerate(rankings_query.all(), 1):
