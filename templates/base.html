@@ -13,7 +13,7 @@
 
     <!-- App CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='transaction.css') }}?v=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='usersystemstyle.css') }}?v=1">
+    <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}?v=1">
 
     {% block styles %}{% endblock %}
 </head>
@@ -47,9 +47,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('payment.index') }}"> Payment System</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('game.index') }}">Game</a>
-                    </li>
                     <!--only admin can see-->
                     {% if current_user.is_authenticated and current_user.role == 'admin' %}
                     <li class="nav-item">
@@ -76,19 +73,30 @@
                                 style="width:40px; height:40px; object-fit:cover; margin-right:10px;">  
                         {% endif %}   
                     </a>
-                        <!--inbox-->
-                        <a class="nav-link me-3" href="{{ url_for('messages.inbox') }}">
-                            <i class="bi bi-envelope-fill" style="font-size:1.3rem; color:white"></i>
-                        </a>
-                        <!--Hello Username-->
-                        <span class="navbar-text me-2">Hello, {{ session.get('user_name', '') }}</span>
-                        <!--Logout-->
-                        <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('usersystem.logout') }}">Logout</a>
-                    {% else %}
-                        <a class="btn btn-outline-light btn-sm" href="{{ url_for('usersystem.login') }}">Login</a>
-                        <a class="btn btn-outline-light btn-sm" href="{{ url_for('usersystem.register') }}">Register</a>
-                    {% endif %}
-                </div>
+                                <!-- inbox -->
+                    <a class="nav-link me-3" href="{{ url_for('messages.inbox') }}">
+                        <i class="bi bi-envelope-fill" style="font-size:1.3rem; color:white"></i>
+                    </a>
+
+                    <!-- cart -->
+                    <a class="nav-link me-3 position-relative" href="{{ url_for('usersystem.view_cart') }}">
+                        <i class="bi bi-cart-fill" style="font-size:1.4rem; color:white"></i>
+                        {% if session.get('cart') %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ session['cart']|length }}
+                            </span>
+                        {% endif %}
+                    </a>
+
+                    <!-- hello + logout -->
+                    <span class="navbar-text me-2">Hello, {{ session.get('user_name', '') }}</span>
+                    <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('usersystem.logout') }}">Logout</a>
+                {% else %}
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('usersystem.login') }}">Login</a>
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('usersystem.register') }}">Register</a>
+                {% endif %}
+            </div>
+                </a>
             </div>
         </div>
     </nav>
