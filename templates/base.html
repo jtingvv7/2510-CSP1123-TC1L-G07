@@ -45,10 +45,10 @@
                         <a class="nav-link" href="{{ url_for('review.index') }}">Review & Rating</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('payment.index') }}"> Payment System</a>
+                        <a class="nav-link" href="{{ url_for('payment.index') }}">Payment System</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('ranking.index') }}"> Ranking System</a>
+                        <a class="nav-link" href="{{ url_for('ranking.index') }}">Ranking</a>
                     </li>
                     <!--only admin can see-->
                     {% if current_user.is_authenticated and current_user.role == 'admin' %}

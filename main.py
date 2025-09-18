@@ -28,7 +28,7 @@ def create_app():
     from messages.routes import messages_bp
     from usersystem.app import usersystem_bp
     from admin.routes import admin_bp
-    from ranking.routes import ranking_bp
+    from ranking.app import ranking_bp
 
     #register blueprint
     app.register_blueprint(transaction_bp, url_prefix="/transaction")
