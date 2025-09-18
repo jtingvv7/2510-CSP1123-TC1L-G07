@@ -82,6 +82,9 @@ class Messages(db.Model):
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(100), nullable = False)
+    seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
     rating= db.Column(db.Integer, nullable = False)
     comment = db.Column(db.Text, nullable = True)
     image_path = db.Column(db.String(225), nullable=True)
