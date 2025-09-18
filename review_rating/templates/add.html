@@ -20,7 +20,7 @@
 <body>
     <div class="container">
     <h2>Add a Reviews</h2>
-    <form action="{{ url_for('review.add') }}" method="POST" class="review-form">
+    <form action="{{ url_for('review.add') }}" method="POST" enctype="multipart/form-data">
         <label for="username">User Name</label>
         <input type="text" id="username" name="username" placeholder="Your name" required>
 
@@ -36,7 +36,11 @@
         <label for="comment">Comment</label>
         <textarea name="comment" placeholder="Write your review..." required></textarea>
 
-        <button type="submit">Add</button>
+        <label for="image">Add Picture</label>
+        <input type="file" id="image" name="image" accept="image/" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; margin-bottom: 10px;">
+        <small style="color: #666; font-size: 12px;">Supported formats: JPG, PNG, Webp (Max size: 5MB)</small>
+
+        <button type="submit">Add Review</button>
     </form>
     </div>
 </body>
