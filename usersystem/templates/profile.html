@@ -16,13 +16,13 @@
             alt="Profile Picture">
       {% else %}
         <img src="https://i.pravatar.cc/100?u={{ user.id }}"
-            alt="Random Profile Picture">  <!--can random profile picture-->
+            alt="Random Profile Picture">  <!-- fallback random profile picture -->
       {% endif %}
     </div>
 
     <a href="{{ url_for('usersystem.editprofile') }}" class="upload-btn">Edit Profile</a>
     <a href="{{ url_for('index') }}">Home</a>
-    <a href="{{ url_for('usersystem.map') }}">Select Pickup Point</a>
+    <a href="{{ url_for('usersystem.profile_address') }}">Edit Address</a>
     <a href="{{ url_for('usersystem.product_manage') }}">Product</a>
     <a href="{{ url_for('usersystem.logout') }}">Log out</a>
   </div>
@@ -34,18 +34,14 @@
       <p><strong>Member since:</strong> {{ user.join_date.strftime('%B %Y') }}</p>
       <p><strong>Phone number:</strong> {{ user.phone or '--' }}</p>
 
-      <h4>Prefer Pickup Points</h4>
-      {% if pickup_points %}
-        <ul>
-          {% for point in pickup_points %}
-            <li>
-              {{ point.name }} - {{ point.address }}
-              (<a href="https://www.google.com/maps?q={{ point.latitude }},{{ point.longitude }}" target="_blank">View Map</a>)
-            </li>
-          {% endfor %}
-        </ul>
+      <h4>Preferred Pickup Point</h4>
+      {% if latest_pickup_point %}
+        <p>
+          {{ latest_pickup_point.name }} - {{ latest_pickup_point.address }}
+          (<a href="https://www.google.com/maps?q={{ latest_pickup_point.latitude }},{{ latest_pickup_point.longitude }}" target="_blank">View Map</a>)
+        </p>
       {% else %}
-        <p>No pickup points saved yet.</p>
+        <p>No pickup point saved yet.</p>
       {% endif %}
     </div>
 
@@ -88,7 +84,7 @@
             <p>{{ product.description[:80] }}{% if product.description|length > 80 %}...{% endif %}</p>
             <p><strong>MYR {{ "%.2f"|format(product.price) }}</strong></p>
             {% if product.pickup_location %}
-              <p><small>Pickup: {{ product.pickup_location.name }}</small></p>
+              <p><small>Pickup: {{ product.pickup_location.name }} - {{ product.pickup_location.address }}</small></p>
             {% endif %}
             <a href="{{ url_for('usersystem.product_manage', product_id=product.id) }}" class="btn btn-sm btn-info">Edit</a>
           </div>

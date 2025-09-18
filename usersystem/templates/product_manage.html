@@ -1,52 +1,45 @@
 {% extends "base.html" %}
-
-{% block title %}
-  {% if product %}Edit Product{% else %}Add Product{% endif %}
-{% endblock %}
+{% block title %}Manage Product{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h2>{% if product %}Edit Product{% else %}Add Product{% endif %}</h2>
+<div class="container mt-4">
+    <h2>Manage Product</h2>
 
-  <form method="POST" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="name" class="form-label">Product Name</label>
-      <input type="text" class="form-control" id="name" name="name"
-             value="{{ product.name if product else '' }}" required>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>{{ product.name }}</h4>
+            <p>{{ product.description }}</p>
+            <p><strong>Price:</strong> RM {{ product.price }}</p>
+
+            <p><strong>Current Pickup Location:</strong>
+                {% if product.pickup_location %}
+                    {{ product.pickup_location.name }} – {{ product.pickup_location.address }}
+                {% else %}
+                    Not set
+                {% endif %}
+            </p>
+        </div>
     </div>
 
-    <div class="mb-3">
-      <label for="description" class="form-label">Description</label>
-      <textarea class="form-control" id="description" name="description" rows="3" required>{{ product.description if product else '' }}</textarea>
-    </div>
+    <h4>Change Pickup Location</h4>
+    <form method="POST" action="{{ url_for('usersystem.product_manage') }}?product_id={{ product.id }}">
+        <div class="mb-3">
+            <label for="pickup_location" class="form-label">Select Pickup Point</label>
+            <select class="form-select" name="pickup_location_id" id="pickup_location" required>
+                <option value="">-- Select Pickup Location --</option>
+                {% for point in pickup_points %}
+                    <option value="{{ point.id }}" 
+                        {% if product.pickup_location_id == point.id %}selected{% endif %}>
+                        {{ point.name }} – {{ point.address }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
 
-    <div class="mb-3">
-      <label for="price" class="form-label">Price (RM)</label>
-      <input type="number" class="form-control" id="price" name="price" step="0.01"
-             value="{{ product.price if product else '' }}" required>
-    </div>
+    <hr>
 
-    <div class="mb-3">
-      <label for="image" class="form-label">Product Image</label>
-      <input type="file" class="form-control" id="image" name="image"
-            {% if not product or not product.image %}required{% endif %}>
-      {% if product and product.image %}
-        <p class="mt-2">Current Image:</p>
-        <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" 
-            alt="Product Image" width="150">
-      {% endif %}
-    </div>
-
-    <button type="submit" class="btn btn-success">
-      {% if product %}Update Product{% else %}Add Product{% endif %}
-    </button>
-
-    {% if product %}
-    <button type="submit" name="delete" value="true" class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to delete this product?');">
-      Delete
-    </button>
-    {% endif %}
-  </form>
+    <a href="{{ url_for('usersystem.profile') }}" class="btn btn-secondary">Back to Profile</a>
 </div>
 {% endblock %}
