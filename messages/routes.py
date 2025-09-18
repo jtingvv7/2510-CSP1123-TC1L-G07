@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 messages_bp = Blueprint('messages', __name__, template_folder='templates', static_folder='static')
 
+''' for test
 #fake inbox
 @messages_bp.route("/test_inbox")
 @login_required
@@ -43,7 +44,7 @@ def fake_messages():
     db.session.commit()
 
     return "Fake messages inserted. Now go check /messages/inbox"
-
+'''
 
 #view conversation
 @messages_bp.route("/chat/<int:user_id>/json",methods=["GET"])

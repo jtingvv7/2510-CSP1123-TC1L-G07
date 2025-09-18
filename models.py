@@ -31,7 +31,7 @@ class Product(db.Model):
     name = db.Column(db.String(30), nullable=False, unique=False)
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=True)
-    is_sold = db.Column(db.Boolean, default=True)
+    is_sold = db.Column(db.Boolean, default=False)
     date_posted = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     image = db.Column(db.String(200), default="default_product.jpg")
     pickup_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'), nullable=True)
@@ -81,20 +81,19 @@ class Messages(db.Model):
 #review & rating db
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(100), nullable = False)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
     rating= db.Column(db.Integer, nullable = False)
     comment = db.Column(db.Text, nullable = True)
+    image_path = db.Column(db.String(225), nullable=True)
     date_review = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
 
-#relationship
-    sender = db.relationship('User', foreign_keys=[buyer_id], backref='sender', lazy = True)
-    receiver = db.relationship('User', foreign_keys=[seller_id], backref='reveiver', lazy = True)
-
     def __repr__(self):
-        return f"<Review {self.id} :buyer rate {self.rating}>"
+        return f"<Review {self.id} by {self.id} rating {self.rating}>"
     
+
 #location db
 class SafeLocation(db.Model):
     __tablename__ = 'safelocation'
