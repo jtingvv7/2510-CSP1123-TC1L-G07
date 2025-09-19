@@ -77,7 +77,7 @@ def buy_product(product_id):
     #check if product is available
     if product.is_sold == True:
         flash("Product is not available for purchase.","warning")
-        return redirect (url_for("transaction.home"))
+        return redirect (url_for("index"))
     
     #prevent duplicate purchase requests
     existing = Transaction.query.filter_by( buyer_id = current_user.id,
@@ -85,12 +85,12 @@ def buy_product(product_id):
                                            status = "pending").first() 
     if existing:
         flash("You have already requested to purchase this product.","info")
-        return redirect(url_for("transaction.home"))
+        return redirect(url_for("index"))
 
     #prevent seller buy own product
     if product.seller_id == current_user.id:
         flash("You cannot buy your own product.","warning")
-        return redirect(url_for("transaction.home"))
+        return redirect(url_for("index"))
 
     #save in database
     try:
@@ -104,7 +104,7 @@ def buy_product(product_id):
         db.session.add(product)
         db.session.commit()
         flash("Purchase request send! Waiting for seller confirmation","success")
-        return redirect(url_for("transaction.home"))
+        return redirect(url_for("index"))
     
     except SQLAlchemyError as e: #e will save the wrong object
         db.session.rollback()
@@ -113,7 +113,7 @@ def buy_product(product_id):
         flash("An error occurred while processing your request.","danger")
 
 
-        return redirect(url_for("transaction.home"))
+        return redirect(url_for("index"))
 
 
 #complete transaction
@@ -266,8 +266,3 @@ def my_transaction():#check all owner by current user transaction record
                            bought_transactions = bought_transactions,
                             sold_transactions = sold_transactions )
 
-
-#transaction front page
-@transaction_bp.route("/home")
-def home():
-    return render_template("transaction/home.html")
