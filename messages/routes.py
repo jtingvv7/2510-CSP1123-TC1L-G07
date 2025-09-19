@@ -46,6 +46,18 @@ def fake_messages():
     return "Fake messages inserted. Now go check /messages/inbox"
 '''
 
+#for unread message
+@messages_bp.app.context_prcessor
+def inject_unread_count():
+    if current_user.is_authenticated:
+        unread_count = Messages.query.filter_by(
+            receiver_id = current_user.id,
+            is_read = False
+        ).count()
+        return dict(unread_count = unread_count)
+    return dict(unread_count = 0)
+
+
 #view conversation
 @messages_bp.route("/chat/<int:user_id>/json",methods=["GET"])
 @login_required
@@ -72,7 +84,7 @@ def chat_json(user_id):
 def send_messages(user_id):
     content = request.form.get("content") #use for get content from front end
     if content:
-        new_msg = Messages(sender_id=current_user.id, receiver_id= user_id, content=content)
+        new_msg = Messages(sender_id=current_user.id, receiver_id= user_id, content=content, is_read = False)
         db.session.add(new_msg)
         db.session.commit()
         return jsonify({"status": "ok", "message": content})

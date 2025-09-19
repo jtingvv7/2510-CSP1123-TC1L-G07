@@ -19,7 +19,7 @@ def create_app():
     # Init extensions
     db.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = "transaction.fake_login"  # (joan test) where login_manager redirects
+    # login_manager.login_view = "transaction.fake_login"  # (joan test) where login_manager redirects
 
     # Import & register blueprints (AFTER app is created ✅)
     from transaction.routes import transaction_bp
