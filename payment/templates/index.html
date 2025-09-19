@@ -20,8 +20,8 @@
   <div class="checkout-box">
     <h2>Checkout</h2>
     <p><a href="{{ url_for('index') }}" style="color: #504f4f; text-decoration: none;">← Back to Home</a></p>
-    <p>Order: <b>{{ order.order_id }}</b></p>
-    <p>Total: <b>RM {{ '%.2f' |format(order.amount) }}</b></p>
+    <p>Order: <b>{{ transaction.product_id }}</b></p>
+    <p>Total: <b>RM {{ "%.2f"|format(grand_total) }}</b></p>
     
     <form id="paymentForm" method="GET">
     <div>
@@ -45,6 +45,13 @@
       </label>
     </div>
 
+    <div>
+      <input type="radio" id="secondlooppay" name="payment_method" value="secondlooppay">
+      <label class="payment-method" for="secondlooppay">
+        <img src="https://img.icons8.com/color/96/wallet.png" alt="SecondLoopPay"> SecondLoopPay (Wallet)
+      </label>
+    </div>
+
     <button class="pay-btn" type="submit">Proceed to Pay</button>
     </form>
 
@@ -59,6 +66,8 @@
           this.action = "{{ url_for('payment.grabpay') }}";
         } else if (choice === "fpx") {
           this.action = "{{ url_for('payment.fpx') }}";
+        } else if (choice === "secondlooppay") {
+          this.action = "{{ url_for('payment.secondlooppay') }}";
         }
         this.submit();
       });
