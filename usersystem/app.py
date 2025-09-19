@@ -429,7 +429,7 @@ def cart():
                     new_transaction = Transaction(
                         product_id=product.id,
                         buyer_id=current_user.id,
-                        seller_id=product.user_id,
+                        seller_id=product.seller_id,
                         status="pending",
                         price=product.price,
                     )

@@ -59,6 +59,7 @@ class Transaction(db.Model):
     status = db.Column(db.String(50), default = "pending") #pending/ accepted/ rejected/ shipped/ completed
     created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     safe_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'))
+    price = db.Column(db.Float, nullable=False)
     
 #relationship
     messages = db.relationship('Messages', backref = 'chating',lazy = True)
