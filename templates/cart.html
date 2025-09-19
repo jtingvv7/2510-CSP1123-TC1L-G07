@@ -3,41 +3,6 @@
 {% block title %}My Cart{% endblock %}
 
 {% block content %}
-<h3>Your Shopping Cart</h3>
-{% if products %}
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Image</th>
-      <th>Name</th>
-      <th>Price</th>
-      <th>Quantity</th>
-      <th>Subtotal</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for p in products %}
-    <tr>
-      <td><img src="{{ url_for('static', filename='uploads/' + p.image) }}" 
-               alt="{{ p.name }}" width="60"></td>
-      <td>{{ p.name }}</td>
-      <td>RM {{ "%.2f"|format(p.price) }}</td>
-      <td>{{ p.quantity }}</td>
-      <td>RM {{ "%.2f"|format(p.subtotal) }}</td>
-      <td>
-        <a href="{{ url_for('usersystem.remove_from_cart', product_id=p.id) }}" 
-           class="btn btn-sm btn-danger">Remove</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<h4>Total: RM {{ "%.2f"|format(total) }}</h4>
-<a href="{{ url_for('payment.index') }}" class="btn btn-primary">Proceed to Checkout</a>
-{% else %}
-<p>Your cart is empty.</p>
-{% endif %}
 <div class="container mt-4">
     <h2 class="mb-4">My Cart</h2>
 
