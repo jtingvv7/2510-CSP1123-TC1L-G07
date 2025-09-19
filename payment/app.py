@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, flash, render_template, request, redirect, url_for, session
+from flask_login import current_user
 from extensions import db
-from models import Order
+from models import Payment, Product, Transaction, Wallet
+from transaction.routes import transaction_bp
 
 payment_bp = Blueprint('payment', __name__, template_folder='templates')
 
@@ -9,18 +11,51 @@ payment_bp = Blueprint('payment', __name__, template_folder='templates')
 # Main Page: Display Order ID and Payment Methods
 @payment_bp.route("/")
 def index():
-    order = Order.query.first()
-    if not order:
-        #Create a sample order if none exists
-        order = Order(order_id="SECONDLOOP1234", amount=99.90, currency="MYR")
-        db.session.add(order)
-        db.session.commit()
-    return render_template("index.html", order=order)
+    # Get cart data
+    cart = session.get("cart", {})
+    
+    # Calculate total price
+    total_price = 0
+    for pid, qty in cart.items():
+        product = Product.query.get(int(pid))
+        if product:
+            total_price += product.price * qty
+    
+    grand_total = total_price
+    
+    # Create or get Transaction
+    transaction = Transaction.query.first()
+    if not transaction:
+       # Use first product_id id there is cart items
+        if cart:
+            first_product_id = int(list(cart.keys())[0]) # Might be change it!!!
+            transaction = Transaction(
+                product_id=first_product_id,
+                buyer_id=1,  # Assume current user id  is 1
+                seller_id=1,  # Assume seller user id  is 1
+                status="pending"
+            )
+            db.session.add(transaction)
+            db.session.commit()
+    
+    return render_template("index.html", 
+                         transaction=transaction, 
+                         grand_total=grand_total)
 
 
 @payment_bp.route("/card", methods=['GET', 'POST'])
 def card():
-    order = Order.query.first()
+    cart = session.get("cart", {})
+
+    total_price = 0
+    for pid, qty in cart.items():
+        product = Product.query.get(int(pid))
+        if product:
+            total_price += product.price * qty
+    
+    grand_total = total_price
+
+    transaction = Transaction.query.first()
     if request.method == 'POST':
         email = request.form.get('email')
         card_number = request.form.get('card_number')
@@ -28,35 +63,117 @@ def card():
         cvv = request.form.get('cvv')
 
         db.session.commit()
+
+        # Clear shopping cart
+        session['cart'] = {}
+
         return redirect(url_for('payment.success'))
-    return render_template("card.html", order=order)
+    return render_template("card.html", transaction=transaction, grand_total=grand_total)
 
 
 @payment_bp.route("/grabpay", methods=['GET', 'POST'])
 def grabpay():
-    order = Order.query.first()
+    cart = session.get("cart", {})
+
+    total_price = 0
+    for pid, qty in cart.items():
+        product = Product.query.get(int(pid))
+        if product:
+            total_price += product.price * qty
+    
+    grand_total = total_price
+
+    transaction = Transaction.query.first()
     if request.method == 'POST':
         email = request.form.get('email')
         
         db.session.commit()
+
+        # Clear shopping cart
+        session['cart'] = {}
+
         return redirect(url_for('payment.success'))
-    return render_template("grabpay.html", order=order)
+    return render_template("grabpay.html", transaction=transaction, grand_total=grand_total)
 
 
 @payment_bp.route("/fpx", methods=['GET', 'POST'])
 def fpx():
-    order = Order.query.first()
+    cart = session.get("cart", {})
+
+    total_price = 0
+    for pid, qty in cart.items():
+        product = Product.query.get(int(pid))
+        if product:
+            total_price += product.price * qty
+    
+    grand_total = total_price
+
+    transaction = Transaction.query.first()
     if request.method == 'POST':
         bank = request.form.get('bank')
         
         db.session.commit()
+
+        # Clear shopping cart
+        session['cart'] = {}
+
         return redirect(url_for('payment.success'))
-    return render_template("fpx.html", order=order)
+    return render_template("fpx.html", transaction=transaction, grand_total=grand_total)
+    
+
+@payment_bp.route("/secondlooppay", methods=['GET', 'POST'])
+def secondlooppay():
+    cart = session.get("cart", {})
+
+    total_price = 0
+    for pid, qty in cart.items():
+        product = Product.query.get(int(pid))
+        if product:
+            total_price += product.price * qty
+    
+    grand_total = total_price
+
+    # Get current user wallet
+    current_user_id = session.get('user_id', 1) # Assume current user ID
+    wallet = Wallet.query.filter_by(user_id=current_user_id).first()
+
+    if not wallet: # might be change it!!!
+        wallet = Wallet(user_id=current_user_id, balance=100.0) # Give initial balance
+        db.session.add(wallet)
+        db.session.commit()
+
+    transaction = Transaction.query.first()
+    if request.method == 'POST':
+        # Check if wallet has enough balance
+        if wallet.balance >= grand_total:
+            # Minus balance from wallet
+            wallet.balance -= grand_total
+            db.session.commit()
+
+            # Create payment record
+            payment = Payment(
+                transaction_id=transaction.id,
+                payer_id=current_user_id, 
+                amount=grand_total,
+                method="wallet",
+                status="success"
+            )
+            db.session.add(payment)
+            db.session.commit()
+
+            # Clear shopping cart
+            session['cart'] = {}
+            
+            return redirect(url_for('payment.success'))
+        else:
+            flash('Balance is not enough!', 'error')
+
+    return render_template("secondlooppay.html", transaction=transaction, grand_total=grand_total, wallet_balance=wallet.balance)
 
 
 @payment_bp.route("/success")
 def success():
-    order = Order.query.first()
+    transaction = Transaction.query.first()
     db.session.commit()
     return render_template("success.html")
 

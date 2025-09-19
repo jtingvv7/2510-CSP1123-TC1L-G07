@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
-from models import User, Transaction, Review, SafeLocation, Product
+from models import User, Transaction, Review, SafeLocation, Product, Wallet
 from flask_login import login_user, logout_user, current_user
 
 usersystem_bp = Blueprint(
@@ -32,14 +32,19 @@ def product_manage():
     if request.method == "POST":
         # Handle delete
         if "delete" in request.form:
-            if product and product.image:
-                # delete image file if exists
-                image_path = os.path.join(current_app.root_path, "static", "uploads", product.image)
-                if os.path.exists(image_path):
-                    os.remove(image_path)
-            db.session.delete(product)
-            db.session.commit()
-            flash("Product deleted successfully.", "success")
+            if product.transactions:  # has transactions
+                product.is_active = False  # soft-delete
+                db.session.commit()
+                flash("Product cannot be deleted because it has transactions. It is now deactivated.", "warning")
+            else:
+                # delete image if exists
+                if product and product.image:
+                    image_path = os.path.join(current_app.root_path, "static", "uploads", product.image)
+                    if os.path.exists(image_path):
+                        os.remove(image_path)
+                db.session.delete(product)
+                db.session.commit()
+                flash("Product deleted successfully.", "success")
             return redirect(url_for("usersystem.profile"))
 
         # Handle create or update
@@ -48,7 +53,7 @@ def product_manage():
         price = request.form.get("price")
         pickup_location_id = request.form.get("pickup_location_id")
 
-        # ✅ Handle image upload
+        #  Handle image upload
         file = request.files.get("image")
         if file and allowed_file(file.filename):
             ext = file.filename.rsplit(".", 1)[-1]
@@ -59,10 +64,13 @@ def product_manage():
         else:
             filename = product.image if product else None  # keep old if editing
 
+        quantity = request.form.get("quantity", type=int, default=1)
+
         if product:
             product.name = name
             product.description = description
             product.price = price
+            product.quantity = quantity
             product.pickup_location_id = pickup_location_id
             product.image = filename
         else:
@@ -70,6 +78,7 @@ def product_manage():
                 name=name,
                 description=description,
                 price=price,
+                quantity=quantity,
                 pickup_location_id=pickup_location_id,
                 seller_id=current_user.id,
                 image=filename
@@ -134,6 +143,10 @@ def register():
         # Create new user
         user = User(name=name, email=email, password=hashed_password)
         db.session.add(user)
+        db.session.commit()
+        #Each new user can get one wallet 
+        new_wallet = Wallet(user_id=user.id, balance=0.0)
+        db.session.add(new_wallet)
         db.session.commit()
         return redirect(url_for("usersystem.login"))
 
@@ -218,9 +231,8 @@ def profile():
     avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user_id).scalar()
     wallet = user.wallet.balance if user.wallet else 0.0
 
-
-     #  fetch history products
-    history_ids = session.get("history", [])
+    #  fetch history products
+    history_ids = [int(pid) for pid in session.get("history", [])]
     history_products = []
     if history_ids:
         history_query = Product.query.filter(Product.id.in_(history_ids)).all()
@@ -237,7 +249,7 @@ def profile():
         completed_purchases=len(completed_purchases),
         avg_rating=avg_rating,
         wallet=wallet,
-        history_products=history_products
+        history_products=history_products 
     )
 
 # ----------------- ADD TO HISTORY  -----------------
@@ -262,11 +274,34 @@ def product_detail(product_id):
         session.modified = True
     return render_template("product_detail.html", product=product)
 
+# ----------------- ADD TO card  -----------------
+
+@usersystem_bp.route("/add_to_cart/<int:product_id>", methods=["POST"])
+def add_to_cart(product_id):
+    cart = session.get("cart", {})
+    product = Product.query.get_or_404(product_id)
+
+    if product.is_sold:
+        flash("This product is sold out!", "danger")
+        return redirect(url_for("usersystem.cart"))
+
+    product_id = str(product_id)
+
+    if cart.get(product_id, 0) < product.quantity:
+        cart[product_id] = cart.get(product_id, 0) + 1
+        flash("Product added to cart!", "success")
+    else:
+        flash("Not enough stock available.", "warning")
+
+    session["cart"] = cart
+    return redirect(url_for("usersystem.cart"))
+
+
 # -----------------view HISTORY  -----------------
 
 @usersystem_bp.route("/history")
 def history():
-    history = session.get("history", [])
+    history = [int(pid) for pid in session.get("history", [])]
     if not history:
         products = []
     else:
@@ -274,7 +309,6 @@ def history():
         # keep order same as session history (latest last)
         products.sort(key=lambda p: history.index(p.id))
     return render_template("history.html", products=products)
-
 
 # ----------------- EDIT PROFILE -----------------
 @usersystem_bp.route("/editprofile", methods=["GET", "POST"])
@@ -373,92 +407,49 @@ def pickup_point():
     return render_template("map_pickup_point.html", user=current_user)
 
 
-
+ # ----------------- cart -----------------
 @usersystem_bp.route("/cart", methods=["GET", "POST"])
 def cart():
     cart = session.get("cart", {})
 
     if request.method == "POST":
         action = request.form.get("action")
-        product_id = request.form.get("product_id")
 
+        if action == "checkout":
+            # handle checkout logic here
+            return redirect(url_for("usersystem.success"))
+
+        product_id = request.form.get("product_id")
         if not product_id:
             flash("Invalid product.", "danger")
             return redirect(url_for("usersystem.cart"))
 
-        # ✅ Make sure product_id is int
-        try:
-            product_id = int(product_id)
-        except ValueError:
-            flash("Invalid product ID.", "danger")
-            return redirect(url_for("usersystem.cart"))
-
-        # ----------------- ADD / INCREASE -----------------
-        if action in ["add", "increase"]:
-            product = Product.query.get(product_id)
-            if not product:
-                flash("Product not found.", "danger")
-            else:
-                if hasattr(product, "quantity") and product.quantity is not None:
-                    if product.quantity <= 0 or product.is_sold:
-                        flash("Product is sold out.", "danger")
-                    else:
-                        qty_in_cart = cart.get(product_id, 0)
-                        if qty_in_cart >= product.quantity:
-                            flash("Cannot add more than available stock.", "warning")
-                        else:
-                            cart[product_id] = qty_in_cart + 1
-                else:
-                    # fallback: always allow adding
-                    cart[product_id] = cart.get(product_id, 0) + 1
-
-        # ----------------- DECREASE -----------------
+        if action == "increase":
+            cart[product_id] = cart.get(product_id, 0) + 1
         elif action == "decrease":
-            if product_id in cart:
-                if cart[product_id] > 1:
-                    cart[product_id] -= 1
-                else:
-                    del cart[product_id]
-
-        # ----------------- REMOVE -----------------
+            if cart.get(product_id, 0) > 1:
+                cart[product_id] -= 1
         elif action == "remove":
-            if product_id in cart:
-                del cart[product_id]
-
-        # ----------------- CLEAR -----------------
-        elif action == "clear":
-            cart.clear()
+            cart.pop(product_id, None)
 
         session["cart"] = cart
         return redirect(url_for("usersystem.cart"))
 
-    # ----------------- GET CART -----------------
-    cart_items = []
-    total_price = 0
-
-    # convert keys to int to avoid str vs int problems
+    # convert keys for template
     cart_quantities = {int(pid): qty for pid, qty in cart.items()}
 
-    for pid, qty in cart_quantities.items():
-        product = Product.query.get(pid)
+    cart_items = []
+    grand_total = 0
+    sold_out = False
+
+    from models import Product
+    for pid, qty in cart.items():
+        product = Product.query.get(int(pid))
         if product:
-            subtotal = product.price * qty
-            cart_items.append({
-                "id": product.id,
-                "name": product.name,
-                "price": product.price,
-                "quantity": qty,
-                "subtotal": subtotal,
-                "image": product.image,
-                "is_sold": getattr(product, "is_sold", False)
-            })
-            total_price += subtotal
-
-    # compute grand total (same as total_price but clearer for template)
-    grand_total = total_price
-
-    # detect if any sold out item in cart
-    sold_out = any(item["is_sold"] for item in cart_items)
+            cart_items.append(product)
+            grand_total += product.price * qty
+            if product.is_sold:
+                sold_out = True
 
     return render_template(
         "cart.html",
@@ -467,6 +458,8 @@ def cart():
         grand_total=grand_total,
         sold_out=sold_out
     )
+
+
 
 # ----------------- search engine -----------------
 
