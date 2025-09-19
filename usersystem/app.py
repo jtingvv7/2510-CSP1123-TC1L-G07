@@ -1,7 +1,7 @@
 import os
 import time
 import re
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app, jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
@@ -24,75 +24,54 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+# ----------------- peoduct manage-----------------
 
-# ----------------- PRODUCT MANAGEMENT -----------------
 @usersystem_bp.route("/product_manage", methods=["GET", "POST"])
-@usersystem_bp.route("/product_manage/<int:product_id>", methods=["GET", "POST"])
-def product_manage(product_id=None):
-    user_id = session.get("user_id")
-    if not user_id:
-        flash("Please login first!", "danger")
-        return redirect(url_for("usersystem.login"))
-
+def product_manage():
+    product_id = request.args.get("product_id")
     product = Product.query.get(product_id) if product_id else None
-    locations = SafeLocation.query.filter_by(user_id=user_id).all()
 
     if request.method == "POST":
-        # DELETE product
-        if "delete" in request.form and product:
-            if product.seller_id == user_id:
-                db.session.delete(product)
-                db.session.commit()
-                flash("Product deleted successfully!", "success")
-            else:
-                flash("Cannot delete this product.", "danger")
+        # Handle delete
+        if "delete" in request.form:
+            db.session.delete(product)
+            db.session.commit()
+            flash("Product deleted successfully.", "success")
             return redirect(url_for("usersystem.profile"))
 
-        # Collect form data
+        # Handle create or update
         name = request.form.get("name")
         description = request.form.get("description")
-        price = float(request.form.get("price", 0))
-        pickup_location_id = request.form.get("pickup_location") or None
+        price = request.form.get("price")
+        pickup_location_id = request.form.get("pickup_location_id")
 
-        file = request.files.get("image")
-        filename = None
-        if file and allowed_file(file.filename):
-            ext = file.filename.rsplit(".", 1)[-1]  # extension name
-            filename = f"product_{int(time.time())}.{ext}"  # product_time.jpg
-            upload_path = os.path.join(current_app.root_path, "static", "uploads", "products")
-            os.makedirs(upload_path, exist_ok=True)
-            file.save(os.path.join(upload_path, filename))
-            filename = f"products/{filename}"  # ✅ store relative path (with products/)
-
+        # update existing
         if product:
-            # EDIT existing product
-            if product.seller_id != user_id:
-                flash("You don’t have permission to edit this product.", "danger")
-                return redirect(url_for("usersystem.profile"))
-
             product.name = name
             product.description = description
             product.price = price
             product.pickup_location_id = pickup_location_id
-            if filename:  # only overwrite image if new file uploaded
-                product.image = filename
         else:
-            # ADD new product
-            product = Product(
+            # create new
+            new_product = Product(
                 name=name,
                 description=description,
                 price=price,
-                seller_id=user_id,
                 pickup_location_id=pickup_location_id,
-                image=filename if filename else "products/default_product.jpg"
+                seller_id=current_user.id
             )
-            db.session.add(product)
+            db.session.add(new_product)
 
         db.session.commit()
-        flash("Product saved successfully!", "success")
+        flash("Product saved successfully.", "success")
+
+        # ✅ Redirect to profile instead of staying
         return redirect(url_for("usersystem.profile"))
 
-    return render_template("product_manage.html", product=product, locations=locations)
+    pickup_points = SafeLocation.query.filter_by(user_id=current_user.id).all()
+    return render_template("product_manage.html", user=current_user, product=product, pickup_points=pickup_points)
+
+
 # ----------------- LOGIN -----------------
 @usersystem_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -144,7 +123,6 @@ def register():
         user = User(name=name, email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash("Account created successfully! Please login.", "success")
         return redirect(url_for("usersystem.login"))
 
     return render_template("register.html")
@@ -181,7 +159,7 @@ def forgot_reset_password():
 
     return render_template('forgot_reset_password.html', email_verified=email_verified)
 # ----------------- PROFILE -----------------
-@usersystem_bp.route("/profile", methods=["GET"])
+@usersystem_bp.route("/profile", methods=["GET", "POST"])
 def profile():
     user_id = session.get("user_id")
     if not user_id:
@@ -194,23 +172,49 @@ def profile():
         session.clear()
         return redirect(url_for("usersystem.login"))
 
-    # Get products of this user
-    products = Product.query.filter_by(seller_id=user.id).all()
+    # ✅ Handle pickup point actions (for products, not profile address)
+    if request.method == "POST":
+        action = request.form.get("action")
 
+        if action == "add_location":
+            name = request.form.get("location_name")
+            address = request.form.get("location_address")
+            if not name or not address:
+                flash("Both name and address are required.", "danger")
+            else:
+                new_location = SafeLocation(user_id=user_id, name=name, address=address)
+                db.session.add(new_location)
+                db.session.commit()
+                flash("Pickup location added!", "success")
+
+        elif action == "delete_location":
+            location_id = request.form.get("location_id")
+            location = SafeLocation.query.get(location_id)
+            if location and location.user_id == user_id:
+                db.session.delete(location)
+                db.session.commit()
+                flash("Pickup location deleted!", "success")
+            else:
+                flash("You don’t have permission to delete this location.", "danger")
+
+        return redirect(url_for("usersystem.profile"))
+
+    # ✅ Fetch related user data
+    products = Product.query.filter_by(seller_id=user.id).all()
     completed_sales = Transaction.query.filter_by(seller_id=user_id, status="completed").all()
     completed_purchases = Transaction.query.filter_by(buyer_id=user_id, status="completed").all()
     avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user_id).scalar()
-    pickup_points = SafeLocation.query.filter_by(user_id=user_id).all()
 
+    # ✅ Profile will now display user.profile_address (from edit_address_profile.html)
     return render_template(
         "profile.html",
         user=user,
         products=products,
         completed_sales=len(completed_sales),
         completed_purchases=len(completed_purchases),
-        avg_rating=avg_rating,
-        pickup_points=pickup_points
+        avg_rating=avg_rating
     )
+
 
 # ----------------- EDIT PROFILE -----------------
 @usersystem_bp.route("/editprofile", methods=["GET", "POST"])
@@ -248,21 +252,39 @@ def editprofile():
             file.save(os.path.join(upload_path, filename))
             current_user.profile_pic = filename
             session["user_profile_pic"] = filename
+            
 
         db.session.commit()
-        flash("Profile updated successfully!", "success")
         return redirect(url_for("usersystem.profile"))
 
     return render_template("editprofile.html", user=user)
 
-# ----------------- MAP -----------------
-@usersystem_bp.route("/map", methods=["GET", "POST"])
-def map():
-    if not session.get("user_id"):
-        flash("Please login first!", "danger")
-        return redirect(url_for("usersystem.login"))
 
-    user_id = session["user_id"]
+# ----------------- edit profile address -----------------
+
+@usersystem_bp.route("/profile/edit_address", methods=["GET", "POST"])
+def profile_address():
+    user = current_user
+
+    if request.method == "POST":
+        profile_address = request.form.get("profile_address")
+        latitude = request.form.get("latitude")
+        longitude = request.form.get("longitude")
+
+        if profile_address:
+            user.profile_address = profile_address
+            user.profile_latitude = float(latitude) if latitude else None
+            user.profile_longitude = float(longitude) if longitude else None
+            db.session.commit()
+            return redirect(url_for("usersystem.profile"))
+
+    return render_template("edit_address_profile.html", user=user)
+
+# ----------------- edit pickup point -----------------
+
+@usersystem_bp.route("/product_manage/add_pickup", methods=["GET", "POST"])
+def pickup_point():
+    user_id = current_user.id
 
     if request.method == "POST":
         name = request.form.get("name")
@@ -272,56 +294,92 @@ def map():
         description = request.form.get("description")
 
         if not all([name, address, latitude, longitude]):
-            flash("Please fill all required fields.", "danger")
-            return redirect(url_for("usersystem.map"))
+            flash("Please fill all required fields!", "danger")
+            return redirect(url_for("usersystem.pickup_point"))
 
-        existing_location = SafeLocation.query.filter_by(user_id=user_id).first()
-        if existing_location:
-            existing_location.name = name
-            existing_location.address = address
-            existing_location.latitude = latitude
-            existing_location.longitude = longitude
-            existing_location.description = description
-        else:
-            new_location = SafeLocation(
-                user_id=user_id,
-                name=name,
-                address=address,
-                latitude=latitude,
-                longitude=longitude,
-                description=description
-            )
-            db.session.add(new_location)
-
+        new_location = SafeLocation(
+            user_id=user_id,
+            name=name,
+            address=address,
+            latitude=float(latitude),
+            longitude=float(longitude),
+            description=description
+        )
+        db.session.add(new_location)
         db.session.commit()
-        return redirect(url_for("usersystem.profile"))
+        return redirect(url_for("usersystem.product_manage"))
 
-    return render_template("map.html")
-
-# ----------------- SHOPPING CART -----------------
-@usersystem_bp.route("/add_to_cart/<int:product_id>")
-def add_to_cart(product_id):
-    if "cart" not in session:
-        session["cart"] = {}
-
-    cart = session["cart"]
-    cart[str(product_id)] = cart.get(str(product_id), 0) + 1
-    session["cart"] = cart  # save back
-    flash("Product added to cart!", "success")
-    return redirect(request.referrer or url_for("index"))
+    #  Pass current_user into template
+    return render_template("map_pickup_point.html", user=current_user)
 
 
-@usersystem_bp.route("/cart")
-def view_cart():
+# ----------------- CART -----------------
+@usersystem_bp.route("/cart", methods=["GET", "POST"])
+def cart():
     cart = session.get("cart", {})
-    products = []
-    total = 0
 
+    if request.method == "POST":
+        action = request.form.get("action")
+        product_id = request.form.get("product_id")
+
+        if not product_id:
+            flash("Invalid product.", "danger")
+            return redirect(url_for("usersystem.cart"))
+
+        # ✅ Make sure product_id is int
+        try:
+            product_id = int(product_id)
+        except ValueError:
+            flash("Invalid product ID.", "danger")
+            return redirect(url_for("usersystem.cart"))
+
+        # ----------------- ADD / INCREASE -----------------
+        if action in ["add", "increase"]:
+            product = Product.query.get(product_id)
+            if not product:
+                flash("Product not found.", "danger")
+            else:
+                if hasattr(product, "quantity") and product.quantity is not None:
+                    if product.quantity <= 0 or product.is_sold:
+                        flash("Product is sold out.", "danger")
+                    else:
+                        qty_in_cart = cart.get(product_id, 0)
+                        if qty_in_cart >= product.quantity:
+                            flash("Cannot add more than available stock.", "warning")
+                        else:
+                            cart[product_id] = qty_in_cart + 1
+                else:
+                    # fallback: always allow adding
+                    cart[product_id] = cart.get(product_id, 0) + 1
+
+        # ----------------- DECREASE -----------------
+        elif action == "decrease":
+            if product_id in cart:
+                if cart[product_id] > 1:
+                    cart[product_id] -= 1
+                else:
+                    del cart[product_id]
+
+        # ----------------- REMOVE -----------------
+        elif action == "remove":
+            if product_id in cart:
+                del cart[product_id]
+
+        # ----------------- CLEAR -----------------
+        elif action == "clear":
+            cart.clear()
+
+        session["cart"] = cart
+        return redirect(url_for("usersystem.cart"))
+
+    # ----------------- GET CART -----------------
+    cart_items = []
+    total_price = 0
     for pid, qty in cart.items():
-        product = Product.query.get(int(pid))
+        product = Product.query.get(pid)
         if product:
             subtotal = product.price * qty
-            products.append({
+            cart_items.append({
                 "id": product.id,
                 "name": product.name,
                 "price": product.price,
@@ -329,18 +387,11 @@ def view_cart():
                 "subtotal": subtotal,
                 "image": product.image
             })
-            total += subtotal
+            total_price += subtotal
 
-    return render_template("cart.html", products=products, total=total)
+    return render_template("cart.html", cart_items=cart_items, total_price=total_price)
 
 
-@usersystem_bp.route("/remove_from_cart/<int:product_id>")
-def remove_from_cart(product_id):
-    cart = session.get("cart", {})
-    cart.pop(str(product_id), None)
-    session["cart"] = cart
-    flash("Product removed from cart.", "info")
-    return redirect(url_for("usersystem.view_cart"))
 
 
 # ----------------- SUCCESS -----------------

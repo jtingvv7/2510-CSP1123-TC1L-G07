@@ -4,29 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profile</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+  <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+  <style>
+    .map-container {
+      height: 300px;
+      width: 100%;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .input-box {
+      margin-bottom: 15px;
+    }
+    .phone-wrapper {
+      display: flex;
+      align-items: center;
+    }
+    .phone-prefix {
+      padding: 5px 10px;
+      background: #eee;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+    }
+    .phone-input {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-left: none;
+      border-radius: 0 4px 4px 0;
+      padding: 5px;
+    }
+    .btn {
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+  </style>
 </head>
 <body>
 
   <div class="sidebar">
     <a href="{{ url_for('usersystem.profile') }}">Profile</a>
     <a class="active" href="{{ url_for('usersystem.editprofile') }}">Edit Profile</a>
-    <a href="{{ url_for('usersystem.login') }}">Log out</a>
+    <a href="{{ url_for('usersystem.logout') }}">Log out</a>
   </div>
 
-  <div class="edit-form">
-    <h3>Edit Profile</h3>
+  <div class="content">
+    <h2>Edit Profile</h2>
 
     <form method="POST" action="{{ url_for('usersystem.editprofile') }}" enctype="multipart/form-data">
       <!-- Profile Picture -->
       <div style="text-align: center; margin-bottom: 20px;">
         {% if user.profile_pic %}
-          <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
-             alt="Profile Picture"
-             style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+          <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}" 
+               alt="Profile Picture" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
         {% else %}
-          <img src="https://i.pravatar.cc/100?u={{ user.id }}"
-            alt="Random Profile Picture">  <!--can random profile picture-->
+          <img src="https://i.pravatar.cc/100?u={{ user.id }}" alt="Random Profile Picture">
         {% endif %}
         <br><br>
         <input type="file" name="file" accept="image/*">
@@ -43,17 +82,83 @@
         <label>Phone Number:</label>
         <div class="phone-wrapper">
           <span class="phone-prefix">+60</span>
-          <input type="text" name="phone"
-                 class="phone-input"
-                 value="{{ user.phone[3:] if user.phone else '' }}"
-                 pattern="\d{9}" maxlength="9"
-                 title="Enter exactly 9 digits">
+          <input type="text" name="phone" class="phone-input" 
+                 value="{{ user.phone[3:] if user.phone else '' }}" 
+                 pattern="\d{9}" maxlength="9" title="Enter exactly 9 digits">
         </div>
       </div>
 
-      <button type="submit" class="upload-btn">Save Changes</button>
+      <!-- Address -->
+      <div class="input-box">
+        <label>Address:</label>
+        <input type="text" id="profile_address" name="profile_address" 
+               value="{{ user.profile_address or '' }}" placeholder="Enter your address">
+      </div>
+
+      <!-- Map -->
+      <div id="map" class="map-container"></div>
+      <input type="hidden" id="latitude" name="latitude" value="{{ user.profile_latitude or '' }}">
+      <input type="hidden" id="longitude" name="longitude" value="{{ user.profile_longitude or '' }}">
+
+      <button type="submit" class="btn">Save Changes</button>
     </form>
   </div>
 
+  <!-- Leaflet JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Default MMU Cyberjaya coordinates
+    var defaultLat = 2.9264;
+    var defaultLng = 101.6400;
+
+    // Use saved location or MMU as fallback
+    var startLat = {{ user.profile_latitude or 2.9264 }};
+    var startLng = {{ user.profile_longitude or 101.6400 }};
+
+    // Init map
+    var map = L.map('map').setView([startLat, startLng], 15);
+
+    // Load map tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
+
+    // Add marker
+    var marker = L.marker([startLat, startLng], {draggable: true}).addTo(map);
+
+    // Update inputs + address
+    function updateInputs(lat, lng) {
+      document.getElementById("latitude").value = lat;
+      document.getElementById("longitude").value = lng;
+
+      // Reverse geocode to get address
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.display_name) {
+            document.getElementById("profile_address").value = data.display_name;
+          }
+        })
+        .catch(err => console.error("Geocode error:", err));
+    }
+
+    // Marker drag event
+    marker.on("dragend", function(e) {
+      var latLng = marker.getLatLng();
+      updateInputs(latLng.lat, latLng.lng);
+    });
+
+    // Click map to move marker
+    map.on("click", function(e) {
+      marker.setLatLng(e.latlng);
+      updateInputs(e.latlng.lat, e.latlng.lng);
+    });
+
+    // If no saved coords, initialize inputs with MMU Cyberjaya
+    {% if not user.profile_latitude or not user.profile_longitude %}
+      updateInputs(defaultLat, defaultLng);
+    {% endif %}
+  </script>
 </body>
 </html>
