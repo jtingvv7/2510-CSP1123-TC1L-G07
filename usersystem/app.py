@@ -330,20 +330,45 @@ def cart():
 
         # ----------------- CHECKOUT -----------------
         if action == "checkout":
-            return redirect(url_for('payment.index'))
+            if not cart:
+                flash("Your cart is empty.", "warning")
+                return redirect(url_for("usersystem.cart"))
 
-        product_id = request.form.get("product_id")
-
-        if not product_id:
-            flash("Invalid product.", "danger")
-            return redirect(url_for("usersystem.cart"))
-
-        # ✅ Make sure product_id is int
         try:
-            product_id = int(product_id)
-        except ValueError:
-            flash("Invalid product ID.", "danger")
+            for product_id, qty in cart.items():
+                product = Product.query.get(product_id)
+                if not product:
+                    continue
+
+                # prevent repeat transaction
+                if product.is_sold:
+                    flash(f"{product.name} is already sold.", "danger")
+                    continue
+
+                # create new transaction
+                new_transaction = Transaction(
+                    product_id=product.id,
+                    buyer_id=current_user.id,
+                    seller_id=product.user_id,
+                    status="pending"
+                )
+                db.session.add(new_transaction)
+
+            # mark with sold out
+                product.is_sold = True
+
+            db.session.commit()
+            session["cart"] = {}
+
+            flash("Checkout successful! Your orders are now pending seller confirmation.", "success")
+            return redirect(url_for("transaction.my_transaction"))
+
+        except Exception as e:
+            db.session.rollback()
+            flash("Checkout failed.", "danger")
+            print("Checkout error:", e)
             return redirect(url_for("usersystem.cart"))
+        
 
         # ----------------- ADD / INCREASE -----------------
         if action in ["add", "increase"]:
@@ -402,7 +427,7 @@ def cart():
                 "quantity": qty,
                 "subtotal": subtotal,
                 "image": product.image,
-                "is_sold": getattr(product, "is_sold", False)
+                "is_sold": getattr(product, "is_sold", True)
             })
             total_price += subtotal
 
