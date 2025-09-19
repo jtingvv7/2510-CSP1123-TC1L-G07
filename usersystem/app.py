@@ -375,7 +375,11 @@ def cart():
     # ----------------- GET CART -----------------
     cart_items = []
     total_price = 0
-    for pid, qty in cart.items():
+
+    # convert keys to int to avoid str vs int problems
+    cart_quantities = {int(pid): qty for pid, qty in cart.items()}
+
+    for pid, qty in cart_quantities.items():
         product = Product.query.get(pid)
         if product:
             subtotal = product.price * qty
@@ -385,12 +389,24 @@ def cart():
                 "price": product.price,
                 "quantity": qty,
                 "subtotal": subtotal,
-                "image": product.image
+                "image": product.image,
+                "is_sold": getattr(product, "is_sold", False)
             })
             total_price += subtotal
 
-    return render_template("cart.html", cart_items=cart_items, total_price=total_price)
+    # compute grand total (same as total_price but clearer for template)
+    grand_total = total_price
 
+    # detect if any sold out item in cart
+    sold_out = any(item["is_sold"] for item in cart_items)
+
+    return render_template(
+        "cart.html",
+        cart_items=cart_items,
+        cart_quantities=cart_quantities,
+        grand_total=grand_total,
+        sold_out=sold_out
+    )
 
 
 
