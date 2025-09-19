@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     profile_pic = db.Column(db.String(200), nullable=True)
     join_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     phone = db.Column(db.String(20), nullable=True)
-    role = db.Column(db.String(20), default="user")
+    role = db.Column(db.String(20), default="user") #admin
     profile_address = db.Column(db.String(250))
     
     # relationship of user
@@ -51,7 +51,7 @@ class Transaction(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'),nullable = False)
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable = False)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    status = db.Column(db.String(50), default = "pending") #pending/ accepted/ rejected/ completed
+    status = db.Column(db.String(50), default = "pending") #pending/ accepted/ rejected/ shipped/ completed
     created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     safe_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'))
     
@@ -111,7 +111,7 @@ class SafeLocation(db.Model):
     def __repr__(self):
         return f"<Safe Location: {self.name} ({self.latitude}, {self.longitude})>"
 
-
+#wallet db
 class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
