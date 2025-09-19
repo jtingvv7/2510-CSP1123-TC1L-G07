@@ -39,37 +39,64 @@
               </div>
               <div class="modal-body">
                 <div class="row">
+                  <!-- Product Image -->
                   <div class="col-md-6">
                     <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}"
-                         class="img-fluid rounded"
-                         alt="{{ product.name }}">
+                        class="img-fluid rounded"
+                        alt="{{ product.name }}">
                   </div>
-                  <div class="col-md-6">
-                    <p><strong>Name:</strong> {{ product.name }}</p>
-                    <p><strong>Description:</strong> {{ product.description }}</p>
-                    <p><strong>Quantity:</strong> {{ product.quantity }}</p>
-                    <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
 
-                    {% if product.pickup_location %}
-                      <p><strong>Pickup Point:</strong> {{ product.pickup_location.name }} - {{ product.pickup_location.address }}</p>
-                    {% else %}
-                      <p><em>No pickup location specified</em></p>
-                    {% endif %}
+                  <!-- Product Details -->
+                  <div class="col-md-6 d-flex flex-column justify-content-between">
+                    <div>
+                      <p><strong>Name:</strong> {{ product.name }}</p>
+                      <p><strong>Description:</strong> {{ product.description }}</p>
+                      <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+                      <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
+
+                      {% if product.pickup_location %}
+                        <p><strong>Pickup Point:</strong> {{ product.pickup_location.name }} - {{ product.pickup_location.address }}</p>
+                      {% else %}
+                        <p><em>No pickup location specified</em></p>
+                      {% endif %}
+
+                      <!-- Seller Info -->
+                      <p class="mt-3">
+                        <strong>Seller:</strong>
+                        <a href="{{ url_for('usersystem.view_profile', user_id=product.seller.id) }}" 
+                          class="d-flex align-items-center text-decoration-none">
+                          {% if product.seller.profile_pic %}
+                            <img src="{{ url_for('static', filename='uploads/profiles/' ~ product.seller.profile_pic) }}" 
+                                alt="{{ product.seller.name }}" 
+                                class="rounded-circle me-2" 
+                                width="40" height="40">
+                          {% else %}
+                            <img src="{{ url_for('static', filename='uploads/profiles/default_user.jpg') }}" 
+                                alt="{{ product.seller.name }}" 
+                                class="rounded-circle me-2" 
+                                width="40" height="40">
+                          {% endif %}
+                          <span>{{ product.seller.name }}</span>
+                        </a>
+                      </p>
+                    </div>
+
+                    <!-- Modal Footer Buttons -->
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <form action="{{ url_for('usersystem.add_to_cart', product_id=product.id) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="btn btn-success">Add to Cart</button>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <form action="{{ url_for('usersystem.add_to_cart', product_id=product.id) }}" method="post" style="display:inline;">
-                  <input type="hidden" name="action" value="add">
-                  <input type="hidden" name="product_id" value="{{ product.id }}">
-                  <button type="submit" class="btn btn-success">Add to Cart</button>
-                </form>
               </div>
             </div>
           </div>
         </div>
-      {% endfor %}
+              {% endfor %}
     </div>
 </div>
 {% endblock %}

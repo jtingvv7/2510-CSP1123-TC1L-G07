@@ -22,7 +22,6 @@ class User(db.Model, UserMixin):
         return self.quantity <= 0 or not self.is_active
     
     # relationship of user
-    products = db.relationship("Product", backref="seller", lazy=True)  # seller is the Product attribute
     wallet = db.relationship("Wallet", backref="wallet_owner", uselist=False, lazy=True)
     payment = db.relationship("Payment", backref="payment_user", lazy=True)
     
@@ -38,6 +37,7 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=True)
     is_sold = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True) 
     date_posted = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     image = db.Column(db.String(200), default="default_product.jpg")
     pickup_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'), nullable=True)
@@ -46,9 +46,18 @@ class Product(db.Model):
     # relationships
     transactions = db.relationship('Transaction', backref='product', lazy=True)
     pickup_location = db.relationship("SafeLocation", backref="products")
+    seller = db.relationship(
+    "User",
+    backref=db.backref("products_selling", lazy=True),  # Use a unique backref name
+    foreign_keys=[seller_id])
 
     def __repr__(self):
         return f"<Product {self.id}  {self.name}>"
+    
+    @property
+    def sold_out(self):
+        """Automatically returns True if quantity is 0 or product is marked sold"""
+        return self.is_sold or self.quantity <= 0
 
 #transaction db
 class Transaction(db.Model):
