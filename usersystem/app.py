@@ -224,7 +224,7 @@ def profile():
 
 
      #  fetch history products
-    history_ids = session.get("history", [])
+    history_ids = [int(pid) for pid in session.get("history", [])]
     history_products = []
     if history_ids:
         history_query = Product.query.filter(Product.id.in_(history_ids)).all()
@@ -249,10 +249,16 @@ def profile():
 @usersystem_bp.route("/add_to_history/<int:product_id>", methods=["POST"])
 def add_to_history(product_id):
     history = session.get("history", [])
+
+    #  normalize to int
+    history = [int(pid) for pid in history]
+
     if product_id not in history:
         history.append(product_id)
-        session["history"] = history
-        session.modified = True   #  force save
+        #  save back as str
+        session["history"] = [str(pid) for pid in history]
+        session.modified = True
+
     return jsonify({"status": "success", "history": session.get("history")})
 
 # -----------------product detail(history)  -----------------
@@ -270,7 +276,7 @@ def product_detail(product_id):
 
 @usersystem_bp.route("/history")
 def history():
-    history = session.get("history", [])
+    history = [int(pid) for pid in session.get("history", [])]
     if not history:
         products = []
     else:
@@ -377,10 +383,13 @@ def pickup_point():
     return render_template("map_pickup_point.html", user=current_user)
 
 
-
+ # ----------------- cart -----------------
 @usersystem_bp.route("/cart", methods=["GET", "POST"])
 def cart():
+    # ----------------- LOAD CART -----------------
     cart = session.get("cart", {})
+    # normalize keys to int for internal use
+    cart = {int(pid): qty for pid, qty in cart.items()}
 
     if request.method == "POST":
         action = request.form.get("action")
@@ -390,12 +399,10 @@ def cart():
             return redirect(url_for('payment.index'))
 
         product_id = request.form.get("product_id")
-
         if not product_id:
             flash("Invalid product.", "danger")
             return redirect(url_for("usersystem.cart"))
 
-        # ✅ Make sure product_id is int
         try:
             product_id = int(product_id)
         except ValueError:
@@ -409,7 +416,7 @@ def cart():
                 flash("Product not found.", "danger")
             else:
                 if hasattr(product, "quantity") and product.quantity is not None:
-                    if product.quantity <= 0 or product.is_sold:
+                    if product.quantity <= 0 or getattr(product, "is_sold", False):
                         flash("Product is sold out.", "danger")
                     else:
                         qty_in_cart = cart.get(product_id, 0)
@@ -438,14 +445,14 @@ def cart():
         elif action == "clear":
             cart.clear()
 
-        session["cart"] = cart
+        # ✅ Save back with string keys (JSON-safe)
+        session["cart"] = {str(pid): qty for pid, qty in cart.items()}
+        session.modified = True
         return redirect(url_for("usersystem.cart"))
 
     # ----------------- GET CART -----------------
     cart_items = []
     total_price = 0
-
-    # convert keys to int to avoid str vs int problems
     cart_quantities = {int(pid): qty for pid, qty in cart.items()}
 
     for pid, qty in cart_quantities.items():
@@ -463,10 +470,7 @@ def cart():
             })
             total_price += subtotal
 
-    # compute grand total (same as total_price but clearer for template)
     grand_total = total_price
-
-    # detect if any sold out item in cart
     sold_out = any(item["is_sold"] for item in cart_items)
 
     return render_template(
@@ -476,6 +480,7 @@ def cart():
         grand_total=grand_total,
         sold_out=sold_out
     )
+
 
 # ----------------- search engine -----------------
 
