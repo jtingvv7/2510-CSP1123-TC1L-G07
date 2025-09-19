@@ -4,7 +4,7 @@ from functools import wraps
 from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
-from models import User, Product, Transaction, Messages
+from models import User, Product, Transaction, Messages, Wallet
 from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
@@ -57,6 +57,14 @@ def manage_products():
 def manage_transactions():
     all_transactions = Transaction.query.all()
     return render_template("manage_transactions.html", transactions = all_transactions)
+
+#check all wallets
+@admin_bp.route("/manage_wallets")
+@login_required
+@admin_required
+def manage_wallets():
+    all_wallets = Wallet.query.all()
+    return render_template("manage_wallets.html", wallets = all_wallets)
 
 
 ################## user management #####################
@@ -170,3 +178,21 @@ def update_transaction(transaction_id):
     else:
         flash("Invalid status", "danger")
     return redirect(url_for("manage_trasactions"))
+
+################## wallet management #####################
+#simulated recharge
+@admin_bp.route("/recharge_wallet/<int:user_id>", methods=["POST"])
+@login_required
+def recharge_wallet(user_id):
+    amount = float(request.form.get("amount", 0))
+    wallet = Wallet.query.filter_by(user_id=user_id).first()
+
+    if wallet:
+        wallet.balance += amount   
+    else:
+        wallet = Wallet(user_id=user_id, balance=amount)
+        db.session.add(wallet)
+
+    db.session.commit()
+    flash(f"Added RM{amount:.2f} to User {user_id}'s wallet", "success")
+    return redirect(url_for("admin.manage_wallets"))
