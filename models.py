@@ -15,12 +15,17 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20), nullable=True)
     role = db.Column(db.String(20), default="user") #admin
     profile_address = db.Column(db.String(250))
+    is_active = db.Column(db.Boolean, default=True)
+
+    @property
+    def is_sold(self):
+        return self.quantity <= 0 or not self.is_active
     
     # relationship of user
     products = db.relationship("Product", backref="seller", lazy=True)  # seller is the Product attribute
     wallet = db.relationship("Wallet", backref="wallet_owner", uselist=False, lazy=True)
     payment = db.relationship("Payment", backref="payment_user", lazy=True)
-
+    
     def __repr__(self):
         return f"<User {self.id} name: {self.name}>"
 
