@@ -8,7 +8,7 @@
     <h3 class="mb-4 text-center">Available Products</h3>
 
     <div class="row">
-        {% for product in products %}
+      {% for product in products %}
         <div class="col-md-3 mb-4">
             <div class="card shadow-sm h-100">
                 <img src="{{ url_for('static', filename='uploads/' + product.image) }}"
@@ -41,27 +41,37 @@
               <div class="modal-body">
                 <div class="row">
                   <div class="col-md-6">
-                    <img src="{{ url_for('static', filename='uploads/' + product.image) }}"
-                         class="img-fluid rounded"
-                         alt="{{ product.name }}">
+                    <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}"
+                        class="img-fluid rounded"
+                        alt="{{ product.name }}">
                   </div>
                   <div class="col-md-6">
                     <p><strong>Name:</strong> {{ product.name }}</p>
                     <p><strong>Description:</strong> {{ product.description }}</p>
                     <p><strong>Quantity:</strong> {{ product.quantity }}</p>
                     <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
+
+                    {% if product.pickup_location %}
+                      <p><strong>Pickup Point:</strong> {{ product.pickup_location.name }}</p>
+                    {% else %}
+                      <p><em>No pickup location specified</em></p>
+                    {% endif %}
                   </div>
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="{{ url_for('usersystem.add_to_cart', product_id=product.id) }}" 
-                class="btn btn-success">Add to Cart</a>
+                <form action="{{ url_for('usersystem.cart') }}" method="post" style="display:inline;">
+                  <input type="hidden" name="action" value="add">
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  <button type="submit" class="btn btn-success">Add to Cart</button>
+                </form>
               </div>
             </div>
           </div>
         </div>
-        {% endfor %}
+
+      {% endfor %}
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Pickup Point</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+    <style>
+        #map { height: 400px; width: 100%; margin-bottom: 15px; }
+        .form-container { margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Select Pickup Point</h2>
+    <div id="map"></div>
+
+    <div class="form-container">
+        <form method="POST">
+            <label>Name:</label>
+            <input type="text" name="name" required><br>
+
+            <label>Address:</label>
+            <input type="text" id="address" name="address" required><br>
+
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+
+            <label>Description:</label>
+            <input type="text" name="description"><br>
+
+            <button type="submit">Save Pickup Point</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([2.922, 101.655], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}).addTo(map);
+
+    var marker;
+
+    function reverseGeocode(lat, lng) {
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+            .then(res => res.json())
+            .then(data => { document.getElementById("address").value = data.display_name || ""; });
+    }
+
+    map.on("click", function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        if(marker) map.removeLayer(marker);
+        marker = L.marker([lat, lng]).addTo(map);
+
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lng;
+
+        reverseGeocode(lat, lng);
+    });
+</script>
+</body>
+</html>
