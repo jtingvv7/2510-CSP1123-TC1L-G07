@@ -23,7 +23,9 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# ----------------- peoduct manage-----------------
+
+# ----------------- product manage-----------------
+
 @usersystem_bp.route("/product_manage", methods=["GET", "POST"])
 def product_manage():
     product_id = request.args.get("product_id")
@@ -32,14 +34,19 @@ def product_manage():
     if request.method == "POST":
         # Handle delete
         if "delete" in request.form:
-            if product and product.image:
-                # delete image file if exists
-                image_path = os.path.join(current_app.root_path, "static", "uploads", product.image)
-                if os.path.exists(image_path):
-                    os.remove(image_path)
-            db.session.delete(product)
-            db.session.commit()
-            flash("Product deleted successfully.", "success")
+            if product.transactions:  # has transactions
+                product.is_active = False  # soft-delete
+                db.session.commit()
+                flash("Product cannot be deleted because it has transactions. It is now deactivated.", "warning")
+            else:
+                # delete image if exists
+                if product and product.image:
+                    image_path = os.path.join(current_app.root_path, "static", "uploads", product.image)
+                    if os.path.exists(image_path):
+                        os.remove(image_path)
+                db.session.delete(product)
+                db.session.commit()
+                flash("Product deleted successfully.", "success")
             return redirect(url_for("usersystem.profile"))
 
         # Handle create or update
@@ -48,7 +55,7 @@ def product_manage():
         price = request.form.get("price")
         pickup_location_id = request.form.get("pickup_location_id")
 
-        # ✅ Handle image upload
+        #  Handle image upload
         file = request.files.get("image")
         if file and allowed_file(file.filename):
             ext = file.filename.rsplit(".", 1)[-1]
@@ -58,6 +65,8 @@ def product_manage():
             file.save(os.path.join(upload_path, filename))
         else:
             filename = product.image if product else None  # keep old if editing
+
+        quantity = request.form.get("quantity", type=int, default=1)
 
         if product:
             product.name = name
@@ -222,8 +231,7 @@ def profile():
     avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user_id).scalar()
     wallet = user.wallet.balance if user.wallet else 0.0
 
-
-     #  fetch history products
+    #  fetch history products
     history_ids = [int(pid) for pid in session.get("history", [])]
     history_products = []
     if history_ids:
@@ -241,7 +249,7 @@ def profile():
         completed_purchases=len(completed_purchases),
         avg_rating=avg_rating,
         wallet=wallet,
-        history_products=history_products
+        history_products=history_products 
     )
 
 # ----------------- ADD TO HISTORY  -----------------
@@ -249,16 +257,10 @@ def profile():
 @usersystem_bp.route("/add_to_history/<int:product_id>", methods=["POST"])
 def add_to_history(product_id):
     history = session.get("history", [])
-
-    #  normalize to int
-    history = [int(pid) for pid in history]
-
     if product_id not in history:
         history.append(product_id)
-        #  save back as str
-        session["history"] = [str(pid) for pid in history]
-        session.modified = True
-
+        session["history"] = history
+        session.modified = True   #  force save
     return jsonify({"status": "success", "history": session.get("history")})
 
 # -----------------product detail(history)  -----------------
@@ -272,6 +274,27 @@ def product_detail(product_id):
         session.modified = True
     return render_template("product_detail.html", product=product)
 
+# ----------------- ADD TO cart  -----------------
+
+@usersystem_bp.route("/add_to_cart/<int:product_id>", methods=["POST"])
+def add_to_cart(product_id):
+    cart = session.get("cart", {})
+    product = Product.query.get_or_404(product_id)
+
+    if product.is_sold:
+        flash("This product is sold out!", "danger")
+        return redirect(url_for("usersystem.cart"))
+
+    if str(product.id) in cart:
+        flash("This product is already in your cart.","warning")
+    else:
+        cart[str(product.id)] = 1
+        flash("Product added to cart!", "success")
+
+    session["cart"] = cart
+    return redirect(url_for("usersystem.cart"))
+
+
 # -----------------view HISTORY  -----------------
 
 @usersystem_bp.route("/history")
@@ -284,7 +307,6 @@ def history():
         # keep order same as session history (latest last)
         products.sort(key=lambda p: history.index(p.id))
     return render_template("history.html", products=products)
-
 
 # ----------------- EDIT PROFILE -----------------
 @usersystem_bp.route("/editprofile", methods=["GET", "POST"])
@@ -393,48 +415,59 @@ def cart():
 
     if request.method == "POST":
         action = request.form.get("action")
+        product_id = request.form.get("product_id")
 
         # ----------------- CHECKOUT -----------------
         if action == "checkout":
-            return redirect(url_for('payment.index'))
+            if not cart:
+                flash("Your cart is empty.", "warning")
+                return redirect(url_for("usersystem.cart"))
 
-        product_id = request.form.get("product_id")
-        if not product_id:
-            flash("Invalid product.", "danger")
-            return redirect(url_for("usersystem.cart"))
+            try:
+                for pid in list(cart.keys()):
+                    product = Product.query.get(int(pid))
+                    if not product or product.is_sold:
+                        continue
 
-        try:
-            product_id = int(product_id)
-        except ValueError:
-            flash("Invalid product ID.", "danger")
-            return redirect(url_for("usersystem.cart"))
+                    new_transaction = Transaction(
+                        product_id=product.id,
+                        buyer_id=current_user.id,
+                        seller_id=product.user_id,
+                        status="pending",
+                        price=product.price,
+                    )
+                    db.session.add(new_transaction)
 
-        # ----------------- ADD / INCREASE -----------------
-        if action in ["add", "increase"]:
-            product = Product.query.get(product_id)
+                    # mark sold out
+                    product.is_sold = True
+
+                db.session.commit()
+                session["cart"] = {}
+
+                flash("Checkout successful! Your orders are now pending seller confirmation.", "success")
+                return redirect(url_for("transaction.my_transaction"))
+
+            except Exception as e:
+                db.session.rollback()
+                flash("Checkout failed.", "danger")
+                print("Checkout error:", e)
+                return redirect(url_for("usersystem.cart"))
+
+        # ----------------- ADD -----------------
+        if action == "add":
+            if not product_id:
+                flash("Invalid product.", "danger")
+                return redirect(url_for("usersystem.cart"))
+
+            product = Product.query.get(int(product_id))
             if not product:
                 flash("Product not found.", "danger")
+            elif product.is_sold:
+                flash("This product is already sold.", "danger")
+            elif str(product.id) in cart:
+                flash("This product is already in your cart.", "warning")
             else:
-                if hasattr(product, "quantity") and product.quantity is not None:
-                    if product.quantity <= 0 or getattr(product, "is_sold", False):
-                        flash("Product is sold out.", "danger")
-                    else:
-                        qty_in_cart = cart.get(product_id, 0)
-                        if qty_in_cart >= product.quantity:
-                            flash("Cannot add more than available stock.", "warning")
-                        else:
-                            cart[product_id] = qty_in_cart + 1
-                else:
-                    # fallback: always allow adding
-                    cart[product_id] = cart.get(product_id, 0) + 1
-
-        # ----------------- DECREASE -----------------
-        elif action == "decrease":
-            if product_id in cart:
-                if cart[product_id] > 1:
-                    cart[product_id] -= 1
-                else:
-                    del cart[product_id]
+                cart[str(product.id)] = 1   
 
         # ----------------- REMOVE -----------------
         elif action == "remove":
@@ -453,31 +486,27 @@ def cart():
     # ----------------- GET CART -----------------
     cart_items = []
     total_price = 0
-    cart_quantities = {int(pid): qty for pid, qty in cart.items()}
+    sold_out = False
 
-    for pid, qty in cart_quantities.items():
-        product = Product.query.get(pid)
+    for pid in list(cart.keys()):
+        product = Product.query.get(int(pid))
         if product:
-            subtotal = product.price * qty
             cart_items.append({
                 "id": product.id,
                 "name": product.name,
                 "price": product.price,
-                "quantity": qty,
-                "subtotal": subtotal,
                 "image": product.image,
-                "is_sold": getattr(product, "is_sold", False)
+                "is_sold": product.is_sold
             })
-            total_price += subtotal
-
-    grand_total = total_price
-    sold_out = any(item["is_sold"] for item in cart_items)
+            if not product.is_sold:
+                total_price += product.price
+            else:
+                sold_out = True
 
     return render_template(
         "cart.html",
         cart_items=cart_items,
-        cart_quantities=cart_quantities,
-        grand_total=grand_total,
+        grand_total=total_price,
         sold_out=sold_out
     )
 
