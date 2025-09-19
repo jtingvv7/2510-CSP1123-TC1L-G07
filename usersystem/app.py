@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
-from models import User, Transaction, Review, SafeLocation, Product
+from models import User, Transaction, Review, SafeLocation, Product, Wallet
 from flask_login import login_user, logout_user, current_user
 
 usersystem_bp = Blueprint(
@@ -122,6 +122,10 @@ def register():
         # Create new user
         user = User(name=name, email=email, password=hashed_password)
         db.session.add(user)
+        db.session.commit()
+        #Each new user can get one wallet 
+        new_wallet = Wallet(user_id=user.id, balance=0.0)
+        db.session.add(new_wallet)
         db.session.commit()
         return redirect(url_for("usersystem.login"))
 
