@@ -23,9 +23,7 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 # ----------------- peoduct manage-----------------
-
 @usersystem_bp.route("/product_manage", methods=["GET", "POST"])
 def product_manage():
     product_id = request.args.get("product_id")
@@ -34,6 +32,11 @@ def product_manage():
     if request.method == "POST":
         # Handle delete
         if "delete" in request.form:
+            if product and product.image:
+                # delete image file if exists
+                image_path = os.path.join(current_app.root_path, "static", "uploads", product.image)
+                if os.path.exists(image_path):
+                    os.remove(image_path)
             db.session.delete(product)
             db.session.commit()
             flash("Product deleted successfully.", "success")
@@ -45,27 +48,36 @@ def product_manage():
         price = request.form.get("price")
         pickup_location_id = request.form.get("pickup_location_id")
 
-        # update existing
+        # ✅ Handle image upload
+        file = request.files.get("image")
+        if file and allowed_file(file.filename):
+            ext = file.filename.rsplit(".", 1)[-1]
+            filename = f"product_{int(time.time())}.{ext}"
+            upload_path = os.path.join(current_app.root_path, "static", "uploads")
+            os.makedirs(upload_path, exist_ok=True)
+            file.save(os.path.join(upload_path, filename))
+        else:
+            filename = product.image if product else None  # keep old if editing
+
         if product:
             product.name = name
             product.description = description
             product.price = price
             product.pickup_location_id = pickup_location_id
+            product.image = filename
         else:
-            # create new
             new_product = Product(
                 name=name,
                 description=description,
                 price=price,
                 pickup_location_id=pickup_location_id,
-                seller_id=current_user.id
+                seller_id=current_user.id,
+                image=filename
             )
             db.session.add(new_product)
 
         db.session.commit()
         flash("Product saved successfully.", "success")
-
-        # ✅ Redirect to profile instead of staying
         return redirect(url_for("usersystem.profile"))
 
     pickup_points = SafeLocation.query.filter_by(user_id=current_user.id).all()
@@ -204,8 +216,18 @@ def profile():
     completed_sales = Transaction.query.filter_by(seller_id=user_id, status="completed").all()
     completed_purchases = Transaction.query.filter_by(buyer_id=user_id, status="completed").all()
     avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user_id).scalar()
-
     wallet = user.wallet.balance if user.wallet else 0.0
+
+
+     #  fetch history products
+    history_ids = session.get("history", [])
+    history_products = []
+    if history_ids:
+        history_query = Product.query.filter(Product.id.in_(history_ids)).all()
+        # keep the order same as session, most recent last
+        history_query.sort(key=lambda p: history_ids.index(p.id))
+        # reverse to show newest first
+        history_products = list(reversed(history_query))
 
     return render_template(
         "profile.html",
@@ -214,9 +236,44 @@ def profile():
         completed_sales=len(completed_sales),
         completed_purchases=len(completed_purchases),
         avg_rating=avg_rating,
-        wallet=wallet  
+        wallet=wallet,
+        history_products=history_products
     )
 
+# ----------------- ADD TO HISTORY  -----------------
+
+@usersystem_bp.route("/add_to_history/<int:product_id>", methods=["POST"])
+def add_to_history(product_id):
+    history = session.get("history", [])
+    if product_id not in history:
+        history.append(product_id)
+        session["history"] = history
+        session.modified = True   #  force save
+    return jsonify({"status": "success", "history": session.get("history")})
+
+# -----------------product detail(history)  -----------------
+@usersystem_bp.route("/product/<int:product_id>")
+def product_detail(product_id):
+    product = Product.query.get_or_404(product_id)
+    history = session.get("history", [])
+    if product_id not in history:
+        history.append(product_id)
+        session["history"] = history
+        session.modified = True
+    return render_template("product_detail.html", product=product)
+
+# -----------------view HISTORY  -----------------
+
+@usersystem_bp.route("/history")
+def history():
+    history = session.get("history", [])
+    if not history:
+        products = []
+    else:
+        products = Product.query.filter(Product.id.in_(history)).all()
+        # keep order same as session history (latest last)
+        products.sort(key=lambda p: history.index(p.id))
+    return render_template("history.html", products=products)
 
 
 # ----------------- EDIT PROFILE -----------------
