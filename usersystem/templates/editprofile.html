@@ -4,29 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profile</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+  <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+  <style>
+    .map-container {
+      height: 300px;
+      width: 100%;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .input-box {
+      margin-bottom: 15px;
+    }
+    .phone-wrapper {
+      display: flex;
+      align-items: center;
+    }
+    .phone-prefix {
+      padding: 5px 10px;
+      background: #eee;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+    }
+    .phone-input {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-left: none;
+      border-radius: 0 4px 4px 0;
+      padding: 5px;
+    }
+    .btn {
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+  </style>
 </head>
 <body>
 
   <div class="sidebar">
     <a href="{{ url_for('usersystem.profile') }}">Profile</a>
     <a class="active" href="{{ url_for('usersystem.editprofile') }}">Edit Profile</a>
-    <a href="{{ url_for('usersystem.login') }}">Log out</a>
+    <a href="{{ url_for('usersystem.logout') }}">Log out</a>
   </div>
 
-  <div class="edit-form">
-    <h3>Edit Profile</h3>
+  <div class="content">
+    <h2>Edit Profile</h2>
 
     <form method="POST" action="{{ url_for('usersystem.editprofile') }}" enctype="multipart/form-data">
       <!-- Profile Picture -->
       <div style="text-align: center; margin-bottom: 20px;">
         {% if user.profile_pic %}
-          <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
-             alt="Profile Picture"
-             style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
+          <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}" 
+               alt="Profile Picture" style="width:100px; height:100px; border-radius:50%; object-fit:cover;">
         {% else %}
-          <img src="https://i.pravatar.cc/100?u={{ user.id }}"
-            alt="Random Profile Picture">  <!--can random profile picture-->
+          <img src="https://i.pravatar.cc/100?u={{ user.id }}" alt="Random Profile Picture">
         {% endif %}
         <br><br>
         <input type="file" name="file" accept="image/*">
@@ -43,15 +82,14 @@
         <label>Phone Number:</label>
         <div class="phone-wrapper">
           <span class="phone-prefix">+60</span>
-          <input type="text" name="phone"
-                 class="phone-input"
-                 value="{{ user.phone[3:] if user.phone else '' }}"
-                 pattern="\d{9}" maxlength="9"
-                 title="Enter exactly 9 digits">
+          <input type="text" name="phone" class="phone-input" 
+                 value="{{ user.phone[3:] if user.phone else '' }}" 
+                 pattern="\d{9}" maxlength="9" title="Enter exactly 9 digits">
         </div>
       </div>
 
-      <button type="submit" class="upload-btn">Save Changes</button>
+  
+      <button type="submit" class="btn">Save Changes</button>
     </form>
   </div>
 

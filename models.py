@@ -13,7 +13,8 @@ class User(db.Model, UserMixin):
     profile_pic = db.Column(db.String(200), nullable=True)
     join_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     phone = db.Column(db.String(20), nullable=True)
-    role = db.Column(db.String(20), default="user")
+    role = db.Column(db.String(20), default="user") #admin
+    profile_address = db.Column(db.String(250))
     
     # relationship of user
     products = db.relationship("Product", backref="seller", lazy=True)  # seller is the Product attribute
@@ -35,6 +36,7 @@ class Product(db.Model):
     date_posted = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     image = db.Column(db.String(200), default="default_product.jpg")
     pickup_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'), nullable=True)
+    quantity = db.Column(db.Integer, default=1, nullable=False)
 
     # relationships
     transactions = db.relationship('Transaction', backref='product', lazy=True)
@@ -49,7 +51,7 @@ class Transaction(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'),nullable = False)
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable = False)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    status = db.Column(db.String(50), default = "pending") #pending/ accepted/ rejected/ completed
+    status = db.Column(db.String(50), default = "pending") #pending/ accepted/ rejected/ shipped/ completed
     created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     safe_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'))
     
@@ -70,6 +72,7 @@ class Messages(db.Model):
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = True)
     content = db.Column(db.Text, nullable = False)
     timestamp = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    is_read = db.Column(db.Text, default = True)
 
 #relationship
     sender = db.relationship('User', foreign_keys=[sender_id], backref='messages_sent', lazy = True)
@@ -108,7 +111,7 @@ class SafeLocation(db.Model):
     def __repr__(self):
         return f"<Safe Location: {self.name} ({self.latitude}, {self.longitude})>"
 
-
+#wallet db
 class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)

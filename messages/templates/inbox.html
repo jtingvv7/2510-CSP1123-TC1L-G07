@@ -9,11 +9,11 @@
     {% if users %}
     <ul class="list-group">
         {% for user in users %}
-        <a href="{{ url_for('chat'), user_id=user.id }}"
+        <a href="{{ url_for('messages.chat', user_id=user.id) }}"
             class="list-group-item list-group-item-action d-flex align-items-center">
             {% if user.profile_pic %}
                 <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
-                    alt="{{ u.name }}"
+                    alt="{{ user.name }}"
                     class="rounded-circle border"
                     width="40" height="40">
             {% else %}

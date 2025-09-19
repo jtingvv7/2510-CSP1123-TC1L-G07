@@ -20,8 +20,7 @@
 <body>
     <!--navigation bar-->
     <nav class=" navbar navbar-expand-lg navbar-dark bg-dark">
-        <!--cls=navbar = navigation bar-->  <!--expand-lg = adapt to screen size--> <!--dark = word automitic bcm light color whn in dark bg-->
-        <div class=" container-fluid"> <!--navigation bar fill the entire width-->
+        <div class=" container-fluid">
             <a class="navbar-brand" href="{{ url_for('index') }}">Second Loop</a>
 
             <!--auto-shrink button-->
@@ -32,9 +31,6 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('transaction.home') }}">Home</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('transaction.my_transaction') }}">My Transaction</a>
                     </li>
@@ -47,14 +43,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('payment.index') }}"> Payment System</a>
                     </li>
-<<<<<<< HEAD
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('ranking.index') }}">Ranking</a>
                     </li>
-=======
-                    
->>>>>>> origin/main
+
                     <!--only admin can see-->
+
                     {% if current_user.is_authenticated and current_user.role == 'admin' %}
                     <li class="nav-item">
                         <a class="nav-link text-warning fw-bold" href="{{ url_for('admin.dashboard') }}"> Admin Dashboard</a>
@@ -65,11 +59,15 @@
                 <!-- User auth buttons with profile picture -->
                 <div class="d-flex align-items-center">
                     {% if current_user.is_authenticated %}
-                        <!-- Profile picture button with fallback -->
-                         
+
+                    <form class="d-flex ms-auto" role="search" action="{{ url_for('usersystem.search') }}" method="get">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+                    </form>
+                                            
                     <a href="{{ url_for('usersystem.profile') }}">
                         {% if session.get('user_profile_pic') %}
-                            <img src="{{ url_for('static',filename='uploads/profiles/' ~ session.get('user_profile_pic')) }}""
+                            <img src="{{ url_for('static',filename='uploads/profiles/' ~ session.get('user_profile_pic')) }}"
                                 alt="Profile" 
                                 class="rounded-circle" 
                                 style="width:40px; height:40px; object-fit:cover; margin-right:10px;">  
@@ -80,18 +78,28 @@
                                 style="width:40px; height:40px; object-fit:cover; margin-right:10px;">  
                         {% endif %}   
                     </a>
-                                <!-- inbox -->
+
+                    <!-- inbox -->
+                    
                     <a class="nav-link me-3" href="{{ url_for('messages.inbox') }}">
                         <i class="bi bi-envelope-fill" style="font-size:1.3rem; color:white"></i>
+                        {% if session.get('unread_count',0 ) > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ session.get('unread_count') }}
+                            </span>
+                        {% endif %}
                     </a>
 
                     <!-- cart -->
-                    <a class="nav-link me-3 position-relative" href="{{ url_for('usersystem.view_cart') }}">
+                    <a class="nav-link me-3 position-relative" href="{{ url_for('usersystem.cart') }}">
                         <i class="bi bi-cart-fill" style="font-size:1.4rem; color:white"></i>
                         {% if session.get('cart') %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ session['cart']|length }}
-                            </span>
+                            {% set cart_total = session['cart'].values() | map('int') | sum %}
+                            {% if cart_total > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ cart_total }}
+                                </span>
+                            {% endif %}
                         {% endif %}
                     </a>
 
@@ -107,6 +115,7 @@
             </div>
         </div>
     </nav>
+
     <!-- Page content -->
     <div class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}

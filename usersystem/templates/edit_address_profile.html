@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Address - Profile</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+  <style>
+      #map { height: 400px; width: 100%; margin-bottom: 20px; }
+      .sidebar { width: 200px; float: left; }
+      .content { margin-left: 220px; padding: 20px; }
+      .btn { padding: 5px 10px; margin-top: 10px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <a href="{{ url_for('usersystem.profile') }}">Profile</a>
+  <a class="active" href="{{ url_for('usersystem.profile_address') }}">Edit Address</a>
+  <a href="{{ url_for('usersystem.logout') }}">Log out</a>
+</div>
+
+<div class="content">
+  <h2>Edit Your Profile Address</h2>
+
+  <div id="map"></div>
+
+  <form method="POST" action="{{ url_for('usersystem.profile_address') }}">
+    <label>Address:</label>
+    <input type="text" id="profile_address" name="profile_address" value="{{ user.profile_address or '' }}" required>
+    <input type="hidden" id="profile_latitude" name="latitude" value="{{ user.profile_latitude or '' }}">
+    <input type="hidden" id="profile_longitude" name="longitude" value="{{ user.profile_longitude or '' }}">
+    <br>
+    <button type="submit" class="btn">Save Address</button>
+  </form>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  var map = L.map('map').setView([2.922, 101.655], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+  var marker;
+  var latInput = document.getElementById("profile_latitude");
+  var lngInput = document.getElementById("profile_longitude");
+
+  if(latInput.value && lngInput.value){
+      var lat = parseFloat(latInput.value);
+      var lng = parseFloat(lngInput.value);
+      marker = L.marker([lat, lng]).addTo(map);
+      map.setView([lat, lng], 15);
+  }
+
+  function reverseGeocode(lat, lng){
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+      .then(res => res.json())
+      .then(data => { document.getElementById("profile_address").value = data.display_name || ""; });
+  }
+
+  map.on("click", function(e){
+      var lat = e.latlng.lat;
+      var lng = e.latlng.lng;
+
+      if(marker) map.removeLayer(marker);
+      marker = L.marker([lat, lng]).addTo(map);
+
+      latInput.value = lat;
+      lngInput.value = lng;
+
+      reverseGeocode(lat, lng);
+  });
+</script>
+</body>
+</html>
