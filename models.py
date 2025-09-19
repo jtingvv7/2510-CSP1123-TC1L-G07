@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     join_date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     phone = db.Column(db.String(20), nullable=True)
     role = db.Column(db.String(20), default="user")
+    profile_address = db.Column(db.String(250))
     
     # relationship of user
     products = db.relationship("Product", backref="seller", lazy=True)  # seller is the Product attribute
@@ -35,6 +36,7 @@ class Product(db.Model):
     date_posted = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     image = db.Column(db.String(200), default="default_product.jpg")
     pickup_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'), nullable=True)
+    quantity = db.Column(db.Integer, default=1, nullable=False)
 
     # relationships
     transactions = db.relationship('Transaction', backref='product', lazy=True)
