@@ -24,7 +24,7 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# ----------------- peoduct manage-----------------
+# ----------------- product manage-----------------
 
 @usersystem_bp.route("/product_manage", methods=["GET", "POST"])
 def product_manage():
