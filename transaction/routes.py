@@ -99,7 +99,8 @@ def buy_product(product_id):
         new_transaction = Transaction (buyer_id = current_user.id,
                                    product_id = product_id,
                                    seller_id =product.seller_id,
-                                   status = "pending")
+                                   status = "pending",
+                                   price = product.price)
         db.session.add(new_transaction)
         db.session.add(product)
         db.session.commit()
@@ -265,4 +266,3 @@ def my_transaction():#check all owner by current user transaction record
     return render_template("transaction/my_transactions.html", 
                            bought_transactions = bought_transactions,
                             sold_transactions = sold_transactions )
-
