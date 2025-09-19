@@ -17,7 +17,7 @@
 <body>
     <div class="container">
     <h2>{{ order.order_id }} - MYR {{ '%.2f' |format(order.amount) }}</h2>
-    <form action="{{ url_for('payment.grabpay') }}" method="POST">
+    <form action="/success" method="POST">
         <label>Email</label>
         <input type="email" name="email" required>
         
@@ -26,9 +26,9 @@
 
         <p>After submission, you will be redirected to securely complete next step</p>
 
-        <button type="submit">Pay</button>
+        <button type="submit"><a href="/success">Pay</a></button>
     </form>
-    <a href="{{ url_for('payment.cancel') }}">Cancel Payment</a>
+    <a href="/cancel">Cancel Payment</a>
     </div>
 </body>
 </html>

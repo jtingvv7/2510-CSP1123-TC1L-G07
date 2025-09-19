@@ -46,6 +46,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('payment.index') }}"> Payment System</a>
                     </li>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ranking.index') }}">Ranking</a>
+                    </li>
+=======
+                    
+>>>>>>> origin/main
+                    <!--only admin can see-->
+>>>>>>> a7c09551bffd00a5960b52f62d4952c9edbb4a6a
                     {% if current_user.is_authenticated and current_user.role == 'admin' %}
                     <li class="nav-item">
                         <a class="nav-link text-warning fw-bold" href="{{ url_for('admin.dashboard') }}"> Admin Dashboard</a>

@@ -23,6 +23,7 @@
     </header>
     <div class="container">
         <a href="{{ url_for('review.add') }}" class="button">Add a Review</a>
+        <p><a href="{{ url_for('index') }}" style="color: #504f4f; text-decoration: none;">← Back to Home</a></p>
         <ul>
             {% for review in reviews %}
             <li>
@@ -34,7 +35,12 @@
                 {% elif review.rating == 1 %}⭐️
                 {% endif %}<br>
                 <p>{{ review.comment }}</p>
-                <small>{{ review.date_review }}</small>
+                {% if review.image_path %}
+                <div style="margin: 10px 0;">
+                    <img src="{{ url_for('static', filename='uploads/' + review.image_path) }}" alt="Review image" style="max-width: 200px; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0, 1);">
+                </div>
+                {% endif %}
+                <small>{{ review.date_review.strftime('%Y-%m-%d %H:%M') }}</small>
 
             </li>
             {% endfor %}

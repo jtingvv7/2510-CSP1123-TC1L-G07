@@ -24,84 +24,53 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+# ----------------- peoduct manage-----------------
 
-
-# # ----------------- PRODUCT MANAGEMENT -----------------
 @usersystem_bp.route("/product_manage", methods=["GET", "POST"])
 def product_manage():
-    user_id = session.get("user_id")
-    if not user_id:
-        flash("Please login first!", "danger")
-        return redirect(url_for("usersystem.login"))
-
-    # read product_id from query parameter instead of as function argument
-    product_id = request.args.get("product_id", type=int)
+    product_id = request.args.get("product_id")
     product = Product.query.get(product_id) if product_id else None
 
-    # Load pickup locations for dropdown
-    locations = SafeLocation.query.filter_by(user_id=user_id).all()
-
     if request.method == "POST":
-        # DELETE product
-        if "delete" in request.form and product:
-            if product.seller_id == user_id:
-                db.session.delete(product)
-                db.session.commit()
-            else:
-                flash("Cannot delete this product.", "danger")
+        # Handle delete
+        if "delete" in request.form:
+            db.session.delete(product)
+            db.session.commit()
+            flash("Product deleted successfully.", "success")
             return redirect(url_for("usersystem.profile"))
 
-        # Collect form data
+        # Handle create or update
         name = request.form.get("name")
         description = request.form.get("description")
-        price = float(request.form.get("price", 0))
-        quantity = int(request.form.get("quantity", 1))
-        pickup_location_id = request.form.get("pickup_location") or None
+        price = request.form.get("price")
+        pickup_location_id = request.form.get("pickup_location_id")
 
-        file = request.files.get("image")
-        filename = None
-        if file and allowed_file(file.filename):
-            ext = file.filename.rsplit(".", 1)[-1]  # extension name
-            filename = f"product_{int(time.time())}.{ext}"  # product_time.jpg
-            upload_path = os.path.join(current_app.root_path, "static", "uploads", "products")
-            os.makedirs(upload_path, exist_ok=True)
-            file.save(os.path.join(upload_path, filename))
-            filename = f"products/{filename}"
-
+        # update existing
         if product:
-            # EDIT existing product
-            if product.seller_id != user_id:
-                flash("You don’t have permission to edit this product.", "danger")
-                return redirect(url_for("usersystem.profile"))
-
             product.name = name
             product.description = description
             product.price = price
-            product.quantity = quantity
-            product.is_sold = True if quantity == 0 else False
             product.pickup_location_id = pickup_location_id
-            if filename:  # only overwrite image if new file uploaded
-                product.image = filename
         else:
-            # ADD new product
-            product = Product(
+            # create new
+            new_product = Product(
                 name=name,
                 description=description,
                 price=price,
-                quantity=quantity,
-                is_sold=True if quantity == 0 else False,
-                seller_id=user_id,
                 pickup_location_id=pickup_location_id,
-                image=filename if filename else "products/default_product.jpg"
+                seller_id=current_user.id
             )
-            db.session.add(product)
+            db.session.add(new_product)
 
         db.session.commit()
+        flash("Product saved successfully.", "success")
 
-        #  redirect with query parameter (so no unexpected keyword arg error)
-        return redirect(url_for("usersystem.product_manage", product_id=product.id))
+        # ✅ Redirect to profile instead of staying
+        return redirect(url_for("usersystem.profile"))
 
-    return render_template("product_manage.html", product=product, locations=locations)
+    pickup_points = SafeLocation.query.filter_by(user_id=current_user.id).all()
+    return render_template("product_manage.html", user=current_user, product=product, pickup_points=pickup_points)
+
 
 # ----------------- LOGIN -----------------
 @usersystem_bp.route('/login', methods=['GET', 'POST'])
@@ -326,7 +295,7 @@ def pickup_point():
 
         if not all([name, address, latitude, longitude]):
             flash("Please fill all required fields!", "danger")
-            return redirect(url_for("usersystem.add_pickup_point"))
+            return redirect(url_for("usersystem.pickup_point"))
 
         new_location = SafeLocation(
             user_id=user_id,
@@ -340,7 +309,9 @@ def pickup_point():
         db.session.commit()
         return redirect(url_for("usersystem.product_manage"))
 
-    return render_template("map_pickup_point.html")
+    #  Pass current_user into template
+    return render_template("map_pickup_point.html", user=current_user)
+
 
 # ----------------- CART -----------------
 @usersystem_bp.route("/cart", methods=["GET", "POST"])

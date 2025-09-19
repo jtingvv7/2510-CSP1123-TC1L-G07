@@ -34,14 +34,14 @@
       <p><strong>Member since:</strong> {{ user.join_date.strftime('%B %Y') }}</p>
       <p><strong>Phone number:</strong> {{ user.phone or '--' }}</p>
 
-      <h4>Preferred Pickup Point</h4>
-      {% if latest_pickup_point %}
+      <h4>Address</h4>
+      {% if user.profile_address %}
         <p>
-          {{ latest_pickup_point.name }} - {{ latest_pickup_point.address }}
-          (<a href="https://www.google.com/maps?q={{ latest_pickup_point.latitude }},{{ latest_pickup_point.longitude }}" target="_blank">View Map</a>)
+          {{ user.profile_address }}
+          (<a href="https://www.google.com/maps?q={{ user.profile_latitude }},{{ user.profile_longitude }}" target="_blank">View Map</a>)
         </p>
       {% else %}
-        <p>No pickup point saved yet.</p>
+        <p>No address saved yet.</p>
       {% endif %}
     </div>
 

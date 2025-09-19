@@ -83,20 +83,19 @@ class Messages(db.Model):
 #review & rating db
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(100), nullable = False)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
     rating= db.Column(db.Integer, nullable = False)
     comment = db.Column(db.Text, nullable = True)
+    image_path = db.Column(db.String(225), nullable=True)
     date_review = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
 
-#relationship
-    sender = db.relationship('User', foreign_keys=[buyer_id], backref='sender', lazy = True)
-    receiver = db.relationship('User', foreign_keys=[seller_id], backref='reveiver', lazy = True)
-
     def __repr__(self):
-        return f"<Review {self.id} :buyer rate {self.rating}>"
+        return f"<Review {self.id} by {self.id} rating {self.rating}>"
     
+
 #location db
 class SafeLocation(db.Model):
     __tablename__ = 'safelocation'
@@ -142,3 +141,4 @@ class Order(db.Model):
     
     def __repr__(self):
         return f"<Order {self.id} order_id: {self.order_id}>"
+    

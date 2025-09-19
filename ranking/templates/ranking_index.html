@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}Ranking System - Second Loop{% endblock %}
+
+{% block styles %}
+<style>
+    .ranking-container {background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 2rem 0;}
+    .ranking-card {background: rgba(255, 255, 255, 0.95); border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); margin-bottom: 2rem; overflow: hidden;}
+    .ranking-header {background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; padding: 1.5rem; text-align: center;}
+    .ranking-header h2 {margin: 0; font-size: 2rem; font-weight: bold;}
+    .ranking-header p {margin: 0.5rem 0 0 0; opacity: 0.9;}
+    .ranking-item {padding: 1rem 1.5rem; border-bottom: 1px solid #eee; transition: all 0.3s ease; display: flex; align-items: center;}
+    .ranking-item:hover {background-color: #f8f9fa; transform: translateX(5px);}
+    .ranking-item:last-child {border-bottom: none;}
+    .rank-number {font-size: 1.5rem; font-weight: bold;color: #667eea; margin-right: 1rem; min-width: 3rem; text-align: center;}
+    .rank-number.top-3 {background: linear-gradient(45deg, #ffd700, #ffed4e); color: #333; border-radius: 50%; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; margin-right: 1rem;}
+    .rank-number.rank-1 {background: linear-gradient(45deg, #ffd700, #ffed4e);}
+    .rank-number.rank-2 {background: linear-gradient(45deg, #c0c0c0, #e8e8e8);}
+    .rank-number.rank-3 {background: linear-gradient(45deg, #cd7f32, #daa520);}
+    .user-info {display: flex; align-items: center; flex-grow: 1;}
+    .user-avatar {width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 1rem; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);}
+    .user-details h5 {margin: 0; color: #333; font-weight: 600;}
+    .user-details p {margin: 0; color: #666; font-size: 0.9rem;}
+    .stats-info {text-align: right; min-width: 120px;}
+    .stats-number {font-size: 1.2rem; font-weight: bold; color: #667eea;}
+    .stats-label {font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px;}
+    .medal-icon {font-size: 1.5rem; margin-right: 0.5rem;}
+    .gold { color: #ffd700; }
+    .silver { color: #c0c0c0; }
+    .bronze { color: #cd7f32; }
+    .view-all-btn {background: linear-gradient(45deg, #667eea, #764ba2); border: none; color: white; padding: 0.75rem 2rem; border-radius: 25px; font-weight: 600; transition: all 0.3s ease; text-decoration: none; display: inline-block;}
+    .view-all-btn:hover {transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); color: white;}
+    .empty-state {text-align: center; padding: 3rem; color: #666;}
+    .empty-state i {font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;}
+    .ranking-tabs {margin-bottom: 2rem;}
+    .nav-pills .nav-link {border-radius: 25px; margin: 0 0.5rem; padding: 0.75rem 1.5rem; font-weight: 600; transition: all 0.3s ease;}
+    .nav-pills .nav-link.active {background: linear-gradient(45deg, #667eea, #764ba2);}
+    .nav-pills .nav-link:hover {transform: translateY(-2px);}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ranking-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="text-center mb-4">
+                    <h1 class="display-4 text-white mb-3">
+                        <i class="bi bi-trophy-fill me-3"></i>Ranking System
+                    </h1>
+                    <p class="lead text-white-50">Discover the top performers in our community</p>
+                </div>
+                
+                <!-- Ranking Tabs -->
+                <div class="ranking-tabs">
+                    <ul class="nav nav-pills justify-content-center" id="rankingTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#overview" type="button" role="tab">
+                                <i class="bi bi-bar-chart-fill me-2"></i>Overview
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="transaction-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#transaction" type="button" role="tab">
+                                <i class="bi bi-graph-up me-2"></i>Transaction Volume
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="review-tab" data-bs-toggle="pill" 
+                                    data-bs-target="#review" type="button" role="tab">
+                                <i class="bi bi-star-fill me-2"></i>Review Ratings
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="tab-content" id="rankingTabContent">
+                    <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                        <div class="row">
+                            <!-- Transaction Volume Rankings -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="ranking-card">
+                                    <div class="ranking-header">
+                                        <h2><i class="bi bi-graph-up me-2"></i>Top Transaction Volume</h2>
+                                        <p>Users with the most completed transactions</p>
+                                    </div>
+                                    
+                                    {% if transaction_rankings %}
+                                        {% for user in transaction_rankings[:10] %}
+                                        <div class="ranking-item">
+                                            <div class="rank-number {% if user.rank <= 3 %}top-3 rank-{{ user.rank }}{% endif %}">
+                                                {% if user.rank == 1 %}
+                                                    <i class="bi bi-trophy-fill gold"></i>
+                                                {% elif user.rank == 2 %}
+                                                    <i class="bi bi-trophy-fill silver"></i>
+                                                {% elif user.rank == 3 %}
+                                                    <i class="bi bi-trophy-fill bronze"></i>
+                                                {% else %}
+                                                    {{ user.rank }}
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div class="user-info">
+                                                {% if user.profile_pic %}
+                                                    <img src="{{ url_for('static', filename='uploads/profiles/' + user.profile_pic) }}" 
+                                                         class="user-avatar" alt="{{ user.name }}">
+                                                {% else %}
+                                                    <img src="https://i.pravatar.cc/50?u={{ user.user_id }}" 
+                                                         class="user-avatar" alt="{{ user.name }}">
+                                                {% endif %}
+                                                
+                                                <div class="user-details">
+                                                    <h5>{{ user.name }}</h5>
+                                                    <p>Member since {{ user.join_date.strftime('%B %Y') }}</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="stats-info">
+                                                <div class="stats-number">{{ user.total_transactions }}</div>
+                                                <div class="stats-label">Transactions</div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        
+                                    {% else %}
+                                        <div class="empty-state">
+                                            <i class="bi bi-graph-up"></i>
+                                            <h4>No Transaction Data</h4>
+                                            <p>Transaction rankings will appear here once users start making transactions.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Review Rating Rankings -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="ranking-card">
+                                    <div class="ranking-header">
+                                        <h2><i class="bi bi-star-fill me-2"></i>Top Review Ratings</h2>
+                                        <p>Users with the highest average ratings</p>
+                                    </div>
+                                    
+                                    {% if review_rankings %}
+                                        {% for user in review_rankings[:10] %}
+                                        <div class="ranking-item">
+                                            <div class="rank-number {% if user.rank <= 3 %}top-3 rank-{{ user.rank }}{% endif %}">
+                                                {% if user.rank == 1 %}
+                                                    <i class="bi bi-trophy-fill gold"></i>
+                                                {% elif user.rank == 2 %}
+                                                    <i class="bi bi-trophy-fill silver"></i>
+                                                {% elif user.rank == 3 %}
+                                                    <i class="bi bi-trophy-fill bronze"></i>
+                                                {% else %}
+                                                    {{ user.rank }}
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div class="user-info">
+                                                {% if user.profile_pic %}
+                                                    <img src="{{ url_for('static', filename='uploads/profiles/' + user.profile_pic) }}" 
+                                                         class="user-avatar" alt="{{ user.name }}">
+                                                {% else %}
+                                                    <img src="https://i.pravatar.cc/50?u={{ user.user_id }}" 
+                                                         class="user-avatar" alt="{{ user.name }}">
+                                                {% endif %}
+                                                
+                                                <div class="user-details">
+                                                    <h5>{{ user.name }}</h5>
+                                                    <p>{{ user.total_reviews }} reviews • {{ user.average_rating }}/5.0</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="stats-info">
+                                                <div class="stats-number">{{ user.positive_percentage }}%</div>
+                                                <div class="stats-label">Positive</div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        
+                                    {% else %}
+                                        <div class="empty-state">
+                                            <i class="bi bi-star"></i>
+                                            <h4>No Review Data</h4>
+                                            <p>Review rankings will appear here once users start receiving reviews.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Transaction Volume Tab -->
+                    <div class="tab-pane fade" id="transaction" role="tabpanel">
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <h2><i class="bi bi-graph-up me-2"></i>Transaction Volume Rankings</h2>
+                                <p>Top users by total number of completed transactions</p>
+                            </div>
+                            
+                            {% if transaction_rankings %}
+                                {% for user in transaction_rankings %}
+                                <div class="ranking-item">
+                                    <div class="rank-number {% if user.rank <= 3 %}top-3 rank-{{ user.rank }}{% endif %}">
+                                        {% if user.rank == 1 %}
+                                            <i class="bi bi-trophy-fill gold"></i>
+                                        {% elif user.rank == 2 %}
+                                            <i class="bi bi-trophy-fill silver"></i>
+                                        {% elif user.rank == 3 %}
+                                            <i class="bi bi-trophy-fill bronze"></i>
+                                        {% else %}
+                                            {{ user.rank }}
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="user-info">
+                                        {% if user.profile_pic %}
+                                            <img src="{{ url_for('static', filename='uploads/profiles/' + user.profile_pic) }}" 
+                                                 class="user-avatar" alt="{{ user.name }}">
+                                        {% else %}
+                                            <img src="https://i.pravatar.cc/50?u={{ user.user_id }}" 
+                                                 class="user-avatar" alt="{{ user.name }}">
+                                        {% endif %}
+                                        
+                                        <div class="user-details">
+                                            <h5>{{ user.name }}</h5>
+                                            <p>Member since {{ user.join_date.strftime('%B %Y') }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stats-info">
+                                        <div class="stats-number">{{ user.total_transactions }}</div>
+                                        <div class="stats-label">Transactions</div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="bi bi-graph-up"></i>
+                                    <h4>No Transaction Data</h4>
+                                    <p>Transaction rankings will appear here once users start making transactions.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Review Ratings Tab -->
+                    <div class="tab-pane fade" id="review" role="tabpanel">
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <h2><i class="bi bi-star-fill me-2"></i>Review Rating Rankings</h2>
+                                <p>Top users by average rating received from other users</p>
+                            </div>
+                            
+                            {% if review_rankings %}
+                                {% for user in review_rankings %}
+                                <div class="ranking-item">
+                                    <div class="rank-number {% if user.rank <= 3 %}top-3 rank-{{ user.rank }}{% endif %}">
+                                        {% if user.rank == 1 %}
+                                            <i class="bi bi-trophy-fill gold"></i>
+                                        {% elif user.rank == 2 %}
+                                            <i class="bi bi-trophy-fill silver"></i>
+                                        {% elif user.rank == 3 %}
+                                            <i class="bi bi-trophy-fill bronze"></i>
+                                        {% else %}
+                                            {{ user.rank }}
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="user-info">
+                                        {% if user.profile_pic %}
+                                            <img src="{{ url_for('static', filename='uploads/profiles/' + user.profile_pic) }}" 
+                                                 class="user-avatar" alt="{{ user.name }}">
+                                        {% else %}
+                                            <img src="https://i.pravatar.cc/50?u={{ user.user_id }}" 
+                                                 class="user-avatar" alt="{{ user.name }}">
+                                        {% endif %}
+                                        
+                                        <div class="user-details">
+                                            <h5>{{ user.name }}</h5>
+                                            <p>{{ user.total_reviews }} reviews • {{ user.average_rating }}/5.0</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stats-info">
+                                        <div class="stats-number">{{ user.positive_percentage }}%</div>
+                                        <div class="stats-label">Positive</div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="bi bi-star"></i>
+                                    <h4>No Review Data</h4>
+                                    <p>Review rankings will appear here once users start receiving reviews.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Information -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="ranking-card">
+                            <div class="ranking-header">
+                                <h2><i class="bi bi-info-circle me-2"></i>How Rankings Work</h2>
+                            </div>
+                            <div class="p-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5><i class="bi bi-graph-up text-primary me-2"></i>Transaction Volume</h5>
+                                        <p class="text-muted">
+                                            Rankings are based on the total number of transactions completed as both buyer and seller. 
+                                            This includes all completed transactions in the system.
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5><i class="bi bi-star-fill text-warning me-2"></i>Review Ratings</h5>
+                                        <p class="text-muted">
+                                            Rankings are based on average rating received from other users. 
+                                            Users need at least 3 reviews to be eligible for ranking.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add smooth scrolling and animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate ranking items on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all ranking items
+        document.querySelectorAll('.ranking-item').forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'all 0.6s ease';
+            observer.observe(item);
+        });
+        
+        // Add click effects to ranking items
+        document.querySelectorAll('.ranking-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Add ripple effect
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(102, 126, 234, 0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.marginLeft = '-10px';
+                ripple.style.marginTop = '-10px';
+                
+                this.style.position = 'relative';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+    });
+    
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}
