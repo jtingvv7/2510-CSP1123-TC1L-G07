@@ -20,8 +20,8 @@
       {% endif %}
     </div>
 
-    <a href="{{ url_for('usersystem.editprofile') }}" class="upload-btn">Edit Profile</a>
     <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('usersystem.editprofile') }}" class="upload-btn">Edit Profile</a>
     <a href="{{ url_for('usersystem.profile_address') }}">Edit Address</a>
     <a href="{{ url_for('usersystem.product_manage') }}">Product</a>
     <a href="{{ url_for('usersystem.logout') }}">Log out</a>
@@ -60,6 +60,17 @@
           <h4>{{ "%.1f"|format(avg_rating) if avg_rating else '-' }} ⭐</h4>
           <p>Average Rating</p>
         </div>
+      </div>
+    </div>
+
+    <!-- Wallet Section -->
+    <div class="profilecard wallet-card">
+      <h3>Wallet</h3>
+      <div class="wallet-info">
+        <!-- Wallet Icon -->
+        <span class="wallet-icon">💰</span>
+        <!-- Wallet Balance -->
+        <h4>RM {{ "%.2f"|format(wallet) }}</h4>
       </div>
     </div>
 

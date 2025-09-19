@@ -46,8 +46,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('ranking.index') }}">Ranking</a>
                     </li>
+
                     <!--only admin can see-->
->>>>>>> a7c09551bffd00a5960b52f62d4952c9edbb4a6a
+
                     {% if current_user.is_authenticated and current_user.role == 'admin' %}
                     <li class="nav-item">
                         <a class="nav-link text-warning fw-bold" href="{{ url_for('admin.dashboard') }}"> Admin Dashboard</a>
@@ -58,7 +59,12 @@
                 <!-- User auth buttons with profile picture -->
                 <div class="d-flex align-items-center">
                     {% if current_user.is_authenticated %}
-                         
+
+                    <form class="d-flex ms-auto" role="search" action="{{ url_for('usersystem.search') }}" method="get">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+                    </form>
+                                            
                     <a href="{{ url_for('usersystem.profile') }}">
                         {% if session.get('user_profile_pic') %}
                             <img src="{{ url_for('static',filename='uploads/profiles/' ~ session.get('user_profile_pic')) }}"

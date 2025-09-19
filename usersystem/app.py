@@ -176,7 +176,7 @@ def profile():
         session.clear()
         return redirect(url_for("usersystem.login"))
 
-    # ✅ Handle pickup point actions (for products, not profile address)
+    #  Handle pickup point actions (for products, not profile address)
     if request.method == "POST":
         action = request.form.get("action")
 
@@ -203,21 +203,24 @@ def profile():
 
         return redirect(url_for("usersystem.profile"))
 
-    # ✅ Fetch related user data
+    #  Fetch related user data
     products = Product.query.filter_by(seller_id=user.id).all()
     completed_sales = Transaction.query.filter_by(seller_id=user_id, status="completed").all()
     completed_purchases = Transaction.query.filter_by(buyer_id=user_id, status="completed").all()
     avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user_id).scalar()
 
-    # ✅ Profile will now display user.profile_address (from edit_address_profile.html)
+    wallet = user.wallet.balance if user.wallet else 0.0
+
     return render_template(
         "profile.html",
         user=user,
         products=products,
         completed_sales=len(completed_sales),
         completed_purchases=len(completed_purchases),
-        avg_rating=avg_rating
+        avg_rating=avg_rating,
+        wallet=wallet  
     )
+
 
 
 # ----------------- EDIT PROFILE -----------------
@@ -317,7 +320,7 @@ def pickup_point():
     return render_template("map_pickup_point.html", user=current_user)
 
 
-# ----------------- CART -----------------
+
 @usersystem_bp.route("/cart", methods=["GET", "POST"])
 def cart():
     cart = session.get("cart", {})
@@ -379,7 +382,11 @@ def cart():
     # ----------------- GET CART -----------------
     cart_items = []
     total_price = 0
-    for pid, qty in cart.items():
+
+    # convert keys to int to avoid str vs int problems
+    cart_quantities = {int(pid): qty for pid, qty in cart.items()}
+
+    for pid, qty in cart_quantities.items():
         product = Product.query.get(pid)
         if product:
             subtotal = product.price * qty
@@ -389,13 +396,39 @@ def cart():
                 "price": product.price,
                 "quantity": qty,
                 "subtotal": subtotal,
-                "image": product.image
+                "image": product.image,
+                "is_sold": getattr(product, "is_sold", False)
             })
             total_price += subtotal
 
-    return render_template("cart.html", cart_items=cart_items, total_price=total_price)
+    # compute grand total (same as total_price but clearer for template)
+    grand_total = total_price
 
+    # detect if any sold out item in cart
+    sold_out = any(item["is_sold"] for item in cart_items)
 
+    return render_template(
+        "cart.html",
+        cart_items=cart_items,
+        cart_quantities=cart_quantities,
+        grand_total=grand_total,
+        sold_out=sold_out
+    )
+
+# ----------------- search engine -----------------
+
+@usersystem_bp.route("/search")
+def search():
+    query = request.args.get("q", "").strip()
+    products = []
+
+    if query:
+        products = Product.query.filter(
+            (Product.name.ilike(f"%{query}%")) | 
+            (Product.description.ilike(f"%{query}%"))
+        ).all()
+
+    return render_template("search.html", products=products, query=query)
 
 
 # ----------------- SUCCESS -----------------
