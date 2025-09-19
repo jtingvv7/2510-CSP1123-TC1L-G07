@@ -313,7 +313,7 @@ def pickup_point():
     return render_template("map_pickup_point.html", user=current_user)
 
 
-# ----------------- CART -----------------
+
 @usersystem_bp.route("/cart", methods=["GET", "POST"])
 def cart():
     cart = session.get("cart", {})
@@ -407,7 +407,6 @@ def cart():
         grand_total=grand_total,
         sold_out=sold_out
     )
-
 
 
 # ----------------- SUCCESS -----------------
