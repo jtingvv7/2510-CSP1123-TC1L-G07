@@ -415,6 +415,14 @@ def cart():
     if request.method == "POST":
         action = request.form.get("action")
 
+
+
+        # ----------------- CHECKOUT -----------------
+        if action == "checkout":
+            return redirect(url_for('payment.index'))
+
+        product_id = request.form.get("product_id")
+
         if action == "checkout":
             # handle checkout logic here
             return redirect(url_for("usersystem.success"))
