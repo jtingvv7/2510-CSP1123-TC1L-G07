@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="container">
-    <h2>{{ order.order_id }} - MYR {{ '%.2f' |format(order.amount) }}</h2>
+    <h2>{{ transaction.product_id }} - MYR {{ "%.2f"|format(grand_total) }}</h2>
     <form action="{{ url_for('payment.grabpay') }}" method="POST">
         <label>Email</label>
         <input type="email" name="email" required>
