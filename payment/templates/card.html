@@ -16,10 +16,10 @@
 </head>
 <body>
     <div class="container">
-    <h2>{{ order.order_id }} - MYR {{ '%.2f' |format(order.amount) }}</h2>
+    <h2>{{ transaction.product_id }} - MYR {{ "%.2f"|format(grand_total) }}</h2>
     <form action="{{ url_for('payment.card') }}" method="POST">
-        <input type="hidden" name="order_id" value="{{ order.order_id }}">
-        <input type="hidden" name="amount" value="{{ order.amount }}">
+        <input type="hidden" name="product_id" value="{{ transaction.product_id }}">
+        <input type="hidden" name="amount" value="{{ "%.2f"|format(grand_total) }}">
         <label>Email</label>
 
         <input type="email" name="email" required>
