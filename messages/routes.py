@@ -46,18 +46,6 @@ def fake_messages():
     return "Fake messages inserted. Now go check /messages/inbox"
 '''
 
-#for unread message
-@messages_bp.app.context_prcessor
-def inject_unread_count():
-    if current_user.is_authenticated:
-        unread_count = Messages.query.filter_by(
-            receiver_id = current_user.id,
-            is_read = False
-        ).count()
-        return dict(unread_count = unread_count)
-    return dict(unread_count = 0)
-
-
 #view conversation
 @messages_bp.route("/chat/<int:user_id>/json",methods=["GET"])
 @login_required

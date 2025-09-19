@@ -2,7 +2,8 @@ import logging
 import os
 from flask import Flask, render_template, session
 from extensions import db, login_manager
-from models import User, Product, SafeLocation
+from models import User, Product, SafeLocation, Messages
+from flask_login import current_user
 
 
 def create_app():
@@ -39,6 +40,18 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(ranking_bp, url_prefix="/ranking")
 
+    #for unread message
+    @app.context_processor
+    def inject_unread_count():
+        if current_user.is_authenticated:
+            unread_count = Messages.query.filter_by(
+                        receiver_id = current_user.id,
+                        is_read = False
+                        ).count()
+            return dict(unread_count = unread_count)
+        return dict(unread_count = 0)
+
+
     # Home route
     @app.route("/")
     def index():
@@ -50,6 +63,7 @@ def create_app():
         locations = SafeLocation.query.filter_by(user_id=user_id).all() if user_id else []
 
         return render_template("home_index.html", products=products, locations=locations)
+    
 
     return app
 
