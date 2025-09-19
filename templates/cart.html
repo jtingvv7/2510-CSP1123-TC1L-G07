@@ -33,7 +33,7 @@
   </tbody>
 </table>
 <h4>Total: RM {{ "%.2f"|format(total) }}</h4>
-<a href="#" class="btn btn-primary">Proceed to Checkout</a>
+<a href="{{ url_for('payment.index') }}" class="btn btn-primary">Proceed to Checkout</a>
 {% else %}
 <p>Your cart is empty.</p>
 {% endif %}
