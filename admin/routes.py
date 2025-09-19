@@ -66,6 +66,13 @@ def manage_wallets():
     all_wallets = Wallet.query.all()
     return render_template("manage_wallets.html", wallets = all_wallets)
 
+#check all messages
+@admin_bp.route("/manage_messages")
+@login_required
+@admin_required
+def manage_messages():
+    all_messages = Messages.query.all()
+    return render_template("manage_messages.html", messages = all_messages)
 
 ################## user management #####################
 
@@ -180,6 +187,7 @@ def update_transaction(transaction_id):
     return redirect(url_for("manage_trasactions"))
 
 ################## wallet management #####################
+
 #simulated recharge
 @admin_bp.route("/recharge_wallet/<int:user_id>", methods=["POST"])
 @login_required
@@ -196,3 +204,16 @@ def recharge_wallet(user_id):
     db.session.commit()
     flash(f"Added RM{amount:.2f} to User {user_id}'s wallet", "success")
     return redirect(url_for("admin.manage_wallets"))
+
+################## messages management #####################
+
+#delete messages
+@admin_bp.route("/delete_message/<int:message_id>")
+@login_required
+@admin_required
+def delete_message(message_id):
+    msg = Messages.query.get_or_404(message_id)
+    db.session.delete(msg)
+    db.session.commit()
+    flash("Message deleted", "success")
+    return redirect(url_for("admin.manage_messages"))
