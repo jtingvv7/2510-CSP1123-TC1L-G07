@@ -139,7 +139,7 @@ def confirm_receipt(transaction_id):
     except SQLAlchemyError:
         db.session.rollback()
         flash("Error confirming transaction.","danger")
-    return redirect(url_for("transaction.my_transactions"))
+    return redirect(url_for("payment.index"))
     
 
 #buyer want to cancel transaction when pending state
