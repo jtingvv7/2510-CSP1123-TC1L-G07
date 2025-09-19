@@ -72,7 +72,6 @@ def product_manage():
             product.name = name
             product.description = description
             product.price = price
-            product.quantity = quantity
             product.pickup_location_id = pickup_location_id
             product.image = filename
         else:
@@ -80,7 +79,6 @@ def product_manage():
                 name=name,
                 description=description,
                 price=price,
-                quantity=quantity,
                 pickup_location_id=pickup_location_id,
                 seller_id=current_user.id,
                 image=filename
@@ -276,7 +274,7 @@ def product_detail(product_id):
         session.modified = True
     return render_template("product_detail.html", product=product)
 
-# ----------------- ADD TO card  -----------------
+# ----------------- ADD TO cart  -----------------
 
 @usersystem_bp.route("/add_to_cart/<int:product_id>", methods=["POST"])
 def add_to_cart(product_id):
@@ -287,13 +285,11 @@ def add_to_cart(product_id):
         flash("This product is sold out!", "danger")
         return redirect(url_for("usersystem.cart"))
 
-    product_id = str(product_id)
-
-    if cart.get(product_id, 0) < product.quantity:
-        cart[product_id] = cart.get(product_id, 0) + 1
-        flash("Product added to cart!", "success")
+    if str(product.id) in cart:
+        flash("This product is already in your cart.","warning")
     else:
-        flash("Not enough stock available.", "warning")
+        cart[str(product.id)] = 1
+        flash("Product added to cart!", "success")
 
     session["cart"] = cart
     return redirect(url_for("usersystem.cart"))
@@ -416,8 +412,7 @@ def cart():
 
     if request.method == "POST":
         action = request.form.get("action")
-
-
+        product_id = request.form.get("product_id")
 
         # ----------------- CHECKOUT -----------------
         if action == "checkout":
@@ -425,109 +420,90 @@ def cart():
                 flash("Your cart is empty.", "warning")
                 return redirect(url_for("usersystem.cart"))
 
-        try:
-            for product_id, qty in cart.items():
-                product = Product.query.get(product_id)
-                if not product:
-                    continue
+            try:
+                for pid in list(cart.keys()):
+                    product = Product.query.get(int(pid))
+                    if not product or product.is_sold:
+                        continue
 
-                # prevent repeat transaction
-                if product.is_sold:
-                    flash(f"{product.name} is already sold.", "danger")
-                    continue
+                    new_transaction = Transaction(
+                        product_id=product.id,
+                        buyer_id=current_user.id,
+                        seller_id=product.user_id,
+                        status="pending",
+                        price=product.price,
+                    )
+                    db.session.add(new_transaction)
 
-                # create new transaction
-                new_transaction = Transaction(
-                    product_id=product.id,
-                    buyer_id=current_user.id,
-                    seller_id=product.user_id,
-                    status="pending"
-                )
-                db.session.add(new_transaction)
+                    # mark sold out
+                    product.is_sold = True
 
-            # mark with sold out
-                product.is_sold = True
+                db.session.commit()
+                session["cart"] = {}
 
-            db.session.commit()
-            session["cart"] = {}
+                flash("Checkout successful! Your orders are now pending seller confirmation.", "success")
+                return redirect(url_for("transaction.my_transaction"))
 
-            flash("Checkout successful! Your orders are now pending seller confirmation.", "success")
-            return redirect(url_for("transaction.my_transaction"))
+            except Exception as e:
+                db.session.rollback()
+                flash("Checkout failed.", "danger")
+                print("Checkout error:", e)
+                return redirect(url_for("usersystem.cart"))
 
-        except Exception as e:
-            db.session.rollback()
-            flash("Checkout failed.", "danger")
-            print("Checkout error:", e)
-            return redirect(url_for("usersystem.cart"))
-        
+        # ----------------- ADD -----------------
+        if action == "add":
+            if not product_id:
+                flash("Invalid product.", "danger")
+                return redirect(url_for("usersystem.cart"))
 
-        # ----------------- ADD / INCREASE -----------------
-        if action in ["add", "increase"]:
-            product = Product.query.get(product_id)
+            product = Product.query.get(int(product_id))
             if not product:
                 flash("Product not found.", "danger")
+            elif product.is_sold:
+                flash("This product is already sold.", "danger")
+            elif str(product.id) in cart:
+                flash("This product is already in your cart.", "warning")
             else:
-                if hasattr(product, "quantity") and product.quantity is not None:
-                    if product.quantity <= 0 or product.is_sold:
-                        flash("Product is sold out.", "danger")
-                    else:
-                        qty_in_cart = cart.get(product_id, 0)
-                        if qty_in_cart >= product.quantity:
-                            flash("Cannot add more than available stock.", "warning")
-                        else:
-                            cart[product_id] = qty_in_cart + 1
-                else:
-                    # fallback: always allow adding
-                    cart[product_id] = cart.get(product_id, 0) + 1
+                cart[str(product.id)] = 1   
 
-        # ----------------- DECREASE -----------------
-        elif action == "decrease":
-            if cart.get(product_id, 0) > 1:
-                cart[product_id] -= 1
+        # ----------------- REMOVE -----------------
         elif action == "remove":
-            cart.pop(product_id, None)
+            if product_id in cart:
+                del cart[product_id]
+
+        # ----------------- CLEAR -----------------
+        elif action == "clear":
+            cart.clear()
 
         session["cart"] = cart
         return redirect(url_for("usersystem.cart"))
 
-    # convert keys for template
-    cart_quantities = {int(pid): qty for pid, qty in cart.items()}
-
+    # ----------------- GET CART -----------------
     cart_items = []
-    grand_total = 0
+    total_price = 0
     sold_out = False
 
-    from models import Product
-    for pid, qty in cart.items():
+    for pid in list(cart.keys()):
         product = Product.query.get(int(pid))
         if product:
-            subtotal = product.price * qty
             cart_items.append({
                 "id": product.id,
                 "name": product.name,
                 "price": product.price,
-                "quantity": qty,
-                "subtotal": subtotal,
                 "image": product.image,
-                "is_sold": getattr(product, "is_sold", True)
+                "is_sold": product.is_sold
             })
-            total_price += subtotal
-
-    # compute grand total (same as total_price but clearer for template)
-    grand_total = total_price
-
-    # detect if any sold out item in cart
-    sold_out = any(item["is_sold"] for item in cart_items)
+            if not product.is_sold:
+                total_price += product.price
+            else:
+                sold_out = True
 
     return render_template(
         "cart.html",
         cart_items=cart_items,
-        cart_quantities=cart_quantities,
-        grand_total=grand_total,
+        grand_total=total_price,
         sold_out=sold_out
     )
-
-
 
 # ----------------- search engine -----------------
 
