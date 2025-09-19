@@ -32,9 +32,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('transaction.home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('transaction.my_transaction') }}">My Transaction</a>
                     </li>
                     <li class="nav-item">
@@ -46,15 +43,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('payment.index') }}"> Payment System</a>
                     </li>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('ranking.index') }}">Ranking</a>
                     </li>
-=======
-                    
->>>>>>> origin/main
                     <!--only admin can see-->
 >>>>>>> a7c09551bffd00a5960b52f62d4952c9edbb4a6a
                     {% if current_user.is_authenticated and current_user.role == 'admin' %}
@@ -83,8 +74,14 @@
                     </a>
 
                     <!-- inbox -->
+                    
                     <a class="nav-link me-3" href="{{ url_for('messages.inbox') }}">
                         <i class="bi bi-envelope-fill" style="font-size:1.3rem; color:white"></i>
+                        {% if session.get('unread_count',0 ) > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ session.get('unread_count') }}
+                            </span>
+                        {% endif %}
                     </a>
 
                     <!-- cart -->

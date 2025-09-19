@@ -72,7 +72,7 @@ def chat_json(user_id):
 def send_messages(user_id):
     content = request.form.get("content") #use for get content from front end
     if content:
-        new_msg = Messages(sender_id=current_user.id, receiver_id= user_id, content=content)
+        new_msg = Messages(sender_id=current_user.id, receiver_id= user_id, content=content, is_read = False)
         db.session.add(new_msg)
         db.session.commit()
         return jsonify({"status": "ok", "message": content})
