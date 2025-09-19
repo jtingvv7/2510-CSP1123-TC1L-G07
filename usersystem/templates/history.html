@@ -1,0 +1,24 @@
+<!-- templates/history.html -->
+{% extends "base.html" %}
+{% block title %}Viewing History{% endblock %}
+{% block content %}
+<h2>Viewing History</h2>
+
+{% if history_products %}
+  <div class="product-grid">
+    {% for product in history_products %}
+      <div class="product-card">
+        <a href="{{ url_for('usersystem.product_detail', product_id=product.id) }}">
+          <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" 
+              alt="{{ product.name }}" class="img-fluid rounded">
+          <h5>{{ product.name }}</h5>
+        </a>
+        <p><strong>RM {{ "%.2f"|format(product.price) }}</strong></p>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No history found.</p>
+{% endif %}
+
+{% endblock %}
