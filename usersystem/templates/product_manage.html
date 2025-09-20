@@ -34,6 +34,27 @@
     <div class="profilecard">
       <h2>{% if product %}Edit Product{% else %}Add Product{% endif %}</h2>
       <form method="POST" enctype="multipart/form-data">
+
+                        <!-- Pickup Location -->
+        <div class="form-group">
+          <label for="pickup_location">Pickup Location</label>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <select name="pickup_location_id" id="pickup_location" required>
+              <option value="">-- Select Pickup Location --</option>
+              {% for point in pickup_points %}
+                <option value="{{ point.id }}" {% if product and product.pickup_location_id == point.id %}selected{% endif %}>
+                  {{ point.name }} – {{ point.address }}
+                </option>
+              {% endfor %}
+            </select>
+
+            <!-- New Button -->
+            <a href="{{ url_for('usersystem.pickup_point') }}" class="btn btn-sm btn-primary">
+               Add Pickup Point
+            </a>
+          </div>
+        </div>
+        
         <div class="mb-3">
           <label for="name" class="form-label">Product Name</label>
           <input type="text" id="name" name="name"
@@ -67,26 +88,6 @@
             <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" 
                  alt="Product Image" width="150">
           {% endif %}
-        </div>
-
-        <!-- Pickup Location -->
-        <div class="form-group">
-          <label for="pickup_location">Pickup Location</label>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <select name="pickup_location_id" id="pickup_location" required>
-              <option value="">-- Select Pickup Location --</option>
-              {% for point in pickup_points %}
-                <option value="{{ point.id }}" {% if product and product.pickup_location_id == point.id %}selected{% endif %}>
-                  {{ point.name }} – {{ point.address }}
-                </option>
-              {% endfor %}
-            </select>
-
-            <!-- New Button -->
-            <a href="{{ url_for('usersystem.pickup_point') }}" class="btn btn-sm btn-primary">
-               Add Pickup Point
-            </a>
-          </div>
         </div>
 
         <button type="submit" class="btn btn-success">
