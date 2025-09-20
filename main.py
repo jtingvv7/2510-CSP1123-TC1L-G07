@@ -23,14 +23,14 @@ def create_app():
     def utility_processor():
         def get_image_url(image_filename):
             if not image_filename:
-                # 
+                # if not image
                 return url_for('static', filename='uploads/products/default_product.jpg')
             
-            # 
+            # if product image strat with products
             if image_filename.startswith("products/"):
                 return url_for('static', filename='uploads/' + image_filename)
             
-            #  "products/"
+            # if not start with "products/"
             return url_for('static', filename='uploads/products/' + image_filename)
         
         return dict(get_image_url=get_image_url)
