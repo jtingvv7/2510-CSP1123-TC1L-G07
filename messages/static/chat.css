@@ -1,41 +1,85 @@
-#chat-box {
-    height: 400px;
-    overflow-y: auto;
-    background-color: hwb(210 43% 10%); 
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+/* chat container */
+.chat-wrapper {
+    width: 90%;
+    max-width: 1200px;
 }
+
+/* title */
+.chat-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0d6efd;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* chat body */
+.chat-body {
+    display: flex;
+    flex-direction: column;
+    height: 600px; /* 固定高度 */
+    background: linear-gradient(135deg, #e0f7fa, #f1f8ff);
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+
+#chat-box {
+    flex: 1; 
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.chat-input {
+    margin-top: 10px;
+}
+
 
 .message-bubble {
     max-width: 70%;
-    padding: 10px 14px;
-    margin: 8px 0;
+    padding: 14px 18px;
+    margin: 12px 0;
     border-radius: 18px;
     display: inline-block;
     word-wrap: break-word;
     clear: both;
+    font-size: 1rem;
+    line-height: 1.4;
 }
 
 .my-message {
-    background-color: hsl(136, 98%, 52%); 
+    background-color: #28c76f; 
     color: white;
-    float: right;
-    text-align: left;
-    border-bottom-right-radius: 5px;
+    align-self: flex-end;
+    border-bottom-right-radius: 6px;
 }
 
 .their-message {
-    background-color: hsl(210, 3%, 73%); 
+    background-color: #e1e1e1; 
     color: black;
-    float: left;
-    text-align: left;
-    border-bottom-left-radius: 5px;
+    align-self: flex-start;
+    border-bottom-left-radius: 6px;
 }
 
 .timestamp {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: #6c757d;
+    margin-top: 6px;
     display: block;
-    margin-top: 4px;
+    text-align: right;
+}
+
+.input-group .form-control {
+    border-radius: 20px 0 0 20px;
+    padding: 12px 18px;
+    font-size: 1rem;
+}
+
+.input-group .btn-send {
+    border-radius: 0 20px 20px 0;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

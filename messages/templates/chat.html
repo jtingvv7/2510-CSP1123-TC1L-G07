@@ -4,20 +4,33 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('messages.static', filename='chat.css') }}">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h3>Chat with {{ user.name }}</h3>
+<div class="container-fluid mt-4">
+  <div class="chat-wrapper mx-auto">
+      
+      <!-- title -->
+      <h2 class="chat-title mb-3 text-center">
+          <i class="bi bi-chat-dots-fill me-2"></i> Chat with {{ user.name }}
+      </h2>
 
-    <!--chat box-->
-    <div id="chat-box"></div>
+      <div class="chat-body">
+          
+          <div id="chat-box"></div>
 
-    <!--input box-->
-    <div class="input-group mt-3">
-        <input type="text" id="message-input" class="form-control" placeholder="Type your message...">
-        <button class="btn btn-primary" onclick="sendMessage({{ user.id }})">Send</button>
-    </div>
+          <!-- input box -->
+          <div class="input-group chat-input">
+              <input type="text" id="message-input" class="form-control" placeholder="Type your message...">
+              <button class="btn btn-primary btn-send" onclick="sendMessage({{ user.id }})">
+                  <i class="bi bi-send-fill"></i>
+              </button>
+          </div>
+
+      </div>
+  </div>
 </div>
 {% endblock %}
 

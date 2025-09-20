@@ -47,24 +47,27 @@ def fake_messages():
 '''
 
 #view conversation
-@messages_bp.route("/chat/<int:user_id>/json",methods=["GET"])
+@messages_bp.route("/chat/<int:user_id>/json", methods=["GET"])
 @login_required
 def chat_json(user_id):
     conversation = Messages.query.filter(
         ((Messages.sender_id == current_user.id) & (Messages.receiver_id == user_id)) |
-          ((Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
+        ((Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
     ).order_by(Messages.timestamp).all()
 
-    #return JSON data to back end
     return jsonify([
         {
-        "sender_id" : msg.sender_id,
-        "sender_name": msg.sender.name,
-        "content" : msg.content,
-        "time" : (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S") #convert to MYT
-    }for msg in conversation
-    ])   
-
+            "sender_id": msg.sender_id,
+            "sender_name": msg.sender.name,
+            "sender_avatar": (
+                url_for('static', filename=f'uploads/profiles/{msg.sender.profile_pic}')
+                if msg.sender.profile_pic else f"https://i.pravatar.cc/40?u={msg.sender.id}"
+            ),
+            "content": msg.content,
+            "time": (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S")  # convert to MYT
+        }
+        for msg in conversation 
+        ])
 
 #send messages
 @messages_bp.route("/send/<int:user_id>",methods=["POST"])
