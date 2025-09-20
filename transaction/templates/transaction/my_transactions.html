@@ -71,7 +71,7 @@
           {% if sold_transactions %}
             {% for tx in sold_transactions %}
             <div class="d-flex align-items-center border-bottom py-2">
-              <img src="{{ url_for('static', filename='uploads/products/' ~ tx.product.image) }}"
+              <img src="{{ get_image_url(product.image) }}"
                    alt="Product Image"
                    class="rounded me-3"
                    style="width:60px; height:60px; object-fit:cover;">
