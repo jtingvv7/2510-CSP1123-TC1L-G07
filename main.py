@@ -14,6 +14,9 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.secret_key = "supersecretkey"  # session key
 
+    #set upload folder
+    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
+
     # Logging setup
     logging.basicConfig(level=logging.INFO, filename="app.log")
 
@@ -55,8 +58,9 @@ def create_app():
     # Home route
     @app.route("/")
     def index():
-        # Fetch all products from DB
-        products = Product.query.order_by(Product.id.desc()).all()  # latest first
+         # Only active and not sold products
+        products = Product.query.filter_by(is_sold=False, is_active=True).all()
+        products = [p for p in products if not p.sold_out]
 
         # Optional: fetch user locations if user logged in
         user_id = session.get("user_id")

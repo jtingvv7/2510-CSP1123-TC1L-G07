@@ -4,20 +4,82 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('messages.static', filename='chat.css') }}">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h3>Chat with {{ user.name }}</h3>
+<div class="container-fluid mt-4">
+  <div class="chat-wrapper mx-auto">
+      
+      <!-- title -->
+      <h2 class="chat-title mb-3 text-center">
+          <i class="bi bi-chat-dots-fill me-2"></i> Chat with {{ user.name }}
+      </h2>
 
-    <!--chat box-->
-    <div id="chat-box"></div>
+      <div class="chat-body">
+          
+          <!-- chat box -->
+          <div id="chat-box"></div>
 
-    <!--input box-->
-    <div class="input-group mt-3">
-        <input type="text" id="message-input" class="form-control" placeholder="Type your message...">
-        <button class="btn btn-primary" onclick="sendMessage({{ user.id }})">Send</button>
+          <!-- input box -->
+          <div class="input-group chat-input">
+              <input type="text" id="message-input" class="form-control" placeholder="Type your message...">
+
+              <!-- send image -->
+              <button class="btn btn-outline-secondary" onclick="document.getElementById('image-input').click();">
+                  <i class="bi bi-paperclip"></i>
+              </button>
+              <input type="file" id="image-input" accept="image/*" style="display:none" onchange="sendImage(USER_ID)">
+
+              <!-- send transaction -->
+              <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                  <i class="bi bi-box-seam"></i>
+              </button>
+
+              <!-- send tesxt -->
+              <button class="btn btn-primary btn-send" onclick="sendMessage({{ user.id }})">
+                  <i class="bi bi-send-fill"></i>
+              </button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- Transaction Modal -->
+<div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="transactionModalLabel">Select Transaction</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if transactions %}
+          <ul class="list-group">
+            {% for tx in transactions %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ tx.product.name }}</strong><br>
+                  <small>RM {{ tx.product.price }} — {{ tx.status }}</small>
+                </div>
+                <button class="btn btn-sm btn-success" 
+                        onclick="sendTransaction({{ user.id }}, {{ tx.id }}); 
+                                 var modalEl = document.getElementById('transactionModal');
+                                 var modal = bootstrap.Modal.getInstance(modalEl);
+                                 modal.hide();">
+                  Send
+                </button>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted">No transactions available.</p>
+        {% endif %}
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
 

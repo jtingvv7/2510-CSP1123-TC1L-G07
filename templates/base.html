@@ -81,11 +81,11 @@
 
                     <!-- inbox -->
                     
-                    <a class="nav-link me-3" href="{{ url_for('messages.inbox') }}">
+                    <a class="nav-link me-3 position-relative" href="{{ url_for('messages.inbox') }}">
                         <i class="bi bi-envelope-fill" style="font-size:1.3rem; color:white"></i>
-                        {% if session.get('unread_count',0 ) > 0 %}
+                        {% if unread_count > 0 %}
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ session.get('unread_count') }}
+                                {{ unread_count }}
                             </span>
                         {% endif %}
                     </a>

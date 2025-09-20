@@ -429,7 +429,7 @@ def cart():
                     new_transaction = Transaction(
                         product_id=product.id,
                         buyer_id=current_user.id,
-                        seller_id=product.user_id,
+                        seller_id=product.seller_id,
                         status="pending",
                         price=product.price,
                     )
@@ -519,6 +519,28 @@ def search():
         ).all()
 
     return render_template("search.html", products=products, query=query)
+
+# ----------------- view seller profile -----------------
+@usersystem_bp.route("/profile/<int:user_id>")
+def view_profile(user_id):
+    user = User.query.get_or_404(user_id)
+
+    # Fetch products of this user
+    products = Product.query.filter_by(seller_id=user.id).all()
+    completed_sales = Transaction.query.filter_by(seller_id=user.id, status="completed").all()
+    avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user.id).scalar()
+    wallet = user.wallet.balance if user.wallet else 0.0
+
+    return render_template(
+        "profile.html",
+        user=user,
+        products=products,
+        completed_sales=len(completed_sales),
+        avg_rating=avg_rating,
+        wallet=wallet,
+        # Optionally you can disable editing for other users
+        editable=False
+    )
 
 
 # ----------------- SUCCESS -----------------
