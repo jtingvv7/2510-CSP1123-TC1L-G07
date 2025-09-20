@@ -25,7 +25,7 @@
           {% if bought_transactions %}
             {% for t in bought_transactions %}
             <div class="d-flex align-items-center border-bottom py-2">
-              <img src="{{ get_image_url(product.image) }}"
+              <img src="{{ get_image_url(t.product.image) }}"
                    alt="Product Image"
                    class="rounded me-3"
                    style="width:60px; height:60px; object-fit:cover;">
@@ -71,7 +71,7 @@
           {% if sold_transactions %}
             {% for tx in sold_transactions %}
             <div class="d-flex align-items-center border-bottom py-2">
-              <img src="{{ get_image_url(product.image) }}"
+              <img src="{{ get_image_url(tx.product.image) }}"
                    alt="Product Image"
                    class="rounded me-3"
                    style="width:60px; height:60px; object-fit:cover;">

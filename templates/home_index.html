@@ -19,9 +19,9 @@
                     <p class="card-text">Quantity: {{ product.quantity }}</p>
                     <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
 
-                    <a href="{{ get_image_url(product.image) }}" 
-                      class="btn btn-sm btn-outline-primary mt-auto">
-                        View Details
+                    <a href="{{ url_for('usersystem.product_detail', product_id=product.id) }}" 
+                    class="btn btn-sm btn-outline-primary mt-auto">
+                      View Details
                     </a>
                 </div>
             </div>
