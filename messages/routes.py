@@ -1,7 +1,7 @@
 import logging
 import os
-from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify
-from flask_login import  login_required , current_user, login_user, current_app
+from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify, current_app
+from flask_login import  login_required , current_user, login_user
 from datetime import timedelta
 from models import db
 from models import User, Product, Transaction, Messages
@@ -149,7 +149,13 @@ def send_transaction(user_id, transaction_id):
 @login_required
 def chat(user_id):
     user = User.query.get_or_404(user_id)
-    return render_template("chat.html", user=user, user_id=user_id)
+
+    transactions = Transaction.query.filter(
+        ((Transaction.buyer_id == current_user.id) & (Transaction.seller_id == user_id)) |
+        ((Transaction.seller_id == current_user.id) & (Transaction.buyer_id == user_id))
+    )
+
+    return render_template("chat.html", user=user, user_id=user_id, transactions=transactions)
 
 #inbox
 @messages_bp.route("/inbox")

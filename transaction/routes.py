@@ -266,3 +266,15 @@ def my_transaction():#check all owner by current user transaction record
     return render_template("transaction/my_transactions.html", 
                            bought_transactions = bought_transactions,
                             sold_transactions = sold_transactions )
+
+#view transaction
+@transaction_bp.route("/view/<int:transaction_id>")
+@login_required
+def view_transaction(transaction_id):
+    transaction = Transaction.query.get_or_404(transaction_id)
+
+    if transaction.buyer_id != current_user.id and transaction.seller_id != current_user.id:
+        flash("You are not authorized to view this transaction.", "danger")
+        return redirect(url_for("transaction.my_transactions"))
+
+    return render_template("transaction/view_transaction.html", transaction=transaction)
