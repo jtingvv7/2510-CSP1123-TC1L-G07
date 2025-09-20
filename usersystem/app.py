@@ -430,7 +430,10 @@ def pickup_point():
  # ----------------- cart -----------------
 @usersystem_bp.route("/cart", methods=["GET", "POST"])
 def cart():
+    # ----------------- LOAD CART -----------------
     cart = session.get("cart", {})
+    # normalize keys to int for internal use
+    cart = {int(pid): qty for pid, qty in cart.items()}
 
     if request.method == "POST":
         action = request.form.get("action")
@@ -497,7 +500,9 @@ def cart():
         elif action == "clear":
             cart.clear()
 
-        session["cart"] = cart
+        # ✅ Save back with string keys (JSON-safe)
+        session["cart"] = {str(pid): qty for pid, qty in cart.items()}
+        session.modified = True
         return redirect(url_for("usersystem.cart"))
 
     # ----------------- GET CART -----------------
@@ -526,6 +531,7 @@ def cart():
         grand_total=total_price,
         sold_out=sold_out
     )
+
 
 # ----------------- search engine -----------------
 
