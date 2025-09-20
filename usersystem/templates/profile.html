@@ -116,7 +116,7 @@
       <div class="product-grid">
         {% for product in history_products %}
           <div class="product-card">
-            <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}"
+            <img src="{{ get_image_url(product.image) }}"
                 class="img-fluid rounded" alt="{{ product.name }}">
             <h6>{{ product.name }}</h6>
             <p class="text-muted small">RM {{ "%.2f"|format(product.price) }}</p>
