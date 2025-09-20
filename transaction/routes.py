@@ -134,7 +134,7 @@ def confirm_receipt(transaction_id):
     
      #change status
     try:
-        transaction.status = "completed"
+        transaction.status = "payment_pending"
         transaction.created_at = datetime.now(timezone.utc)
         db.session.commit()
 

@@ -79,7 +79,7 @@
                 <h6 class="mb-1">{{ tx.product.name }}</h6>
                 <p class="mb-1 text-muted">RM {{ tx.product.price }}</p>
                 <span class="badge 
-                  {% if tx.status == 'pending' %} bg-secondary
+                  {% if tx.status == 'payment_pending' %} bg-secondary
                   {% elif tx.status == 'accepted' %} bg-primary
                   {% elif tx.status == 'shipped' %} bg-warning text-dark
                   {% elif tx.status == 'completed' %} bg-success
