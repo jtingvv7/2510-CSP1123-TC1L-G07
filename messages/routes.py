@@ -1,13 +1,21 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify
+import os
+from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify, current_app
 from flask_login import  login_required , current_user, login_user
 from datetime import timedelta
 from models import db
 from models import User, Product, Transaction, Messages
 from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.utils import secure_filename
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 messages_bp = Blueprint('messages', __name__, template_folder='templates', static_folder='static')
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 ''' for test
 #fake inbox
@@ -46,25 +54,50 @@ def fake_messages():
     return "Fake messages inserted. Now go check /messages/inbox"
 '''
 
-#view conversation
-@messages_bp.route("/chat/<int:user_id>/json",methods=["GET"])
+#chat json
+@messages_bp.route("/chat/<int:user_id>/json", methods=["GET"])
 @login_required
 def chat_json(user_id):
     conversation = Messages.query.filter(
         ((Messages.sender_id == current_user.id) & (Messages.receiver_id == user_id)) |
-          ((Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
+        ((Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
     ).order_by(Messages.timestamp).all()
 
-    #return JSON data to back end
-    return jsonify([
-        {
-        "sender_id" : msg.sender_id,
-        "sender_name": msg.sender.name,
-        "content" : msg.content,
-        "time" : (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S") #convert to MYT
-    }for msg in conversation
-    ])   
+    result = []
+    for msg in conversation:
+        msg_type = getattr(msg, "message_type", "text")  # default as text
 
+        data = {
+            "sender_id": msg.sender_id,
+            "sender_name": msg.sender.name if msg_type != "system" else "System",
+            "sender_avatar": (
+                url_for('static', filename=f'uploads/profiles/{msg.sender.profile_pic}')
+                if msg.sender.profile_pic else f"https://i.pravatar.cc/100?u={msg.sender.id}"
+            ) if msg_type != "system" else None,  # system messages
+            "content": msg.content,
+            "message_type": msg_type,
+            "time": (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S")
+        }
+
+        # if msg type = transaction insert details
+        if msg_type == "transaction" and getattr(msg, "transaction_id", None):
+            tx = Transaction.query.get(msg.transaction_id)
+            if tx:
+                data["transaction"] = {
+                    "id": tx.id,
+                    "product": tx.product.name if tx.product else "Unknown",
+                    "price": tx.product.price if tx.product else 0,
+                    "status": tx.status
+                }
+
+        result.append(data)
+
+        for msg in conversation:
+            if msg.receiver_id == current_user.id and not msg.is_read:
+                msg.is_read = True
+        db.session.commit
+
+    return jsonify(result)
 
 #send messages
 @messages_bp.route("/send/<int:user_id>",methods=["POST"])
@@ -78,12 +111,61 @@ def send_messages(user_id):
         return jsonify({"status": "ok", "message": content})
     return jsonify({"status": "error", "message": "empty content"})
 
+#send image
+@messages_bp.route("/send_image/<int:user_id>", methods=["POST"])
+@login_required
+def send_image(user_id):
+    if "image" not in request.files:
+        return jsonify({"status": "error", "message": "No file uploaded"})
+
+    file = request.files["image"]
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], "messages", filename)
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        file.save(filepath)
+
+        new_msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=user_id,
+            content=f"uploads/messages/{filename}",
+            message_type="image"
+        )
+        db.session.add(new_msg)
+        db.session.commit()
+        return jsonify({"status": "ok"})
+    return jsonify({"status": "error", "message": "Invalid file"})
+
+
+#send transaction
+@messages_bp.route("/send_transaction/<int:user_id>/<int:transaction_id>", methods=["POST"])
+@login_required
+def send_transaction(user_id, transaction_id):
+    new_msg = Messages(
+        sender_id=current_user.id,
+        receiver_id=user_id,
+        transaction_id=transaction_id,
+        message_type="transaction"
+    )
+    db.session.add(new_msg)
+    db.session.commit()
+    return jsonify({"status": "ok"})
+
 #chat page
 @messages_bp.route("/chat/<int:user_id>")
 @login_required
 def chat(user_id):
     user = User.query.get_or_404(user_id)
-    return render_template("chat.html", user=user, user_id=user_id)
+
+    Messages.query.filter_by(sender_id=user_id, receiver_id=current_user.id, is_read=False).update({"is_read": True})
+    db.session.commit()
+
+    transactions = Transaction.query.filter(
+        ((Transaction.buyer_id == current_user.id) & (Transaction.seller_id == user_id)) |
+        ((Transaction.seller_id == current_user.id) & (Transaction.buyer_id == user_id))
+    )
+
+    return render_template("chat.html", user=user, user_id=user_id, transactions=transactions)
 
 #inbox
 @messages_bp.route("/inbox")
