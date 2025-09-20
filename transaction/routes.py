@@ -171,6 +171,19 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
     try:
         transaction.status = "cancelled"
         db.session.commit()
+
+        #send message to seller (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=transaction.seller_id,
+            transaction_id=transaction.id,
+            message_type="transaction",
+            content="[System] Buyer has cancel request."
+            )
+        db.session.add(msg)
+        db.session.commit
+        
+
         flash("Transaction cancelled successsfully.","success")
     except SQLAlchemyError:
         db.session.rollback()
@@ -207,6 +220,17 @@ def accept_transaction(transaction_id):
         tx.status = "accepted"
         db.session.commit()
         print(f"After: {tx.status}")
+
+        # send to buyer (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=tx.buyer_id,
+            transaction_id=tx.id,
+            message_type="transaction",
+            content="[System] Seller has accept your request."
+        )
+        db.session.add(msg)
+        db.session.commit
         flash("You have accepted the purchase request.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
