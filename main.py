@@ -1,6 +1,6 @@
 import logging
 import os
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, url_for
 from extensions import db, login_manager
 from models import User, Product, SafeLocation, Messages
 from flask_login import current_user
@@ -16,6 +16,23 @@ def create_app():
 
     #set upload folder
     app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
+
+    #register helper
+    @app.context_processor
+    def utility_processor():
+        def get_image_url(image_filename):
+            if not image_filename:
+                # 
+                return url_for('static', filename='uploads/products/default_product.jpg')
+            
+            # 
+            if image_filename.startswith("products/"):
+                return url_for('static', filename='uploads/' + image_filename)
+            
+            #  "products/"
+            return url_for('static', filename='uploads/products/' + image_filename)
+        
+        return dict(get_image_url=get_image_url)
 
     # Logging setup
     logging.basicConfig(level=logging.INFO, filename="app.log")

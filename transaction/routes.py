@@ -326,7 +326,7 @@ def my_transaction():#check all owner by current user transaction record
                            bought_transactions = bought_transactions,
                             sold_transactions = sold_transactions )
 
-#view transaction
+#view transaction (in chat)
 @transaction_bp.route("/view/<int:transaction_id>")
 @login_required
 def view_transaction(transaction_id):
@@ -336,4 +336,4 @@ def view_transaction(transaction_id):
         flash("You are not authorized to view this transaction.", "danger")
         return redirect(url_for("transaction.my_transactions"))
 
-    return render_template("transaction/view_transaction.html", transaction=transaction)
+    return render_template("transaction/view_transaction.html", transaction=transaction, product=transaction.product)
