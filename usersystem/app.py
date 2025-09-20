@@ -60,7 +60,7 @@ def product_manage():
         if file and allowed_file(file.filename):
             ext = file.filename.rsplit(".", 1)[-1]
             filename = f"product_{int(time.time())}.{ext}"
-            upload_path = os.path.join(current_app.root_path, "static", "uploads")
+            upload_path = os.path.join(current_app.root_path, "static", "uploads","products")
             os.makedirs(upload_path, exist_ok=True)
             file.save(os.path.join(upload_path, filename))
         else:
@@ -220,7 +220,7 @@ def profile():
                 db.session.commit()
                 flash("Pickup location deleted!", "success")
             else:
-                flash("You don’t have permission to delete this location.", "danger")
+                flash("You don't have permission to delete this location.", "danger")
 
         return redirect(url_for("usersystem.profile"))
 
