@@ -1,10 +1,12 @@
 import os
 import time
 import re
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app, jsonify, Flask
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
+from datetime import datetime
+from collections import defaultdict
 from models import User, Transaction, Review, SafeLocation, Product, Wallet
 from flask_login import login_user, logout_user, current_user
 
@@ -46,7 +48,6 @@ def product_manage():
                         os.remove(image_path)
                 db.session.delete(product)
                 db.session.commit()
-                flash("Product deleted successfully.", "success")
             return redirect(url_for("usersystem.profile"))
 
         # Handle create or update
@@ -86,7 +87,6 @@ def product_manage():
             db.session.add(new_product)
 
         db.session.commit()
-        flash("Product saved successfully.", "success")
         return redirect(url_for("usersystem.profile"))
 
     pickup_points = SafeLocation.query.filter_by(user_id=current_user.id).all()
@@ -186,6 +186,8 @@ def forgot_reset_password():
 # ----------------- PROFILE -----------------
 @usersystem_bp.route("/profile", methods=["GET", "POST"])
 def profile():
+    history = session.get("history", [])
+
     user_id = session.get("user_id")
     if not user_id:
         flash("Please login first!", "danger")
@@ -231,15 +233,18 @@ def profile():
     avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user_id).scalar()
     wallet = user.wallet.balance if user.wallet else 0.0
 
-    #  fetch history products
-    history_ids = [int(pid) for pid in session.get("history", [])]
+ # Extract product IDs safely (works with dicts and ints)
+    history_ids = []
+    for item in history:
+        if isinstance(item, dict):  # new format with {"id":..., "date":...}
+            history_ids.append(int(item["id"]))
+        elif isinstance(item, (int, str)):  # fallback old format
+            history_ids.append(int(item))
+
+    # Query products (only if we have IDs)
     history_products = []
     if history_ids:
-        history_query = Product.query.filter(Product.id.in_(history_ids)).all()
-        # keep the order same as session, most recent last
-        history_query.sort(key=lambda p: history_ids.index(p.id))
-        # reverse to show newest first
-        history_products = list(reversed(history_query))
+        history_products = Product.query.filter(Product.id.in_(history_ids)).all()
 
     return render_template(
         "profile.html",
@@ -263,15 +268,30 @@ def add_to_history(product_id):
         session.modified = True   #  force save
     return jsonify({"status": "success", "history": session.get("history")})
 
-# -----------------product detail(history)  -----------------
+# -----------------product detail -----------------
+
 @usersystem_bp.route("/product/<int:product_id>")
 def product_detail(product_id):
     product = Product.query.get_or_404(product_id)
+
+    # history is always separate from Flask-Login's session["user_id"]
     history = session.get("history", [])
-    if product_id not in history:
-        history.append(product_id)
-        session["history"] = history
-        session.modified = True
+
+    if not isinstance(history, list):
+        history = []
+
+    # remove old record if product already exists
+    history = [h for h in history if isinstance(h, dict) and h.get("id") != product_id]
+
+    # add new record
+    history.append({
+        "id": product_id,
+        "date": datetime.today().strftime("%Y-%m-%d")
+    })
+
+    session["history"] = history
+    session.modified = True
+
     return render_template("product_detail.html", product=product)
 
 # ----------------- ADD TO cart  -----------------
@@ -299,14 +319,16 @@ def add_to_cart(product_id):
 
 @usersystem_bp.route("/history")
 def history():
-    history = [int(pid) for pid in session.get("history", [])]
-    if not history:
-        products = []
-    else:
-        products = Product.query.filter(Product.id.in_(history)).all()
-        # keep order same as session history (latest last)
-        products.sort(key=lambda p: history.index(p.id))
-    return render_template("history.html", products=products)
+    history = session.get("history", [])
+    grouped = defaultdict(list)
+
+    for h in history:
+        if isinstance(h, dict):
+            product = Product.query.get(h["id"])
+            if product:
+                grouped[h["date"]].append(product)
+
+    return render_template("history.html", grouped=grouped)
 
 # ----------------- EDIT PROFILE -----------------
 @usersystem_bp.route("/editprofile", methods=["GET", "POST"])

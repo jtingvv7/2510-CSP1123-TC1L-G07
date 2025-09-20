@@ -18,6 +18,11 @@ body {
   min-height: 100vh;
 }
 
+.container.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
 /* ------------------ SIDEBAR ------------------ */
 .sidebar {
   width: 220px;

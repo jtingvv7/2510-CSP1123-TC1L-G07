@@ -43,6 +43,23 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(ranking_bp, url_prefix="/ranking")
 
+        # --- Register custom filter ---
+    def format_history_date(value):
+        """Format YYYY-MM-DD into Today / Yesterday / 20 Sep 2025"""
+        try:
+            date_obj = datetime.strptime(value, "%Y-%m-%d").date()
+            today = datetime.today().date()
+            if date_obj == today:
+                return "Today"
+            elif date_obj == today - timedelta(days=1):
+                return "Yesterday"
+            else:
+                return date_obj.strftime("%d %b %Y")
+        except Exception:
+            return value
+
+    app.jinja_env.filters["history_date"] = format_history_date
+
     #for unread message
     @app.context_processor
     def inject_unread_count():
@@ -76,6 +93,7 @@ def create_app():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 
 if __name__ == "__main__":
