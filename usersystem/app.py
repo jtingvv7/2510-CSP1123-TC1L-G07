@@ -75,6 +75,7 @@ def product_manage():
             product.price = price
             product.pickup_location_id = pickup_location_id
             product.image = filename
+            product.quantity = quantity
         else:
             new_product = Product(
                 name=name,
@@ -82,7 +83,8 @@ def product_manage():
                 price=price,
                 pickup_location_id=pickup_location_id,
                 seller_id=current_user.id,
-                image=filename
+                image=filename,
+                quantity=quantity 
             )
             db.session.add(new_product)
 
@@ -306,7 +308,11 @@ def add_to_cart(product_id):
         return redirect(url_for("usersystem.cart"))
 
     if str(product.id) in cart:
-        flash("This product is already in your cart.","warning")
+        if cart[str(product.id)] < product.quantity:
+            cart[str(product.id)] += 1
+            flash("Increased quantity in cart.", "success")
+        else:
+            flash("No more stock available.", "warning")
     else:
         cart[str(product.id)] = 1
         flash("Product added to cart!", "success")
@@ -446,22 +452,29 @@ def cart():
                 return redirect(url_for("usersystem.cart"))
 
             try:
-                for pid in list(cart.keys()):
+                for pid, qty in cart.items():
                     product = Product.query.get(int(pid))
                     if not product or product.is_sold:
                         continue
+
+                    # prevent over-checkout
+                    if qty > product.quantity:
+                        flash(f"Not enough stock for {product.name}.", "danger")
+                        return redirect(url_for("usersystem.cart"))
 
                     new_transaction = Transaction(
                         product_id=product.id,
                         buyer_id=current_user.id,
                         seller_id=product.seller_id,
                         status="pending",
-                        price=product.price,
+                        price=product.price * qty,
                     )
                     db.session.add(new_transaction)
 
-                    # mark sold out
-                    product.is_sold = True
+                    # reduce stock
+                    product.quantity -= qty
+                    if product.quantity <= 0:
+                        product.is_sold = True
 
                 db.session.commit()
                 session["cart"] = {}
@@ -491,10 +504,26 @@ def cart():
             else:
                 cart[str(product.id)] = 1   
 
+        elif action == "increase":
+            if product_id:
+                pid = int(product_id)
+                if pid in cart:
+                    product = Product.query.get(pid)
+                    if product and not product.is_sold and cart[pid] < product.quantity:
+                        cart[pid] += 1
+                    else:
+                        flash("No more stock available.", "warning")
+
+        elif action == "decrease":
+            if product_id:
+                pid = int(product_id)
+                if pid in cart and cart[pid] > 1:
+                    cart[pid] -= 1
+
         # ----------------- REMOVE -----------------
         elif action == "remove":
-            if product_id in cart:
-                del cart[product_id]
+            if product_id and int(product_id) in cart:
+                del cart[int(product_id)]
 
         # ----------------- CLEAR -----------------
         elif action == "clear":
@@ -508,28 +537,25 @@ def cart():
     # ----------------- GET CART -----------------
     cart_items = []
     total_price = 0
-    sold_out = False
 
-    for pid in list(cart.keys()):
+    for pid, qty in cart.items():
         product = Product.query.get(int(pid))
         if product:
             cart_items.append({
                 "id": product.id,
                 "name": product.name,
                 "price": product.price,
+                "qty": qty,
                 "image": product.image,
-                "is_sold": product.is_sold
+                "is_sold": product.is_sold or product.quantity <= 0
             })
-            if not product.is_sold:
-                total_price += product.price
-            else:
-                sold_out = True
+            if not (product.is_sold or product.quantity <= 0):
+                total_price += product.price * qty
 
     return render_template(
         "cart.html",
         cart_items=cart_items,
         grand_total=total_price,
-        sold_out=sold_out
     )
 
 
