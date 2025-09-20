@@ -217,3 +217,5 @@ def delete_message(message_id):
     db.session.commit()
     flash("Message deleted", "success")
     return redirect(url_for("admin.manage_messages"))
+
+################## report management #####################
