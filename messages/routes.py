@@ -54,7 +54,7 @@ def fake_messages():
     return "Fake messages inserted. Now go check /messages/inbox"
 '''
 
-#view conversation
+#chat json
 @messages_bp.route("/chat/<int:user_id>/json", methods=["GET"])
 @login_required
 def chat_json(user_id):
@@ -63,8 +63,9 @@ def chat_json(user_id):
         ((Messages.sender_id == user_id) & (Messages.receiver_id == current_user.id))
     ).order_by(Messages.timestamp).all()
 
-    return jsonify([
-        {
+    result = []
+    for msg in conversation:
+        data = {
             "sender_id": msg.sender_id,
             "sender_name": msg.sender.name,
             "sender_avatar": (
@@ -72,10 +73,24 @@ def chat_json(user_id):
                 if msg.sender.profile_pic else f"https://i.pravatar.cc/40?u={msg.sender.id}"
             ),
             "content": msg.content,
-            "time": (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S")  # convert to MYT
+            "message_type": getattr(msg, "message_type", "text"),  # defaut text
+            "time": (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S")
         }
-        for msg in conversation 
-        ])
+
+        #if message type = transaction, add transaction details
+        if data["message_type"] == "transaction" and getattr(msg, "transaction_id", None):
+            tx = Transaction.query.get(msg.transaction_id)
+            if tx:
+                data["transaction"] = {
+                    "id": tx.id,
+                    "product": tx.product.name if tx.product else "Unknown",
+                    "price": tx.product.price if tx.product else 0,
+                    "status": tx.status
+                }
+
+        result.append(data)
+
+    return jsonify(result)
 
 #send messages
 @messages_bp.route("/send/<int:user_id>",methods=["POST"])
@@ -116,7 +131,18 @@ def send_image(user_id):
 
 
 #send transaction
-
+@messages_bp.route("/send_transaction/<int:user_id>/<int:transaction_id>", methods=["POST"])
+@login_required
+def send_transaction(user_id, transaction_id):
+    new_msg = Messages(
+        sender_id=current_user.id,
+        receiver_id=user_id,
+        transaction_id=transaction_id,
+        message_type="transaction"
+    )
+    db.session.add(new_msg)
+    db.session.commit()
+    return jsonify({"status": "ok"})
 
 #chat page
 @messages_bp.route("/chat/<int:user_id>")
