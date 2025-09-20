@@ -36,7 +36,7 @@
                     <!-- Product Name -->
                     <td>
                         <strong>{{ item.name }}</strong><br>
-                        <span class="text-muted">RM {{ "%.2f"|format(item.price) }}</span><br>
+                        <span class="text-muted">RM {{ "%.2f"|format(item.price) }} x {{ item.qty }}</span><br>
                         {% if item.is_sold %}
                             <span class="badge bg-danger">Sold Out</span>
                         {% else %}
@@ -44,15 +44,34 @@
                         {% endif %}
                     </td>
 
+                        <!-- Quantity control -->
+                    <td>
+                    <form method="POST" action="{{ url_for('usersystem.cart') }}" class="d-inline">
+                        <input type="hidden" name="product_id" value="{{ item.id }}">
+                        <input type="hidden" name="action" value="decrease">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" {% if item.qty <= 1 %}disabled{% endif %}>-</button>
+                    </form>
+
+                    <span class="mx-2">{{ item.qty }}</span>
+
+                    <form method="POST" action="{{ url_for('usersystem.cart') }}" class="d-inline">
+                        <input type="hidden" name="product_id" value="{{ item.id }}">
+                        <input type="hidden" name="action" value="increase">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" {% if item.is_sold %}disabled{% endif %}>+</button>
+                    </form>
+                    </td>
+
                     <!-- Price -->
-                    <td>RM {{ "%.2f"|format(item.price) }}</td>
+                    <td>
+                        RM {{ "%.2f"|format(item.price * item.qty) }}
+                    </td>
 
                     <!-- Remove -->
                     <td>
-                        <form action="{{ url_for('usersystem.cart') }}" method="POST" class="d-inline">
-                            <input type="hidden" name="action" value="remove">
+                        <form method="POST" action="{{ url_for('usersystem.cart') }}">
                             <input type="hidden" name="product_id" value="{{ item.id }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            <input type="hidden" name="action" value="remove">
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                         </form>
                     </td>
                 </tr>
