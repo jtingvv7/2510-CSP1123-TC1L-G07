@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for , flash
 from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
-from models import User, Product, Transaction
+from models import User, Product, Transaction, Messages
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
@@ -137,6 +137,18 @@ def confirm_receipt(transaction_id):
         transaction.status = "completed"
         transaction.created_at = datetime.now(timezone.utc)
         db.session.commit()
+
+        #send message to seller (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=transaction.seller_id,
+            transaction_id=transaction.id,
+            message_type="transaction",
+            content="[System] Buyer has confirmed receipt."
+        )
+        db.session.add(msg)
+        db.session.commit
+
     except SQLAlchemyError:
         db.session.rollback()
         flash("Error confirming transaction.","danger")
@@ -219,6 +231,18 @@ def reject_request(transaction_id):
     try:
         tx.status = "rejected"
         db.session.commit()
+
+        # send to buyer (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=tx.buyer_id,
+            transaction_id=tx.id,
+            message_type="transaction",
+            content="[System] Seller has rejected your request."
+        )
+        db.session.add(msg)
+        db.session.commit
+
         flash("You have rejected the purchase request.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -246,6 +270,17 @@ def ship_transaction(transaction_id):
     try:
         tx.status = "shipped"
         db.session.commit()
+
+        # send message to buyer (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=tx.buyer_id,
+            transaction_id=tx.id,
+            message_type="transaction",
+            content="[System] Seller has marked the transaction as shipped."
+        )
+        db.session.add(msg)
+        db.session.commit
         flash("Order marked as shipped.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
