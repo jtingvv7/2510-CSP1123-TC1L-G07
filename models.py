@@ -85,9 +85,10 @@ class Messages(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = True)
-    content = db.Column(db.Text, nullable = False)
+    content = db.Column(db.Text, nullable = True)
     timestamp = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     is_read = db.Column(db.Text, default = True)
+    message_type = db.Column(db.String(20), default = "text") #text/image/transaction
 
 #relationship
     sender = db.relationship('User', foreign_keys=[sender_id], backref='messages_sent', lazy = True)
@@ -157,4 +158,3 @@ class Order(db.Model):
     
     def __repr__(self):
         return f"<Order {self.id} order_id: {self.order_id}>"
-    

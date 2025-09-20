@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %} Transaction #{{ transaction.id }} {% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4>Transaction #{{ transaction.id }}</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Item:</strong> {{ transaction.product.name }}</p>
+            <p><strong>Price:</strong> RM {{ transaction.product.price }}</p>
+            <p><strong>Status:</strong> 
+                <span class="badge 
+                    {% if transaction.status == 'Completed' %} bg-success
+                    {% elif transaction.status == 'Shipped' %} bg-warning text-dark
+                    {% elif transaction.status == 'Cancelled' %} bg-danger
+                    {% else %} bg-info {% endif %}">
+                    {{ transaction.status }}
+                </span>
+            </p>
+            <p><strong>Buyer:</strong> {{ transaction.buyer.name }}</p>
+            <p><strong>Seller:</strong> {{ transaction.seller.name }}</p>
+            <p><strong>Date:</strong> {{ transaction.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{{ url_for('transaction.my_transaction') }}" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
