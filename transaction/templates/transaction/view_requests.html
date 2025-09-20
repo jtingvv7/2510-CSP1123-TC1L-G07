@@ -1,41 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}View Requests {% endblock %}
+{% block title %}View Requests{% endblock %}
 
 {% block content %}
-<div class="list group">
-    <h1 class="mb-4 text-center">Purchase Requests</h1>
-    {% if requests %}
-        <div class="list-group">
-            {% for r in requests %}
-                <div class="list-group-item shadow-sm mb-3">
-                    <h5 class="mb-1">Request #{{r.id}} </h5>
-                    <p class="mb-1">Product ID : <b>{{r.product_id}}</b></p>
-                    <p class="mb-1">Buyer ID : <b>{{r.buyer_id}}</b></p>
-                    <p>Status:
-                        {% if r.status == "pending" %}
-                            <span class="badge bg-warning text-dark">Pending</span>
-                        {% elif r.status == "accepted" %}
-                            <span class="badge bg-success">Accepted</span>
-                        {% elif r.status == "rejected" %}
-                            <span class="badge bg-danger">Rejected</span>
-                        {% else %}
-                            <span class="badge bg-secondary">{{r.status}}</span>
-                        {% endif %}
-                    </p>
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Purchase Requests</h2>
 
-                    {% if r.status == "pending" %}
-                    <!--Accept-->
-                        <form action="{{ url_for('transaction.accept_transaction', transaction_id=r.id) }}"
-                            method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-success">Accept</button>
-                        </form>
-                    <!--Reject-->
-                        <form action="{{ url_for('transaction.reject_request', transaction_id=r.id) }}"
-                            method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-danger">Reject</button>
-                        </form>
-                    {% endif %}
+    {% if requests %}
+        <div class="row">
+            {% for r in requests %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <!-- product image -->
+                        <img src="{{ get_image_url(product.image)  }}"
+                             class="card-img-top"
+                             alt="Product Image"
+                             style="object-fit: cover; height: 200px;">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Request #{{ r.id }}</h5>
+                            <p class="card-text mb-1"><b>Product:</b> {{ r.product.name }}</p>
+                            <p class="card-text mb-1"><b>Buyer ID:</b> {{ r.buyer_id }}</p>
+                            <p class="card-text">
+                                <b>Status:</b>
+                                {% if r.status == "pending" %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                {% elif r.status == "accepted" %}
+                                    <span class="badge bg-success">Accepted</span>
+                                {% elif r.status == "rejected" %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ r.status }}</span>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="card-footer bg-light text-center">
+                            {% if r.status == "pending" %}
+                                <!--Accept-->
+                                <form action="{{ url_for('transaction.accept_transaction', transaction_id=r.id) }}"
+                                    method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-success me-2">Accept</button>
+                                </form>
+                                <!--Reject-->
+                                <form action="{{ url_for('transaction.reject_request', transaction_id=r.id) }}"
+                                    method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>

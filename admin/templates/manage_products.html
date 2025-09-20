@@ -23,7 +23,7 @@
                     <td>{{ p.id }}</td>
                     <td>
                         {% if p.image %}
-                            <img src="{{ get_image_url(product.image) }}" 
+                            <img src="{{ get_image_url(p.image) }}" 
                                 width="60" class="img-thumbnail">
                         {% else %}
                             <img src="{{ url_for('static', filename='uploads/products/default_product.jpg') }}" 
