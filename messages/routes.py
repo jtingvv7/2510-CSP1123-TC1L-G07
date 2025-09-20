@@ -72,14 +72,14 @@ def chat_json(user_id):
             "sender_name": msg.sender.name if msg_type != "system" else "System",
             "sender_avatar": (
                 url_for('static', filename=f'uploads/profiles/{msg.sender.profile_pic}')
-                if msg.sender.profile_pic else f"https://i.pravatar.cc/40?u={msg.sender.id}"
+                if msg.sender.profile_pic else f"https://i.pravatar.cc/100?u={msg.sender.id}"
             ) if msg_type != "system" else None,  # system messages
             "content": msg.content,
             "message_type": msg_type,
             "time": (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S")
         }
 
-        # 
+        # if msg type = transaction insert details
         if msg_type == "transaction" and getattr(msg, "transaction_id", None):
             tx = Transaction.query.get(msg.transaction_id)
             if tx:
@@ -91,6 +91,11 @@ def chat_json(user_id):
                 }
 
         result.append(data)
+
+        for msg in conversation:
+            if msg.receiver_id == current_user.id and not msg.is_read:
+                msg.is_read = True
+        db.session.commit
 
     return jsonify(result)
 
@@ -151,6 +156,9 @@ def send_transaction(user_id, transaction_id):
 @login_required
 def chat(user_id):
     user = User.query.get_or_404(user_id)
+
+    Messages.query.filter_by(sender_id=user_id, receiver_id=current_user.id, is_read=False).update({"is_read": True})
+    db.session.commit()
 
     transactions = Transaction.query.filter(
         ((Transaction.buyer_id == current_user.id) & (Transaction.seller_id == user_id)) |

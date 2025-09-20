@@ -143,11 +143,11 @@ def confirm_receipt(transaction_id):
             sender_id=current_user.id,
             receiver_id=transaction.seller_id,
             transaction_id=transaction.id,
-            message_type="transaction",
+            message_type="system",
             content="[System] Buyer has confirmed receipt."
         )
         db.session.add(msg)
-        db.session.commit
+        db.session.commit()
 
     except SQLAlchemyError:
         db.session.rollback()
@@ -177,11 +177,11 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
             sender_id=current_user.id,
             receiver_id=transaction.seller_id,
             transaction_id=transaction.id,
-            message_type="transaction",
+            message_type="system",
             content="[System] Buyer has cancel request."
             )
         db.session.add(msg)
-        db.session.commit
+        db.session.commit()
         
 
         flash("Transaction cancelled successsfully.","success")
@@ -226,11 +226,11 @@ def accept_transaction(transaction_id):
             sender_id=current_user.id,
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
-            message_type="transaction",
+            message_type="system",
             content="[System] Seller has accept your request."
         )
         db.session.add(msg)
-        db.session.commit
+        db.session.commit()
         flash("You have accepted the purchase request.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -261,11 +261,11 @@ def reject_request(transaction_id):
             sender_id=current_user.id,
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
-            message_type="transaction",
+            message_type="system",
             content="[System] Seller has rejected your request."
         )
         db.session.add(msg)
-        db.session.commit
+        db.session.commit()
 
         flash("You have rejected the purchase request.","success")
     except SQLAlchemyError as e:
@@ -300,11 +300,11 @@ def ship_transaction(transaction_id):
             sender_id=current_user.id,
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
-            message_type="transaction",
+            message_type="system",
             content="[System] Seller has marked the transaction as shipped."
         )
         db.session.add(msg)
-        db.session.commit
+        db.session.commit()
         flash("Order marked as shipped.","success")
     except SQLAlchemyError as e:
         db.session.rollback()

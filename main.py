@@ -14,6 +14,9 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.secret_key = "supersecretkey"  # session key
 
+    #set upload folder
+    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
+
     # Logging setup
     logging.basicConfig(level=logging.INFO, filename="app.log")
 
