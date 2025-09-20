@@ -88,6 +88,7 @@ class Messages(db.Model):
     content = db.Column(db.Text, nullable = False)
     timestamp = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     is_read = db.Column(db.Text, default = True)
+    message_type = db.Column(db.String(20), default = "text") #text/image/transaction
 
 #relationship
     sender = db.relationship('User', foreign_keys=[sender_id], backref='messages_sent', lazy = True)
