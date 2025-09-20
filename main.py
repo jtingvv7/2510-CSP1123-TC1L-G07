@@ -51,6 +51,7 @@ def create_app():
     from usersystem.app import usersystem_bp
     from admin.routes import admin_bp
     from ranking.app import ranking_bp
+    from report.routes import report_bp
 
     #register blueprint
     app.register_blueprint(transaction_bp, url_prefix="/transaction")
@@ -60,6 +61,7 @@ def create_app():
     app.register_blueprint(usersystem_bp, url_prefix="/usersystem")
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(ranking_bp, url_prefix="/ranking")
+    app.register_blueprint(report_bp, url_prefix="/report")
 
         # --- Register custom filter ---
     def format_history_date(value):

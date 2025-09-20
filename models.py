@@ -158,3 +158,17 @@ class Order(db.Model):
     
     def __repr__(self):
         return f"<Order {self.id} order_id: {self.order_id}>"
+    
+class Report(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    reporter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    reported_type = db.Column(db.String(50), nullable=False)  # product / transaction / message
+    reported_id = db.Column(db.Integer, nullable=False)       
+    reason = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), default="pending")      # pending / resolved
+    report_time = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+
+    reporter = db.relationship("User", backref="reports", lazy=True)
+
+    def __repr__(self):
+        return f"<Order {self.id} order_id: {self.order_id}>"
