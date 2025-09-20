@@ -524,22 +524,23 @@ def search():
 @usersystem_bp.route("/profile/<int:user_id>")
 def view_profile(user_id):
     user = User.query.get_or_404(user_id)
+    return_product = request.args.get("return_product")  # NEW
 
-    # Fetch products of this user
+    # Fetch products
     products = Product.query.filter_by(seller_id=user.id).all()
     completed_sales = Transaction.query.filter_by(seller_id=user.id, status="completed").all()
     avg_rating = db.session.query(db.func.avg(Review.rating)).filter_by(seller_id=user.id).scalar()
     wallet = user.wallet.balance if user.wallet else 0.0
 
     return render_template(
-        "profile.html",
+        "view_seller_profile.html",
         user=user,
         products=products,
         completed_sales=len(completed_sales),
         avg_rating=avg_rating,
         wallet=wallet,
-        # Optionally you can disable editing for other users
-        editable=False
+        editable=False,
+        return_product=return_product  # pass to template
     )
 
 
