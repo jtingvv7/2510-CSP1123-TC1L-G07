@@ -65,20 +65,22 @@ def chat_json(user_id):
 
     result = []
     for msg in conversation:
+        msg_type = getattr(msg, "message_type", "text")  # default as text
+
         data = {
             "sender_id": msg.sender_id,
-            "sender_name": msg.sender.name,
+            "sender_name": msg.sender.name if msg_type != "system" else "System",
             "sender_avatar": (
                 url_for('static', filename=f'uploads/profiles/{msg.sender.profile_pic}')
                 if msg.sender.profile_pic else f"https://i.pravatar.cc/40?u={msg.sender.id}"
-            ),
+            ) if msg_type != "system" else None,  # system messages
             "content": msg.content,
-            "message_type": getattr(msg, "message_type", "text"),  # defaut text
+            "message_type": msg_type,
             "time": (msg.timestamp + timedelta(hours=8)).strftime("%H:%M:%S")
         }
 
-        #if message type = transaction, add transaction details
-        if data["message_type"] == "transaction" and getattr(msg, "transaction_id", None):
+        # 
+        if msg_type == "transaction" and getattr(msg, "transaction_id", None):
             tx = Transaction.query.get(msg.transaction_id)
             if tx:
                 data["transaction"] = {

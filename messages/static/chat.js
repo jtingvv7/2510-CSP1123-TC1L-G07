@@ -7,6 +7,20 @@ function loadMessages(){
         chatBox.innerHTML="";
 
         data.forEach(msg => {
+            // system message
+            if (msg.message_type === "system") {
+                let sysWrapper = document.createElement("div");
+                sysWrapper.classList.add("system-message");
+                sysWrapper.innerHTML = `
+                    <div class="system-bubble">
+                        ${msg.content}<br>
+                        <span class="timestamp">${msg.time}</span>
+                    </div>
+                `;
+                chatBox.appendChild(sysWrapper);
+                return; // skip
+            }
+
             let wrapper = document.createElement("div");
             wrapper.classList.add("d-flex", "mb-2");
 
