@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for , flash
 from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
-from models import User, Product, Transaction
+from models import User, Product, Transaction, Messages
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
@@ -137,6 +137,18 @@ def confirm_receipt(transaction_id):
         transaction.status = "completed"
         transaction.created_at = datetime.now(timezone.utc)
         db.session.commit()
+
+        #send message to seller (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=transaction.seller_id,
+            transaction_id=transaction.id,
+            message_type="system",
+            content="[System] Buyer has confirmed receipt."
+        )
+        db.session.add(msg)
+        db.session.commit()
+
     except SQLAlchemyError:
         db.session.rollback()
         flash("Error confirming transaction.","danger")
@@ -159,6 +171,19 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
     try:
         transaction.status = "cancelled"
         db.session.commit()
+
+        #send message to seller (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=transaction.seller_id,
+            transaction_id=transaction.id,
+            message_type="system",
+            content="[System] Buyer has cancel request."
+            )
+        db.session.add(msg)
+        db.session.commit()
+        
+
         flash("Transaction cancelled successsfully.","success")
     except SQLAlchemyError:
         db.session.rollback()
@@ -195,6 +220,17 @@ def accept_transaction(transaction_id):
         tx.status = "accepted"
         db.session.commit()
         print(f"After: {tx.status}")
+
+        # send to buyer (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=tx.buyer_id,
+            transaction_id=tx.id,
+            message_type="system",
+            content="[System] Seller has accept your request."
+        )
+        db.session.add(msg)
+        db.session.commit()
         flash("You have accepted the purchase request.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -219,6 +255,18 @@ def reject_request(transaction_id):
     try:
         tx.status = "rejected"
         db.session.commit()
+
+        # send to buyer (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=tx.buyer_id,
+            transaction_id=tx.id,
+            message_type="system",
+            content="[System] Seller has rejected your request."
+        )
+        db.session.add(msg)
+        db.session.commit()
+
         flash("You have rejected the purchase request.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -246,6 +294,17 @@ def ship_transaction(transaction_id):
     try:
         tx.status = "shipped"
         db.session.commit()
+
+        # send message to buyer (auto)
+        msg = Messages(
+            sender_id=current_user.id,
+            receiver_id=tx.buyer_id,
+            transaction_id=tx.id,
+            message_type="system",
+            content="[System] Seller has marked the transaction as shipped."
+        )
+        db.session.add(msg)
+        db.session.commit()
         flash("Order marked as shipped.","success")
     except SQLAlchemyError as e:
         db.session.rollback()
@@ -266,3 +325,15 @@ def my_transaction():#check all owner by current user transaction record
     return render_template("transaction/my_transactions.html", 
                            bought_transactions = bought_transactions,
                             sold_transactions = sold_transactions )
+
+#view transaction (in chat)
+@transaction_bp.route("/view/<int:transaction_id>")
+@login_required
+def view_transaction(transaction_id):
+    transaction = Transaction.query.get_or_404(transaction_id)
+
+    if transaction.buyer_id != current_user.id and transaction.seller_id != current_user.id:
+        flash("You are not authorized to view this transaction.", "danger")
+        return redirect(url_for("transaction.my_transactions"))
+
+    return render_template("transaction/view_transaction.html", transaction=transaction, product=transaction.product)

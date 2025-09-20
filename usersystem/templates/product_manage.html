@@ -85,7 +85,7 @@
                  {% if not product or not product.image %}required{% endif %}>
           {% if product and product.image %}
             <p class="mt-2">Current Image:</p>
-            <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" 
+            <img src="{{ get_image_url(product.image) }}" 
                  alt="Product Image" width="150">
           {% endif %}
         </div>

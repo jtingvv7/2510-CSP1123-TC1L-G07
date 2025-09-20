@@ -12,7 +12,7 @@
     <p class="mb-0">Track and manage all your purchases and sales easily</p>
   </div>
 
-  <!-- 卡片区域 -->
+  <!-- card -->
   <div class="row g-4">
 
     <!-- Bought Transactions -->
@@ -25,7 +25,7 @@
           {% if bought_transactions %}
             {% for t in bought_transactions %}
             <div class="d-flex align-items-center border-bottom py-2">
-              <img src="{{ url_for('usersystem.static', filename='uploads/products/' ~ t.product.image) }}"
+              <img src="{{ get_image_url(product.image) }}"
                    alt="Product Image"
                    class="rounded me-3"
                    style="width:60px; height:60px; object-fit:cover;">
@@ -71,7 +71,7 @@
           {% if sold_transactions %}
             {% for tx in sold_transactions %}
             <div class="d-flex align-items-center border-bottom py-2">
-              <img src="{{ url_for('static', filename='uploads/products/' ~ tx.product.image) }}"
+              <img src="{{ get_image_url(product.image) }}"
                    alt="Product Image"
                    class="rounded me-3"
                    style="width:60px; height:60px; object-fit:cover;">

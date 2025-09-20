@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %} Transaction #{{ transaction.id }} {% endblock %}
+
+{% block content %}
+<div class="container mt-4 d-flex justify-content-center">
+  <div class="card shadow-lg" style="max-width: 700px; width: 100%;">
+    
+    <!-- Card Header -->
+    <div class="card-header bg-primary text-white text-center">
+      <h5 class="mb-0">Transaction #{{ transaction.id }}</h5>
+    </div>
+
+    <!-- Card Body -->
+    <div class="card-body text-center">
+
+      <!-- Product Image -->
+      {% if product and product.image %}
+        <img src="{{ get_image_url(product.image) }}"
+             alt="Product Image"
+             class="img-fluid rounded mb-3"
+             style="max-height: 250px; object-fit: cover;">
+      {% else %}
+        <img src="https://via.placeholder.com/300x200?text=No+Image"
+             alt="No Image"
+             class="img-fluid rounded mb-3"
+             style="max-height: 250px; object-fit: cover;">
+      {% endif %}
+
+      <!-- Transaction Details -->
+      <p><strong>Item:</strong> {{ product.name if product else "Unknown" }}</p>
+      <p><strong>Price:</strong> RM {{ product.price if product else 0 }}</p>
+
+      <p>
+        <strong>Status:</strong>
+        <span class="badge 
+          {% if transaction.status == 'pending' %} bg-secondary
+          {% elif transaction.status == 'accepted' %} bg-info
+          {% elif transaction.status == 'shipped' %} bg-warning text-dark
+          {% elif transaction.status == 'completed' %} bg-success
+          {% elif transaction.status == 'cancelled' %} bg-danger
+          {% endif %}
+        ">
+          {{ transaction.status }}
+        </span>
+      </p>
+
+      <p><strong>Buyer:</strong> {{ transaction.buyer.name if transaction.buyer else "N/A" }}</p>
+      <p><strong>Seller:</strong> {{ transaction.seller.name if transaction.seller else "N/A" }}</p>
+      <p><strong>Date:</strong> {{ transaction.created_at.strftime("%Y-%m-%d %H:%M") }}</p>
+
+      <!-- Operate Button -->
+      <div class="mt-4">
+        {% if current_user.id == transaction.seller_id %}
+          {% if transaction.status == 'pending' %}
+            <form action="{{ url_for('transaction.accept_transaction', transaction_id=transaction.id) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-success">Accept</button>
+            </form>
+
+            <form action="{{ url_for('transaction.reject_request', transaction_id=transaction.id) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Reject</button>
+            </form>
+
+          {% elif transaction.status == 'accepted' %}
+            <form action="{{ url_for('transaction.ship_transaction', transaction_id=transaction.id) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-warning">Mark as Shipped</button>
+            </form>
+          {% endif %}
+
+        {% elif current_user.id == transaction.buyer_id %}
+          {% if transaction.status == 'accepted' %}
+            <form action="{{ url_for('transaction.cancel_transaction', transaction_id=transaction.id) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Cancel</button>
+            </form>
+
+          {% elif transaction.status == 'shipped' %}
+            <form action="{{ url_for('transaction.confirm_receipt', transaction_id=transaction.id) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-success">Confirm Receipt</button>
+            </form>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <!-- Back Button -->
+      <a href="{{ url_for('messages.inbox') }}" class="btn btn-secondary mt-3">Back</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

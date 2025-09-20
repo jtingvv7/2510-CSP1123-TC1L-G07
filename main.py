@@ -1,6 +1,6 @@
 import logging
 import os
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, url_for
 from extensions import db, login_manager
 from models import User, Product, SafeLocation, Messages
 from flask_login import current_user
@@ -13,6 +13,26 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///secondloop.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.secret_key = "supersecretkey"  # session key
+
+    #set upload folder
+    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
+
+    #register helper
+    @app.context_processor
+    def utility_processor():
+        def get_image_url(image_filename):
+            if not image_filename:
+                # 
+                return url_for('static', filename='uploads/products/default_product.jpg')
+            
+            # 
+            if image_filename.startswith("products/"):
+                return url_for('static', filename='uploads/' + image_filename)
+            
+            #  "products/"
+            return url_for('static', filename='uploads/products/' + image_filename)
+        
+        return dict(get_image_url=get_image_url)
 
     # Logging setup
     logging.basicConfig(level=logging.INFO, filename="app.log")
@@ -39,6 +59,23 @@ def create_app():
     app.register_blueprint(usersystem_bp, url_prefix="/usersystem")
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(ranking_bp, url_prefix="/ranking")
+
+        # --- Register custom filter ---
+    def format_history_date(value):
+        """Format YYYY-MM-DD into Today / Yesterday / 20 Sep 2025"""
+        try:
+            date_obj = datetime.strptime(value, "%Y-%m-%d").date()
+            today = datetime.today().date()
+            if date_obj == today:
+                return "Today"
+            elif date_obj == today - timedelta(days=1):
+                return "Yesterday"
+            else:
+                return date_obj.strftime("%d %b %Y")
+        except Exception:
+            return value
+
+    app.jinja_env.filters["history_date"] = format_history_date
 
     #for unread message
     @app.context_processor
@@ -73,6 +110,7 @@ def create_app():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 
 if __name__ == "__main__":

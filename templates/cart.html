@@ -24,7 +24,7 @@
                     <!-- Product Image -->
                     <td>
                         {% if item.image %}
-                            <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}"
+                            <img src="{{ get_image_url(item.image) }}"
                                  alt="{{ item.name }}"
                                  class="img-thumbnail"
                                  style="width: 80px; height: 80px; object-fit: cover;">
