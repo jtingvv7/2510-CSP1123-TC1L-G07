@@ -70,7 +70,7 @@ def add():
                 flash('Invalid file type. Please upload JPG, PNG, or Webp image only', 400)
                 return render_template('add.html', seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
         
-        new_review = Review(username=username, rating=rating, comment=comment, image_path=image_path, seller_id=int(seller_id), transaction_id=int(transaction_id))
+        new_review = Review(username=username, rating=rating, comment=comment, image_path=image_path, seller_id=int(seller_id), buyer_id=current_user.id, transaction_id=int(transaction_id))
         db.session.add(new_review)
         db.session.commit()
 

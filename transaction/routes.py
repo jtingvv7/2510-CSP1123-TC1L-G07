@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for , flash
 from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
-from models import User, Product, Transaction, Messages
+from models import User, Product, Transaction, Messages, Review
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
@@ -322,9 +322,12 @@ def my_transaction():#check all owner by current user transaction record
 
     sold_transactions = Transaction.query.filter_by(seller_id = current_user.id).all()
 
+    user_reviews = Review.query.filter_by(username=current_user.name).all()
+
     return render_template("transaction/my_transactions.html", 
                            bought_transactions = bought_transactions,
-                            sold_transactions = sold_transactions )
+                            sold_transactions = sold_transactions,
+                            reviews = user_reviews )
 
 #view transaction (in chat)
 @transaction_bp.route("/view/<int:transaction_id>")
