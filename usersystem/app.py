@@ -41,7 +41,6 @@ def product_manage():
                 db.session.commit()
                 flash("Product cannot be deleted because it has transactions. It is now deactivated.", "warning")
             else:
-                # delete image if exists
                 if product and product.image:
                     image_path = os.path.join(current_app.root_path, "static", "uploads", product.image)
                     if os.path.exists(image_path):
@@ -50,13 +49,50 @@ def product_manage():
                 db.session.commit()
             return redirect(url_for("usersystem.profile"))
 
-        # Handle create or update
+        # Handle create/update
         name = request.form.get("name")
         description = request.form.get("description")
-        price = request.form.get("price")
+        price = float(request.form.get("price", 0))
+        quantity = int(request.form.get("quantity", 1))
         pickup_location_id = request.form.get("pickup_location_id")
 
+        # Handle file upload
+        file = request.files.get("image")
+        filename = None
+        if file and allowed_file(file.filename):
+            ext = file.filename.rsplit(".", 1)[1].lower()
+            filename = f"product_{current_user.id}_{int(time.time())}.{ext}"
+            upload_path = os.path.join(current_app.root_path, "static", "uploads", "products")
+            os.makedirs(upload_path, exist_ok=True)
+            file.save(os.path.join(upload_path, filename))
 
+        if product:  # Update existing
+            product.name = name
+            product.description = description
+            product.price = price
+            product.quantity = quantity
+            product.pickup_location_id = pickup_location_id
+            if filename:  # only update image if new one uploaded
+                product.image = filename
+            db.session.commit()
+            flash("Product updated successfully!", "success")
+        else:  # Create new
+            new_product = Product(
+                name=name,
+                description=description,
+                price=price,
+                quantity=quantity,
+                pickup_location_id=pickup_location_id,
+                seller_id=current_user.id,
+                image=filename,
+                is_sold=False,
+                is_active=True
+            )
+            db.session.add(new_product)
+            db.session.commit()
+            flash("Product added successfully!", "success")
+
+        return redirect(url_for("usersystem.profile"))
 
     pickup_points = SafeLocation.query.filter_by(user_id=current_user.id).all()
     return render_template("product_manage.html", user=current_user, product=product, pickup_points=pickup_points)
