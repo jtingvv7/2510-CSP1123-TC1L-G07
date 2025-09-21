@@ -15,3 +15,4 @@ report_bp = Blueprint("admin", __name__, template_folder="templates", static_fol
 @login_required
 def report_center():
     return render_template("report_center.html")
+

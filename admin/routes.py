@@ -4,7 +4,7 @@ from functools import wraps
 from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
-from models import User, Product, Transaction, Messages, Wallet
+from models import User, Product, Transaction, Messages, Wallet, Report
 from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
@@ -73,6 +73,13 @@ def manage_wallets():
 def manage_messages():
     all_messages = Messages.query.all()
     return render_template("manage_messages.html", messages = all_messages)
+
+#check all reports
+@admin_bp.route("/manage_reports")
+@login_required
+def manage_reports():
+    reports = Report.query.order_by(Report.created_at.desc()).all()
+    return render_template("manage_reports.html", reports=reports)
 
 ################## user management #####################
 

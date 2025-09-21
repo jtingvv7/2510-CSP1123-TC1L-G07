@@ -162,13 +162,19 @@ class Order(db.Model):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reporter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    reported_type = db.Column(db.String(50), nullable=False)  # product / transaction / message
-    reported_id = db.Column(db.Integer, nullable=False)       
-    reason = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(20), default="pending")      # pending / resolved
-    report_time = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    reported_user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+    product_id = db.Column(db.Integer, db.ForeignKey("product.id"), nullable=True)
+    transaction_id = db.Column(db.Integer, db.ForeignKey("transaction.id"), nullable=True)
+    message_id = db.Column(db.Integer, db.ForeignKey("message.id"), nullable=True)
+    reason = db.Column(db.Text, nullable=False)  
+    status = db.Column(db.String(20), default="pending")  # pending / resolved
+    report_time = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    
+    reported_user = db.relationship("User", foreign_keys=[reported_user_id], backref="reports_received")
+    reporter = db.relationship("User", foreign_keys=[reporter_id], backref="reports_made")
+    message = db.relationship("Message", backref="reports", lazy=True)
+    transaction = db.relationship("Transaction", backref="reports", lazy=True)
+    product = db.relationship("Product", backref="reports", lazy=True)
 
-    reporter = db.relationship("User", backref="reports", lazy=True)
-
-    def __repr__(self):
-        return f"<Order {self.id} order_id: {self.order_id}>"
+    def _repr_(self):
+        return f"<Report {self.id} status={self.status}>"

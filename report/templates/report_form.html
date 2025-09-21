@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Report {{ report_type }} {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-danger text-white fw-bold">
+      <i class="bi bi-flag-fill"></i> Report {{ report_type }}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">You are reporting {{ report_type }} (ID: {{ item_id }})</h5>
+      <form method="POST">
+        <div class="mb-3">
+          <label for="reason" class="form-label">Reason</label>
+          <textarea id="reason" name="reason" class="form-control" rows="4" placeholder="Describe the issue..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">
+          <i class="bi bi-flag-fill"></i> Submit Report
+        </button>
+        <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
