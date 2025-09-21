@@ -59,8 +59,10 @@
           <p>Completed Purchases</p>
         </div>
         <div class="star">
-          <h4>{{ "%.1f"|format(avg_rating) if avg_rating else '-' }} ⭐</h4>
-          <p>Average Rating</p>
+          <a href="{{ url_for('review.index', seller_id=user.id) }}" style="text-decoration: none; color: inherit;">
+            <h4>{{ "%.1f"|format(avg_rating) if avg_rating else '-' }} ⭐</h4>
+            <p>Average Rating (点击查看评价)</p>
+          </a>
         </div>
       </div>
     </div>

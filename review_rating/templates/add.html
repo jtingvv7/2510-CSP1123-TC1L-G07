@@ -21,8 +21,10 @@
     <div class="container">
     <h2>Add a Reviews</h2>
     <form action="{{ url_for('review.add') }}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="seller_id" value="{{ seller_id or '' }}">
+        <input type="hidden" name="transaction_id" value="{{ transaction_id or '' }}">
         <label for="username">User Name</label>
-        <input type="text" id="username" name="username" placeholder="Your name" required>
+        <input type="text" id="username" name="username" value="{{ current_user.name or '' }}" placeholder="Your name" required>
 
         <label>Rating</label>
         <select id="rating" name="rating" required>

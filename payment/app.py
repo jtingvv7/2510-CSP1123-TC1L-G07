@@ -14,9 +14,9 @@ def index():
     # Get cart data
     cart = session.get("cart", {})
     
-    # Get current user's completed transaction
+    # Get current user's pending transaction
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="completed").first()
+    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
     
     # Use transaction price for grand_total
     grand_total = transaction.price if transaction else 0
@@ -28,9 +28,9 @@ def index():
 
 @payment_bp.route("/card", methods=['GET', 'POST'])
 def card():
-    # Get current user's completed transaction
+    # Get current user's pending transaction
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="completed").first()
+    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
     
     # Use transaction price for grand_total
     grand_total = transaction.price if transaction else 0
@@ -51,9 +51,9 @@ def card():
 
 @payment_bp.route("/grabpay", methods=['GET', 'POST'])
 def grabpay():
-    # Get current user's completed transaction
+    # Get current user's pending transaction
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="completed").first()
+    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
     
     # Use transaction price for grand_total
     grand_total = transaction.price if transaction else 0
@@ -71,9 +71,9 @@ def grabpay():
 
 @payment_bp.route("/fpx", methods=['GET', 'POST'])
 def fpx():
-    # Get current user's completed transaction
+    # Get current user's pending transaction
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="completed").first()
+    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
     
     # Use transaction price for grand_total
     grand_total = transaction.price if transaction else 0
@@ -91,9 +91,9 @@ def fpx():
 
 @payment_bp.route("/secondlooppay", methods=['GET', 'POST'])
 def secondlooppay():
-    # Get current user's completed transaction
+    # Get current user's pending transaction
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="completed").first()
+    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
     
     # Use transaction price for grand_total
     grand_total = transaction.price if transaction else 0
@@ -107,7 +107,7 @@ def secondlooppay():
         db.session.add(wallet)
         db.session.commit()
 
-    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="completed").first()
+    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").first()
     if request.method == 'POST':
         # Check if wallet has enough balance
         if wallet.balance >= grand_total:
@@ -138,11 +138,23 @@ def secondlooppay():
 
 @payment_bp.route("/success")
 def success():
-    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="completed").first()
-    db.session.commit()
+    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").first()
+
+    if transaction:
+        # Change transaction status to completed
+        transaction.status = "completed"
+        db.session.commit()
+
     return render_template("success.html")
 
 
 @payment_bp.route("/cancel")
 def cancel():
+    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").first()
+
+    if transaction:
+        # Change transaction status to shipped
+        transaction.status = "shipped"
+        db.session.commit()
+
     return render_template("cancel.html")

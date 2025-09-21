@@ -49,6 +49,13 @@
                   <form action="{{ url_for('transaction.confirm_receipt', transaction_id=t.id) }}" method="POST" class="d-inline">
                     <button type="submit" class="btn btn-sm btn-success">Confirm</button>
                   </form>
+                {% elif t.status == "completed" %}
+                  {% set matching_reviews = reviews | selectattr('transaction_id', 'equalto', t.id) | list %}
+                  {% if matching_reviews | length > 0 %}
+                    <span class="badge bg-success me-2">Reviewed</span>
+                  {% else %}
+                    <a href="{{ url_for('review.add', transaction_id=t.id, seller_id=t.seller_id) }}" class="btn btn-sm btn-info me-2">Review</a>
+                  {% endif %}
                 {% endif %}
                 <a href="{{ url_for('messages.chat', user_id=t.seller_id) }}" class="btn btn-outline-primary btn-sm mt-1">Contact</a>
               </div>
@@ -79,7 +86,7 @@
                 <h6 class="mb-1">{{ tx.product.name }}</h6>
                 <p class="mb-1 text-muted">RM {{ tx.product.price }}</p>
                 <span class="badge 
-                  {% if tx.status == 'pending' %} bg-secondary
+                  {% if tx.status == 'payment_pending' %} bg-secondary
                   {% elif tx.status == 'accepted' %} bg-primary
                   {% elif tx.status == 'shipped' %} bg-warning text-dark
                   {% elif tx.status == 'completed' %} bg-success

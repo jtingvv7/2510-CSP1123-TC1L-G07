@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import current_user
 from extensions import db
 from models import Review
 from werkzeug.utils import secure_filename
@@ -19,6 +20,7 @@ def allowed_file(filename):
 # Main Page: Display all Review
 @review_bp.route("/")
 def index():
+    seller_id = request.args.get('seller_id')
     reviews = Review.query.order_by(Review.date_review.desc()).all()
     return render_template("review_index.html", reviews=reviews)
 
@@ -26,14 +28,25 @@ def index():
 # Add Review
 @review_bp.route("/add", methods=['GET', 'POST'])
 def add():
+    # Get seller_id and transaction_id from url parameters
+    seller_id = request.args.get('seller_id')
+    transaction_id = request.args.get('transaction_id')
+
     if request.method == 'POST':
         username = request.form.get('username')
         rating = int(request.form.get('rating'))
         comment = request.form.get('comment')
+        seller_id = request.form.get('seller_id') or seller_id
+        transaction_id = request.form.get('transaction_id') or transaction_id
 
         if not username or not comment:
             flash("Username and Comment cannot be empty!", 400)
-            return render_template("add.html")
+            return render_template("add.html", seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
+
+        # Check if seller_id and transaction_id exist
+        if not seller_id or not transaction_id:
+            flash("Seller ID and Transaction ID are required!", 400)
+            return render_template("add.html", seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
         
         image_path = None
         if 'image' in request.files:
@@ -55,18 +68,18 @@ def add():
 
             elif file and file.filename:
                 flash('Invalid file type. Please upload JPG, PNG, or Webp image only', 400)
-                return render_template('add.html')
+                return render_template('add.html', seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
         
-        new_review = Review(username=username, rating=rating, comment=comment, image_path=image_path)
+        new_review = Review(username=username, rating=rating, comment=comment, image_path=image_path, seller_id=int(seller_id), buyer_id=current_user.id, transaction_id=int(transaction_id))
         db.session.add(new_review)
         db.session.commit()
 
         flash('Review added successfully!', 'success')
         return redirect(url_for('review.success'))
     
-    return render_template("add.html")
+    return render_template("add.html", seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
 
 
 @review_bp.route("/success")
 def success():
-    return render_template("review_success.html")
+    return redirect(url_for("transaction.my_transaction"))
