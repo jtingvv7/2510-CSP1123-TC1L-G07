@@ -22,17 +22,17 @@ def create_app():
     @app.context_processor
     def utility_processor():
         def get_image_url(image_filename):
+        # if no image = default
             if not image_filename:
-                # if not image
                 return url_for('static', filename='uploads/products/default_product.jpg')
-            
-            # if product image strat with products
+
+        # if have products/
             if image_filename.startswith("products/"):
                 return url_for('static', filename='uploads/' + image_filename)
-            
-            # if not start with "products/"
+
+        # if filename only
             return url_for('static', filename='uploads/products/' + image_filename)
-        
+
         return dict(get_image_url=get_image_url)
 
     # Logging setup
@@ -96,8 +96,11 @@ def create_app():
     @app.route("/")
     def index():
          # Only active and not sold products
-        products = Product.query.filter_by(is_sold=False, is_active=True).all()
-        products = [p for p in products if not p.sold_out]
+        products = Product.query.filter_by(
+            is_sold=False, 
+            is_active=True
+            ).all()
+        #  products = [p for p in products if not p.sold_out]
 
         # Optional: fetch user locations if user logged in
         user_id = session.get("user_id")
