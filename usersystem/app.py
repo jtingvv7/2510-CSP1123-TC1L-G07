@@ -56,40 +56,7 @@ def product_manage():
         price = request.form.get("price")
         pickup_location_id = request.form.get("pickup_location_id")
 
-        #  Handle image upload
-        file = request.files.get("image")
-        if file and allowed_file(file.filename):
-            ext = file.filename.rsplit(".", 1)[-1]
-            filename = f"product_{int(time.time())}.{ext}"
-            upload_path = os.path.join(current_app.root_path, "static", "uploads","products")
-            os.makedirs(upload_path, exist_ok=True)
-            file.save(os.path.join(upload_path, filename))
-        else:
-            filename = product.image if product else None  # keep old if editing
 
-        quantity = request.form.get("quantity", type=int, default=1)
-
-        if product:
-            product.name = name
-            product.description = description
-            product.price = price
-            product.pickup_location_id = pickup_location_id
-            product.image = filename
-            product.quantity = quantity
-        else:
-            new_product = Product(
-                name=name,
-                description=description,
-                price=price,
-                pickup_location_id=pickup_location_id,
-                seller_id=current_user.id,
-                image=filename,
-                quantity=quantity 
-            )
-            db.session.add(new_product)
-
-        db.session.commit()
-        return redirect(url_for("usersystem.profile"))
 
     pickup_points = SafeLocation.query.filter_by(user_id=current_user.id).all()
     return render_template("product_manage.html", user=current_user, product=product, pickup_points=pickup_points)

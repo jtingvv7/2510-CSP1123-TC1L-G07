@@ -1,13 +1,22 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for , flash, abort, request
+import time
+import os
+from flask import Blueprint, render_template, redirect, url_for , flash, abort, request, current_app
 from functools import wraps
 from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
+from werkzeug.utils import secure_filename
 from models import User, Product, Transaction, Messages, Wallet, Report
 from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
+
+UPLOAD_FOLDER = os.path.join("static", "uploads", "products")
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #ensure only admin can enter
 def admin_required(func):
@@ -127,8 +136,28 @@ def add_product():
         name = request.form.get("name")
         price = request.form.get("price")
         description = request.form.get("description")
+        file = request.files.get("image")
 
-        new_product = Product(name=name, price=price, description=description, is_sold=False)
+        if file and file.filename != "" and allowed_file(file.filename):
+            ext = file.filename.rsplit(".", 1)[1].lower()
+            filename = f"product_{int(time.time())}.{ext}"
+            upload_path = os.path.join(current_app.root_path, "static", "uploads", "products")
+            os.makedirs(upload_path, exist_ok=True)
+            file.save(os.path.join(upload_path, filename.split("/")[-1]))
+
+            db_filename = f"products/{filename}"
+
+        else:
+            db_filename = "products/default_product.jpg"
+
+        new_product = Product(
+            name=name,
+            price=price,
+            description=description,
+            is_sold=False,
+            seller_id = current_user.id,
+            image = db_filename,
+            is_active = True)
         db.session.add(new_product)
         db.session.commit()
 
@@ -152,8 +181,6 @@ def edit_product(product_id):
 
         file = request.files.get("image")
         if file and file.filename:
-            from werkzeug.utils import secure_filename
-            import time, os
             filename = f"{product.id}{int(time.time())}{secure_filename(file.filename)}"
             upload_path = os.path.join("static", "uploads", "products", filename)
             file.save(upload_path)
@@ -189,7 +216,7 @@ def delete_transaction(transaction_id):
     db.session.delete(tx)
     db.session.commit()
     flash("Transaction deleted successfully","success")
-    return redirect(url_for("manage_trasactions"))
+    return redirect(url_for("admin.manage_transactions"))
 
 
 #update transacton status(when error)
@@ -205,7 +232,7 @@ def update_transaction(transaction_id):
         flash(f"Transaction status updated to {new_status}","success")
     else:
         flash("Invalid status", "danger")
-    return redirect(url_for("manage_trasactions"))
+    return redirect(url_for("admin.manage_transactions"))
 
 ################## wallet management #####################
 

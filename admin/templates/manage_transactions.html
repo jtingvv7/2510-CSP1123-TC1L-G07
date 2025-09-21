@@ -23,8 +23,8 @@
             <tr>
                 <td>{{ tx.id }}</td>
                 <td>{{ tx.product.name }}</td>
-                <td>{{ tx.buyer.username }}</td>
-                <td>{{ tx.seller.username }}</td>
+                <td>{{ tx.buyer.name }}</td>
+                <td>{{ tx.seller.name }}</td>
                 <td>
                     {% if tx.status == "pending" %}
                         <span class="badge bg-warning text-dark">{{ tx.status }}</span>
