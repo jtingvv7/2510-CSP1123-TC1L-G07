@@ -4,7 +4,7 @@ from functools import wraps
 from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
-from models import User, Product, Transaction, Messages, Wallet
+from models import User, Product, Transaction, Messages, Wallet, Report
 from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
@@ -74,6 +74,14 @@ def manage_messages():
     all_messages = Messages.query.all()
     return render_template("manage_messages.html", messages = all_messages)
 
+#check all reports
+@admin_bp.route("/manage_reports")
+@login_required
+@admin_required
+def manage_reports():
+    reports = Report.query.order_by(Report.date_report.desc()).all()
+    return render_template("manage_reports.html", reports=reports)
+
 ################## user management #####################
 
 #make other user become admin
@@ -110,52 +118,65 @@ def delete_user(user_id):
 
 ################## product management #####################
 
-#add product
-@admin_bp.route("/product/add", methods=["GET","POST"])
+# add product
+@admin_bp.route("/products/add", methods=["GET", "POST"])
 @login_required
 @admin_required
 def add_product():
-    '''
     if request.method == "POST":
-        name = request.form["name"]
-        price = request.form["price"]
-        description = request.form["description"]
+        name = request.form.get("name")
+        price = request.form.get("price")
+        description = request.form.get("description")
 
-        new_product = Product(name=name, price=price, description=description)
+        new_product = Product(name=name, price=price, description=description, is_sold=False)
         db.session.add(new_product)
         db.session.commit()
 
-        flash("Product added successfully!","success")
-        '''
-    return redirect(url_for("usersystem.product_manage"))
-    #return render_template("manage_products")
+        flash("Product added successfully!", "success")
+        return redirect(url_for("admin.manage_products"))
 
-#edit product
-@admin_bp.route("/products/edit/<int:product_id>", methods=["GET","POST"])
+    return render_template("add_product.html")
+    
+
+# edit product
+@admin_bp.route("/products/edit/<int:product_id>", methods=["GET", "POST"])
 @login_required
 @admin_required
 def edit_product(product_id):
     product = Product.query.get_or_404(product_id)
 
-    if request.method =="POST":
-        product.name = request.form["name"]
-        product.price = request.form["price"]
-        product.description = request.form["description"]
-        db.session.commit()
-        flash("Product update successfully!","success")
-        return redirect(url_for("admin.manage_products",))
-    return render_template("edit_product.html",product = product)
+    if request.method == "POST":
+        product.name = request.form.get("name")
+        product.price = request.form.get("price")
+        product.description = request.form.get("description")
 
-#delete product
-@admin_bp.route("/products/delete/<int:product_id>", methods=["GET","POST"])
+        file = request.files.get("image")
+        if file and file.filename:
+            from werkzeug.utils import secure_filename
+            import time, os
+            filename = f"{product.id}{int(time.time())}{secure_filename(file.filename)}"
+            upload_path = os.path.join("static", "uploads", "products", filename)
+            file.save(upload_path)
+            product.image = filename  
+
+        db.session.commit()
+        flash("Product updated successfully!", "success")
+        return redirect(url_for("admin.manage_products"))
+
+    return render_template("edit_product.html", product=product)
+
+
+# delete product
+@admin_bp.route("/products/delete/<int:product_id>", methods=["POST"])
 @login_required
 @admin_required
 def delete_product(product_id):
     product = Product.query.get_or_404(product_id)
     db.session.delete(product)
     db.session.commit()
-    flash("Product deleted successfully!","success")
-    return redirect(url_for("usersystem.manage_products"))
+
+    flash("Product deleted successfully!", "success")
+    return redirect(url_for("admin.manage_products"))
 
 ################## transactions management #####################
 
@@ -217,3 +238,28 @@ def delete_message(message_id):
     db.session.commit()
     flash("Message deleted", "success")
     return redirect(url_for("admin.manage_messages"))
+
+################## report management #####################
+
+@admin_bp.route("/resolve_report/<int:report_id>")
+@login_required
+def resolve_report(report_id):
+    if not current_user.is_admin:
+        abort(403)
+    report = Report.query.get_or_404(report_id)
+    report.status = "resolved"
+    db.session.commit()
+    flash("Report resolved!", "success")
+    return redirect(url_for("admin.manage_reports"))
+
+
+@admin_bp.route("/delete_report/<int:report_id>")
+@login_required
+def delete_report(report_id):
+    if not current_user.is_admin:
+        abort(403)
+    report = Report.query.get_or_404(report_id)
+    db.session.delete(report)
+    db.session.commit()
+    flash("Report deleted!", "danger")
+    return redirect(url_for("admin.manage_reports"))

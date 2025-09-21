@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %} Report Center {% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg w-75">  
+    <div class="card-header bg-danger text-white fw-bold fs-3 py-3">
+      <i class="bi bi-flag-fill"></i> Report Center
+    </div>
+    <div class="card-body">
+      <h5 class="fw-bold mb-3" style="font-size: 1.5rem;">Before you submit a report:</h5>
+    <ul style="font-size: 1.2rem; line-height: 1.8;">
+      <li>You can report <b>Users, Products, Transactions, or Messages</b> related to this platform.</li>
+      <li>Please provide a <b>clear reason</b> and (if possible) <b>evidence</b> such as screenshots.</li>
+      <li>Reports will be reviewed by Admin within <b>3-5 working days</b>.</li>
+      <li>Your identity will remain <b>confidential</b>; reported users will not see your details.</li>
+      <li>Abuse of this feature (false or repeated reports) may result in <b>account suspension</b>.</li>
+    </ul>
+      <div class="text-center mt-4">
+        <a href="{{ url_for('report.report_submit') }}" class="btn btn-danger btn-lg">
+          Confirm & Report
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

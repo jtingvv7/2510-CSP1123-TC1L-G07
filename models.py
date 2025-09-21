@@ -158,3 +158,19 @@ class Order(db.Model):
     
     def __repr__(self):
         return f"<Order {self.id} order_id: {self.order_id}>"
+    
+class Report(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    reporter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    reported_type = db.Column(db.String(50), nullable=False)   # user / product / transaction / message
+    reported_id = db.Column(db.Integer, nullable=True)        
+    reason = db.Column(db.Text, nullable=False)
+    evidence_file = db.Column(db.String(255), nullable=True)   # save filename (JPG/PNG/PDF)
+    status = db.Column(db.String(20), default="pending")       # pending / resolved
+    date_report = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+
+    # relationship
+    reporter = db.relationship("User", backref="reports", lazy=True)
+
+    def _repr_(self):
+        return f"<Report {self.id} status={self.status}>"

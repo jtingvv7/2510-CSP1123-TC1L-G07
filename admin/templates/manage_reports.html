@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %} Manage Reports {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4 fw-bold">Manage Reports</h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover shadow">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>ID</th>
+          <th>Reporter</th>
+          <th>Type</th>
+          <th>Reported ID</th>
+          <th>Reason</th>
+          <th>Evidence</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody class="align-middle">
+        {% for r in reports %}
+        <tr>
+          <td class="text-center">{{ r.id }}</td>
+          <td class="text-center">{{ r.reporter.name }}</td>
+          <td class="text-center text-capitalize">{{ r.reported_type }}</td>
+          <td class="text-center">
+            {% if r.reported_id %}
+              {{ r.reported_id }}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td style="max-width: 250px; white-space: pre-wrap;">{{ r.reason }}</td>
+
+          <!-- Evidence -->
+          <td class="text-center">
+            {% if r.evidence_file %}
+              <a href="{{ url_for('static', filename='uploads/reports/' ~ r.evidence_file) }}" 
+                 target="_blank" class="btn btn-sm btn-outline-primary">
+                View Evidence
+              </a>
+            {% else %}
+              <span class="text-muted">No File</span>
+            {% endif %}
+          </td>
+
+          <!-- Status -->
+          <td class="text-center">
+            {% if r.status == "pending" %}
+              <span class="badge bg-warning text-dark">Pending</span>
+            {% else %}
+              <span class="badge bg-success">Resolved</span>
+            {% endif %}
+          </td>
+
+          <td class="text-center">{{ r.date_report.strftime('%Y-%m-%d %H:%M') }}</td>
+
+          <!-- Action -->
+          <td class="text-center">
+            {% if r.status == "pending" %}
+              <a href="{{ url_for('admin.resolve_report', report_id=r.id) }}" 
+                 class="btn btn-success btn-sm">Resolve</a>
+            {% endif %}
+            <a href="{{ url_for('admin.delete_report', report_id=r.id) }}" 
+               class="btn btn-danger btn-sm">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
