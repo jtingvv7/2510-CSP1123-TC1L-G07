@@ -162,19 +162,15 @@ class Order(db.Model):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reporter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    reported_user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
-    product_id = db.Column(db.Integer, db.ForeignKey("product.id"), nullable=True)
-    transaction_id = db.Column(db.Integer, db.ForeignKey("transaction.id"), nullable=True)
-    message_id = db.Column(db.Integer, db.ForeignKey("message.id"), nullable=True)
-    reason = db.Column(db.Text, nullable=False)  
-    status = db.Column(db.String(20), default="pending")  # pending / resolved
-    report_time = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    
-    reported_user = db.relationship("User", foreign_keys=[reported_user_id], backref="reports_received")
-    reporter = db.relationship("User", foreign_keys=[reporter_id], backref="reports_made")
-    message = db.relationship("Message", backref="reports", lazy=True)
-    transaction = db.relationship("Transaction", backref="reports", lazy=True)
-    product = db.relationship("Product", backref="reports", lazy=True)
+    reported_type = db.Column(db.String(50), nullable=False)   # user / product / transaction / message
+    reported_id = db.Column(db.Integer, nullable=True)        
+    reason = db.Column(db.Text, nullable=False)
+    evidence_file = db.Column(db.String(255), nullable=True)   # save filename (JPG/PNG/PDF)
+    status = db.Column(db.String(20), default="pending")       # pending / resolved
+    date_report = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+
+    # relationship
+    reporter = db.relationship("User", backref="reports", lazy=True)
 
     def _repr_(self):
         return f"<Report {self.id} status={self.status}>"

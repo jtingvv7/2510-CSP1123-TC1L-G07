@@ -77,8 +77,9 @@ def manage_messages():
 #check all reports
 @admin_bp.route("/manage_reports")
 @login_required
+@admin_required
 def manage_reports():
-    reports = Report.query.order_by(Report.created_at.desc()).all()
+    reports = Report.query.order_by(Report.date_report.desc()).all()
     return render_template("manage_reports.html", reports=reports)
 
 ################## user management #####################
@@ -226,3 +227,26 @@ def delete_message(message_id):
     return redirect(url_for("admin.manage_messages"))
 
 ################## report management #####################
+
+@admin_bp.route("/resolve_report/<int:report_id>")
+@login_required
+def resolve_report(report_id):
+    if not current_user.is_admin:
+        abort(403)
+    report = Report.query.get_or_404(report_id)
+    report.status = "resolved"
+    db.session.commit()
+    flash("Report resolved!", "success")
+    return redirect(url_for("admin.manage_reports"))
+
+
+@admin_bp.route("/delete_report/<int:report_id>")
+@login_required
+def delete_report(report_id):
+    if not current_user.is_admin:
+        abort(403)
+    report = Report.query.get_or_404(report_id)
+    db.session.delete(report)
+    db.session.commit()
+    flash("Report deleted!", "danger")
+    return redirect(url_for("admin.manage_reports"))

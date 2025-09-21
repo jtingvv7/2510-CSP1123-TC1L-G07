@@ -1,25 +1,43 @@
 {% extends "base.html" %}
-{% block title %} Report {{ report_type }} {% endblock %}
+{% block title %} Submit Report {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-  <div class="card shadow-lg">
-    <div class="card-header bg-danger text-white fw-bold">
-      <i class="bi bi-flag-fill"></i> Report {{ report_type }}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg w-75">   
+    <div class="card-header bg-danger text-white fw-bold fs-3 py-3">
+      <i class="bi bi-flag-fill"></i> Submit Report
     </div>
-    <div class="card-body">
-      <h5 class="card-title">You are reporting {{ report_type }} (ID: {{ item_id }})</h5>
-      <form method="POST">
+    <div class="card-body" style="font-size: 1.2rem;">
+      <form method="POST" enctype="multipart/form-data">
         <div class="mb-3">
-          <label for="reason" class="form-label">Reason</label>
-          <textarea id="reason" name="reason" class="form-control" rows="4" placeholder="Describe the issue..." required></textarea>
+          <label class="form-label">Report Type</label>
+          <select class="form-select" name="report_type" required>
+            <option value="">-- Select Type --</option>
+            <option value="user">User</option>
+            <option value="product">Product</option>
+            <option value="transaction">Transaction</option>
+            <option value="message">Message</option>
+          </select>
         </div>
-        <button type="submit" class="btn btn-danger">
-          <i class="bi bi-flag-fill"></i> Submit Report
-        </button>
-        <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+
+        <div class="mb-3">
+          <label class="form-label">Reason</label>
+          <textarea name="reason" class="form-control" rows="5" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Upload Evidence (optional)</label>
+          <input type="file" name="evidence" class="form-control">
+          <small class="text-muted">Accepted: PNG, JPG, PDF</small>
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-danger">Submit Report</button>
+          <a href="{{ url_for('report.report_center') }}" class="btn btn-secondary">Cancel</a>
+        </div>
       </form>
     </div>
   </div>
 </div>
+
 {% endblock %}
