@@ -17,6 +17,43 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='transaction.css') }}?v=1">
     <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}?v=1">
 
+    <!--flash message styles-->
+    <style>
+    .flash-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        right: 20px;
+        z-index: 9999;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .flash-message {
+        margin-bottom: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 8px;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from{
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to{
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Ensure flash messages are above the page content */
+    body {
+        position: relative;
+    }
+    </style>
+
     {% block styles %}{% endblock %}
 </head>
 <body>
@@ -123,9 +160,9 @@
         <!-- flash messages -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                <div>
+                <div class="flash-container">
                     {% for category, message in messages %}
-                        <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                        <div class="alert alert-{{category}} alert-dismissible fade show flash-message" role="alert">
                             {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
