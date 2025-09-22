@@ -37,7 +37,7 @@
               <button class="btn btn-outline-secondary" onclick="document.getElementById('image-input').click();">
                   <i class="bi bi-paperclip"></i>
               </button>
-              <input type="file" id="image-input" accept="image/*" style="display:none" onchange="sendImage({{ user.id }})">
+              <input type="file" id="image-input" accept="image/*" style="display:none" onchange="sendImage(USER_ID)">
 
               <!-- send transaction -->
               <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#transactionModal">
@@ -91,5 +91,9 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+    const CURRENT_USER_ID = {{ current_user.id }};
+    const USER_ID = {{ user.id }};
+</script>
 <script src="{{ url_for('messages.static', filename='chat.js') }}"></script>
 {% endblock %}
