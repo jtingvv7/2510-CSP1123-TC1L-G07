@@ -1,7 +1,7 @@
 import logging
 import time
 import os
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, abort
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, abort, current_app
 from flask_login import login_required, current_user
 from datetime import datetime, timezone, timedelta
 from models import db, Report, User, Product, Transaction, Messages, Announcement
@@ -17,15 +17,16 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Announcement
-@report_bp.route("/announcements", methods=["GET"])
+@report_bp.route("/announcements")
 @login_required
 def announcements():
-    today = datetime.now(timezone.utc)
-    announcements = Announcement.query.order_by(
-        Announcement.created_at.desc()
-    ).all()
-    return render_template("announcement.html", announcements=announcements)
+    now = datetime.now(timezone.utc)
+    announcements = Announcement.query.filter(
+        ((Announcement.user_id == None) | (Announcement.user_id == current_user.id)) &
+        ((Announcement.expires_at == None) | (Announcement.expires_at > now))
+    ).order_by(Announcement.created_at.desc()).all()
 
+    return render_template("announcement.html", announcements=announcements, now=now)
 
 
 # Report Center 
@@ -54,6 +55,8 @@ def report_submit():
             filename = f"{current_user.id}_{int(time.time())}_{secure_filename(file.filename)}"
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
+            appeal_deadline=datetime.now(timezone.utc) + timedelta(days=5)
+
         new_report = Report(
             reporter_id=current_user.id,
             reported_type=report_type,
@@ -62,11 +65,23 @@ def report_submit():
             evidence_file=filename,
             status="pending",
             date_report=datetime.now(timezone.utc),
-            appeal_deadline=datetime.now(timezone.utc) + timedelta(days=5)
+            appeal_deadline=appeal_deadline
         )
+
+        deadline_str = (appeal_deadline + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+        new_announcement = Announcement(
+            user_id=reported_id,
+            report_id=new_report.id,
+            title="⚠ You have been reported!",
+            content=f"Please submit your appeal before {deadline_str}.",
+            expires_at = appeal_deadline
+            )
+        db.session.add(new_announcement)
+        db.session.commit
 
         try:
             db.session.add(new_report)
+            db.session.add()
             db.session.commit()
             flash("Your report has been submitted. Admin will review it soon.", "success")
         except SQLAlchemyError:
@@ -92,29 +107,40 @@ def my_reports():
 # Appeal report
 @report_bp.route("/appeal/<int:report_id>", methods=["GET", "POST"])
 @login_required
-def appeal(report_id):
+def submit_appeal(report_id):
     report = Report.query.get_or_404(report_id)
-    if report.reported_id != current_user.id:
-        abort(403)  # can appeal by own self only
 
-    # check expired or not
-    if datetime.now(timezone.utc) > report.appeal_deadline:
-        flash("Your appeal deadline has expired.", "danger")
-        return redirect(url_for("home"))
+    # only reported can appeal
+    if report.reported_id != current_user.id:
+        flash("You are not authorized to appeal this report.", "danger")
+        return redirect(url_for("report.my_reports"))
+
+    # check  expired
+    if report.appeal_deadline and datetime.utcnow() > report.appeal_deadline:
+        flash("The appeal deadline has expired.", "danger")
+        return redirect(url_for("report.my_reports"))
 
     if request.method == "POST":
-        report.appeal_text = request.form.get("appeal_text")
-        file = request.files.get("appeal_file")
+        appeal_text = request.form.get("reason")
+        appeal_file = request.files.get("evidence")
 
+        if not appeal_text:
+            flash("You must provide a reason for your appeal.", "danger")
+            return redirect(url_for("report.submit_appeal", report_id=report_id))
+        
         filename = None
-        if file and allowed_file(file.filename):
-            filename = f"appeal_{current_user.id}{int(time.time())}{secure_filename(file.filename)}"
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
+        if appeal_file and appeal_file.filename != "":
+            filename = secure_filename(appeal_file.filename)
+            file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
+            appeal_file.save(file_path)
             report.appeal_file = filename
 
+        # update status
+        report.appeal_text = appeal_text
         report.appeal_status = "submitted"
         db.session.commit()
-        flash("Your appeal has been submitted. Admin will review it soon.", "success")
+
+        flash("Your appeal has been submitted successfully!", "success")
         return redirect(url_for("report.my_reports"))
 
     return render_template("appeal_form.html", report=report)

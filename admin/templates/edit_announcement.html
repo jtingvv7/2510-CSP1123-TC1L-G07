@@ -19,6 +19,12 @@
               <label class="form-label">Content</label>
               <textarea name="content" class="form-control" rows="5" required>{{ announcement.content }}</textarea>
             </div>
+            <div class="mb-3">
+              <label class="form-label">Valid Until (optional)</label>
+              <input type="date" name="expires_at" class="form-control"
+                     value="{{ announcement.expires_at.strftime('%Y-%m-%d') if announcement.expires_at else '' }}">
+            </div>
+
             <button type="submit" class="btn btn-primary">
               <i class="bi bi-save"></i> Update
             </button>

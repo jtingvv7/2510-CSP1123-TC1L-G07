@@ -185,10 +185,14 @@ class Report(db.Model):
     
 class Announcement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True) #None = to everyone
+    reporter_id = db.Column(db.Integer, db.ForeignKey("report.id"), nullable=True) #if about report
     title = db.Column(db.String(150), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    expires_at = db.Column(db.DateTime, nullable=True)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # which admin
 
     # relationship
     author = db.relationship("User", backref="author", lazy=True)
+    report = db.relationship("Report", backref="announcements", lazy=True)
