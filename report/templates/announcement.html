@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4" style="background-color: #f8f9fa; min-height: calc(100vh - 80px);">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-sm border border-secondary">
+        <div class="card-header bg-dark text-white fs-4 text-center">
+          <i class="bi bi-megaphone-fill"></i> Official Announcements
+        </div>
+        <div class="card-body">
+          {% if announcements %}
+            {% for a in announcements %}
+            <div class="mb-4 p-4 bg-light border rounded text-center">
+              <h4 class="mb-3">
+                <i class="bi bi-megaphone text-secondary"></i> {{ a.title }}
+              </h4>
+              <p class="fs-5">{{ a.content }}</p>
+              <small class="text-muted d-block mt-2">
+                Posted on {{ a.created_at.strftime('%Y-%m-%d') }}
+                {% if a.expires_at %}
+                  (valid until {{ a.expires_at.strftime('%Y-%m-%d') }})
+                {% endif %}
+              </small>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted fs-5 text-center">No announcements yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

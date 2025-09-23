@@ -7,7 +7,7 @@ from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
 from werkzeug.utils import secure_filename
-from models import User, Product, Transaction, Messages, Wallet, Report
+from models import User, Product, Transaction, Messages, Wallet, Report, Announcement
 from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
@@ -90,6 +90,15 @@ def manage_messages():
 def manage_reports():
     reports = Report.query.order_by(Report.date_report.desc()).all()
     return render_template("manage_reports.html", reports=reports)
+
+#check all annoucements
+@admin_bp.route("/manage_announcements")
+@login_required
+@admin_required
+def manage_announcements():
+    announcements = Announcement.query.order_by(Announcement.created_at.desc()).all()
+    return render_template("manage_announcements.html", announcements=announcements)
+
 
 ################## user management #####################
 
@@ -300,3 +309,60 @@ def update_report(report_id):
     db.session.commit()
     flash("Admin comment updated.", "success")
     return redirect(url_for("admin.manage_reports"))
+
+################## announcement management #####################
+
+#add announcement
+@admin_bp.route("/add_announcement", methods=["GET", "POST"])
+@login_required
+@admin_required
+def add_announcement():
+    if request.method == "POST":
+        title = request.form.get("title")
+        content = request.form.get("content")
+
+        if not title or not content:
+            flash("Title and content are required!", "danger")
+            return redirect(url_for("admin.add_announcement"))
+
+        announcement = Announcement(
+            title=title,
+            content=content
+        )
+        db.session.add(announcement)
+        db.session.commit()
+        flash("Announcement added successfully!", "success")
+        return redirect(url_for("admin.manage_announcements"))
+
+    return render_template("add_announcement.html")
+
+
+# edit announcement
+@admin_bp.route("/edit_announcement/<int:announcement_id>", methods=["GET", "POST"])
+@login_required
+@admin_required
+def edit_announcement(announcement_id):
+    announcement = Announcement.query.get_or_404(announcement_id)
+
+    if request.method == "POST":
+        announcement.title = request.form.get("title")
+        announcement.content = request.form.get("content")
+
+        db.session.commit()
+        flash("Announcement updated successfully!", "success")
+        return redirect(url_for("admin.manage_announcements"))
+    return render_template("edit_announcement.html", announcement=announcement)
+
+
+#delete announcement
+@admin_bp.route("/delete_announcement/<int:announcement_id>", methods=["POST"])
+@login_required
+@admin_required
+def delete_announcement(announcement_id):
+    announcement = Announcement.query.get_or_404(announcement_id)
+    db.session.delete(announcement)
+    db.session.commit()
+    flash("Announcement deleted successfully!", "success")
+    return redirect(url_for("admin.manage_announcements"))
+
+
