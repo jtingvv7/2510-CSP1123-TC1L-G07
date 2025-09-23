@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(20), default="user") #admin
     profile_address = db.Column(db.String(250))
     is_active = db.Column(db.Boolean, default=True)
+    last_seen_announcement_id = db.Column(db.Integer, default=0) #for announcement flash
 
     @property
     def is_sold(self):
@@ -162,15 +163,38 @@ class Order(db.Model):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reporter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    reported_type = db.Column(db.String(50), nullable=False)   # user / product / transaction / message
-    reported_id = db.Column(db.Integer, nullable=True)        
+    reported_type = db.Column(db.String(50), nullable=False)   # user / product / transaction 
+    reported_id = db.Column(db.Integer, nullable=True)        #can be product/ transaction/ user id
+    reported_user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)  # the actual user being reported
     reason = db.Column(db.Text, nullable=False)
     evidence_file = db.Column(db.String(255), nullable=True)   # save filename (JPG/PNG/PDF)
     status = db.Column(db.String(20), default="pending")       # pending / resolved
     date_report = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    #admin feedback
+    admin_comment = db.Column(db.Text, nullable = True)
+    #appeal part
+    appeal_text = db.Column(db.Text, nullable=True)
+    appeal_file = db.Column(db.String(200), nullable=True)
+    appeal_status = db.Column(db.String(20), default="none")   # none / submitted / reviewed
+    appeal_deadline = db.Column(db.DateTime, nullable=True)
 
     # relationship
     reporter = db.relationship("User", backref="reports", lazy=True)
 
     def _repr_(self):
         return f"<Report {self.id} status={self.status}>"
+    
+class Announcement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)  # None = to everyone
+    report_id = db.Column(db.Integer, db.ForeignKey("report.id"), nullable=True)  # if about report
+    title = db.Column(db.String(150), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    expires_at = db.Column(db.DateTime, nullable=True)
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"))  # which admin
+
+    # relationships
+    author = db.relationship("User", foreign_keys=[author_id], backref="announcements", lazy=True)
+    target_user = db.relationship("User", foreign_keys=[user_id], backref="targeted_announcements", lazy=True)
+    report = db.relationship("Report", backref="announcements", lazy=True)

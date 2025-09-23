@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Edit Announcement{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4" style="background-color: #f8f9fa; min-height: calc(100vh - 80px);">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border border-secondary">
+        <div class="card-header bg-primary text-white">
+          <i class="bi bi-pencil-square"></i> Edit Announcement
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            <div class="mb-3">
+              <label class="form-label">Title</label>
+              <input type="text" name="title" class="form-control" value="{{ announcement.title }}" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Content</label>
+              <textarea name="content" class="form-control" rows="5" required>{{ announcement.content }}</textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Valid Until (optional)</label>
+              <input type="date" name="expires_at" class="form-control"
+                     value="{{ announcement.expires_at.strftime('%Y-%m-%d') if announcement.expires_at else '' }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-save"></i> Update
+            </button>
+            <a href="{{ url_for('admin.manage_announcements') }}" class="btn btn-secondary">
+              <i class="bi bi-arrow-left"></i> Back
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

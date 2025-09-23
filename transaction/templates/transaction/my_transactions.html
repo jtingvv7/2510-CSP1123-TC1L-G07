@@ -57,7 +57,11 @@
                     <a href="{{ url_for('review.add', transaction_id=t.id, seller_id=t.seller_id) }}" class="btn btn-sm btn-info me-2">Review</a>
                   {% endif %}
                 {% endif %}
+                <!--contact button-->
                 <a href="{{ url_for('messages.chat', user_id=t.seller_id) }}" class="btn btn-outline-primary btn-sm mt-1">Contact</a>
+
+                <!--report button-->
+                <a href="{{ url_for('report.report_submit' , type='transaction' , pre_id=t.id) }}" class="btn btn-outline-danger btn-sm ">Report</a>
               </div>
             </div>
             {% endfor %}
@@ -102,7 +106,10 @@
                 {% elif tx.status == "shipped" %}
                   <span class="badge bg-info">Awaiting Buyer</span>
                 {% endif %}
+                <!--contact button-->
                 <a href="{{ url_for('messages.chat', user_id=tx.buyer_id) }}" class="btn btn-outline-primary btn-sm mt-1">Contact</a>
+                <!--report button-->
+                <a href="{{ url_for('report.report_submit' , type='transaction' , pre_id=tx.id) }}" class="btn btn-outline-danger btn-sm ">Report</a>
               </div>
             </div>
             {% endfor %}
