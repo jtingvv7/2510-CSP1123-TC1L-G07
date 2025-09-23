@@ -98,7 +98,7 @@
                 <div class="d-flex align-items-center">
                     {% if current_user.is_authenticated %}
 
-                    <form class="d-flex ms-auto" role="search" action="{{ url_for('usersystem.search') }}" method="get">
+                    <form class="d-flex ms-auto me-2" role="search" action="{{ url_for('usersystem.search') }}" method="get">
                     <input class="form-control me-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
                     <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
                     </form>
