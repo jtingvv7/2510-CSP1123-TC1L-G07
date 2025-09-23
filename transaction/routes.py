@@ -134,38 +134,9 @@ def confirm_receipt(transaction_id):
     
      #change status
     try:
-        transaction.status = "completed"
+        transaction.status = "payment_pending"
         transaction.created_at = datetime.now(timezone.utc)
         db.session.commit()
-
-        # Release escrow balance to seller
-        payment = Payment.query.filter_by(transaction_id=transaction.id).first()
-        if payment and payment.escrow_status == 'held':
-            # Find buyer wallet (Release escrow balance)
-            buyer_wallet = Wallet.query.filter_by(user_id=transaction.buyer_id).first()
-            # Find seller wallet (Accept escrow balance)
-            seller_wallet = Wallet.query.filter_by(user_id=transaction.seller_id).first()
-            
-            if not seller_wallet:
-                seller_wallet = Wallet(user_id=transaction.seller_id, balance=0.0)
-                db.session.add(seller_wallet)
-            
-            if buyer_wallet and buyer_wallet.escrow_balance >= payment.amount:
-                # Release escrow balance from buyer
-                buyer_wallet.escrow_balance -= payment.amount
-                buyer_wallet.total_escrow_released += payment.amount
-                
-                # Transfer to seller
-                seller_wallet.balance += payment.amount
-                seller_wallet.total_escrow_received += payment.amount
-                
-                # Update payment status
-                payment.escrow_status = 'released'
-                payment.date_released = datetime.now(timezone.utc)
-                
-                flash("Payment has been released to seller!", "success")
-            else:
-                flash("Warning: Funds transfer verification failed!", "warning")
 
         #send message to seller (auto)
         msg = Messages(
@@ -173,7 +144,7 @@ def confirm_receipt(transaction_id):
             receiver_id=transaction.seller_id,
             transaction_id=transaction.id,
             message_type="system",
-            content="[System] Buyer has confirmed receipt and payment has been released."
+            content="[System] Buyer has confirmed receipt."
         )
         db.session.add(msg)
         db.session.commit()
@@ -181,7 +152,7 @@ def confirm_receipt(transaction_id):
     except SQLAlchemyError:
         db.session.rollback()
         flash("Error confirming transaction.","danger")
-    return redirect(url_for("transaction.my_transaction"))
+    return redirect(url_for("payment.index"))
     
 
 #buyer want to cancel transaction when pending state
