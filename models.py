@@ -132,10 +132,33 @@ class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     balance = db.Column(db.Float, default = 0.0)
+    escrow_balance = db.Column(db.Float, default=0.0)  # escrow balance
+    total_escrow_released = db.Column(db.Float, default=0.0)  # total escrow balance that released
+    total_escrow_received = db.Column(db.Float, default=0.0)  # total escrow balance that accept
 
     def __repr__(self):
         return f"<Wallet {self.user_id} balance {self.balance}>"
+
+    def add_to_escrow(self, amount):
+        """Add balance to escrow"""
+        self.escrow_balance += amount
+        self.balance -= amount
     
+    def release_from_escrow(self, amount):
+        """Release balance from escrow"""
+        if self.escrow_balance >= amount:
+            self.escrow_balance -= amount
+            self.balance += amount
+            self.total_escrow_released += amount
+            return True
+        return False
+    
+    def receive_escrow(self, amount):
+        """Accept balance that escrow release"""
+        self.balance += amount
+        self.total_escrow_received += amount
+    
+
 class Payment(db.Model):
     id =db.Column(db.Integer, primary_key = True)
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
@@ -143,7 +166,9 @@ class Payment(db.Model):
     amount = db.Column(db.Float, nullable = False)
     method =db.Column(db.String(20), nullable= False) #wallet / online / offline
     status = db.Column(db.String(20), default = 'pending') #pending / success / fail
+    escrow_status = db.Column(db.String(20), default='held')  # held / released / refunded
     date_created = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    date_released = db.Column(db.DateTime, nullable=True)
     
     def __repr__(self):
         return f"<Payment {self.id} amount: {self.amount}>"

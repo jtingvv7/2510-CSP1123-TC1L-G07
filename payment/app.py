@@ -111,23 +111,26 @@ def secondlooppay():
     if request.method == 'POST':
         # Check if wallet has enough balance
         if wallet.balance >= grand_total:
-            # Minus balance from wallet
+            # Transfer balance to escrow
             wallet.balance -= grand_total
-            db.session.commit()
-
+            wallet.escrow_balance += grand_total
+            
             # Create payment record
             payment = Payment(
                 transaction_id=transaction.id,
                 payer_id=current_user_id, 
                 amount=grand_total,
                 method="wallet",
-                status="success"
+                status="held",
+                escrow_status="held"
             )
             db.session.add(payment)
             db.session.commit()
 
             # Clear shopping cart
             session['cart'] = {}
+            
+            flash('Payment successful! Funds are held in escrow until you confirm receipt.', 'success')
             
             return redirect(url_for('payment.success'))
         else:
