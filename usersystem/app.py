@@ -120,7 +120,7 @@ def login():
             session["user_profile_pic"] = user.profile_pic
 
             latest_announcement = Announcement.query.order_by(Announcement.id.desc()).first()
-            if latest_announcement and (user.last_seen_announcement_id is None or latest_announcement.id > user.last_seen_announcement):
+            if latest_announcement and (user.last_seen_announcement_id is None or latest_announcement.id > user.last_seen_announcement_id):
                 flash (f"{latest_announcement.title}: {latest_announcement.content}", "info")
                 user.last_seen_announcement_id = latest_announcement.id
                 db.session.commit()
