@@ -152,12 +152,10 @@ def confirm_receipt(transaction_id):
             
             if buyer_wallet and buyer_wallet.escrow_balance >= payment.amount:
                 # Release escrow balance from buyer
-                buyer_escrow_before = buyer_wallet.escrow_balance
-                seller_balance_before = seller_wallet.balance
-                
-                # Transfer to seller
                 buyer_wallet.escrow_balance -= payment.amount
                 buyer_wallet.total_escrow_released += payment.amount
+                
+                # Transfer to seller
                 seller_wallet.balance += payment.amount
                 seller_wallet.total_escrow_received += payment.amount
                 

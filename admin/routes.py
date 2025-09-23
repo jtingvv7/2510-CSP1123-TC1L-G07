@@ -101,29 +101,36 @@ def make_admin(user_id):
     user = User.query.get(user_id)
     if not user:
         flash("User not found","danger")
-        return redirect(url_for("manage_users"))
+        return redirect(url_for("admin.manage_users"))
     user.role = "admin"
     db.session.commit()
     flash(f"{user.name} is now an admin", "success")
-    return redirect(url_for("manage_users"))
+    return redirect(url_for("admin.manage_users"))
 
 #delete user
-@admin_bp.route("/delete_user/<int:user_id>")
+@admin_bp.route("/delete_user/<int:user_id>", methods=["POST"])
 @login_required
 @admin_required
 def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
         flash("User not found","danger")
-        return redirect(url_for("manage_users"))
+        return redirect(url_for("admin.manage_users"))
     #prevent admin delete own acc
     if user.id == current_user.id:
         flash("You cannot delete your own account!","warning")
-        return redirect(url_for("manage_users"))
+        return redirect(url_for("admin.manage_users"))
+    
+    # 处理用户的产品 - 转移给当前管理员
+    user_products = Product.query.filter_by(seller_id=user.id).all()
+    for product in user_products:
+        product.seller_id = current_user.id
+        product.is_active = False  # 标记为非活跃状态
+    
     db.session.delete(user)
     db.session.commit()
-    flash(f"User {user.name} has been deleted!","success")
-    return redirect(url_for("manage_users"))
+    flash(f"User {user.name} has been deleted! Their {len(user_products)} products have been transferred to you.","success")
+    return redirect(url_for("admin.manage_users"))
 
 ################## product management #####################
 
@@ -256,7 +263,7 @@ def recharge_wallet(user_id):
 ################## messages management #####################
 
 #delete messages
-@admin_bp.route("/delete_message/<int:message_id>")
+@admin_bp.route("/delete_message/<int:message_id>", methods=["POST"])
 @login_required
 @admin_required
 def delete_message(message_id):
@@ -280,7 +287,7 @@ def resolve_report(report_id):
     return redirect(url_for("admin.manage_reports"))
 
 
-@admin_bp.route("/delete_report/<int:report_id>")
+@admin_bp.route("/delete_report/<int:report_id>", methods=["POST"])
 @login_required
 def delete_report(report_id):
     if not current_user.is_admin:
