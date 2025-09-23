@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for , flash
 from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
-from models import User, Product, Transaction, Messages, Review
+from models import User, Product, Transaction, Messages, Review, Payment, Wallet
 from sqlalchemy.exc import SQLAlchemyError
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
