@@ -26,7 +26,7 @@ def announcements():
         ((Announcement.expires_at == None) | (Announcement.expires_at > now))
     ).order_by(Announcement.created_at.desc()).all()
 
-    return render_template("announcement.html", announcements=announcements, now=now)
+    return render_template("announcement.html", announcements=announcements, now=now, timedelta=timedelta)
 
 
 # Report Center 
@@ -44,7 +44,7 @@ def report_center():
 def report_submit():
     if request.method == "POST":
         report_type = request.form.get("report_type")
-        reported_id = request.form.get("reported_id")
+        reported_id = int(request.form.get("reported_id"))   # ensure it is int
         reason = request.form.get("reason")
         file = request.files.get("evidence")
 
@@ -52,15 +52,16 @@ def report_submit():
         if file and allowed_file(file.filename):
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
-            filename = f"{current_user.id}_{int(time.time())}_{secure_filename(file.filename)}"
+            filename = f"{current_user.id}{int(time.time())}{secure_filename(file.filename)}"
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-            appeal_deadline=datetime.now(timezone.utc) + timedelta(days=5)
+        appeal_deadline = datetime.now(timezone.utc) + timedelta(days=5)
 
+        #  Create a new Report
         new_report = Report(
             reporter_id=current_user.id,
             reported_type=report_type,
-            reported_id=reported_id,
+            reported_id=reported_id,         # can be product.id / user.id / transaction.id
             reason=reason,
             evidence_file=filename,
             status="pending",
@@ -68,20 +69,43 @@ def report_submit():
             appeal_deadline=appeal_deadline
         )
 
+        # Determine which user should receive the announcement
+        target_user_id = None
+
+        if report_type == "user":
+            # report directly against a user
+            target_user_id = reported_id
+
+        elif report_type == "product":
+            # report against a product → send announcement to product owner
+            product = Product.query.get(reported_id)
+            if product:
+                target_user_id = product.user_id
+
+        elif report_type == "transaction":
+            # report against a transaction → notify the other party
+            transaction = Transaction.query.get(reported_id)
+            if transaction:
+                if current_user.id == transaction.buyer_id:
+                    target_user_id = transaction.seller_id   # reporter is buyer → notify seller
+                elif current_user.id == transaction.seller_id:
+                    target_user_id = transaction.buyer_id   # reporter is seller → notify buyer
+
+
+        #  Create an Announcement
         deadline_str = (appeal_deadline + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+
         new_announcement = Announcement(
-            user_id=reported_id,
-            report_id=new_report.id,
+            user_id=target_user_id,          # the user who should see this announcement
+            report_id=new_report.id,         # link to the report
+            author_id=current_user.id,       # who created this announcement (the reporter/admin)
             title="⚠ You have been reported!",
             content=f"Please submit your appeal before {deadline_str}.",
-            expires_at = appeal_deadline
-            )
-        db.session.add(new_announcement)
-        db.session.commit
+            expires_at=appeal_deadline
+        )
 
         try:
-            db.session.add(new_report)
-            db.session.add()
+            db.session.add_all([new_report, new_announcement])
             db.session.commit()
             flash("Your report has been submitted. Admin will review it soon.", "success")
         except SQLAlchemyError:
@@ -89,10 +113,12 @@ def report_submit():
             flash("Error submitting report. Please try again.", "danger")
 
         return redirect(url_for("report.report_center"))
+
+    # pre-fill data
     pre_type = request.args.get("type")
     pre_id = request.args.get("pre_id")
 
-    return render_template("report_form.html", pre_id = pre_id, pre_type = pre_type)
+    return render_template("report_form.html", pre_id=pre_id, pre_type=pre_type)
 
 
 

@@ -163,8 +163,9 @@ class Order(db.Model):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     reporter_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    reported_type = db.Column(db.String(50), nullable=False)   # user / product / transaction / message
-    reported_id = db.Column(db.Integer, nullable=True)        
+    reported_type = db.Column(db.String(50), nullable=False)   # user / product / transaction 
+    reported_id = db.Column(db.Integer, nullable=True)        #can be product/ transaction/ user id
+    reported_user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)  # the actual user being reported
     reason = db.Column(db.Text, nullable=False)
     evidence_file = db.Column(db.String(255), nullable=True)   # save filename (JPG/PNG/PDF)
     status = db.Column(db.String(20), default="pending")       # pending / resolved
@@ -185,14 +186,15 @@ class Report(db.Model):
     
 class Announcement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True) #None = to everyone
-    reporter_id = db.Column(db.Integer, db.ForeignKey("report.id"), nullable=True) #if about report
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)  # None = to everyone
+    report_id = db.Column(db.Integer, db.ForeignKey("report.id"), nullable=True)  # if about report
     title = db.Column(db.String(150), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     expires_at = db.Column(db.DateTime, nullable=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # which admin
+    author_id = db.Column(db.Integer, db.ForeignKey("user.id"))  # which admin
 
-    # relationship
-    author = db.relationship("User", backref="author", lazy=True)
+    # relationships
+    author = db.relationship("User", foreign_keys=[author_id], backref="announcements", lazy=True)
+    target_user = db.relationship("User", foreign_keys=[user_id], backref="targeted_announcements", lazy=True)
     report = db.relationship("Report", backref="announcements", lazy=True)
