@@ -168,10 +168,26 @@ class Report(db.Model):
     evidence_file = db.Column(db.String(255), nullable=True)   # save filename (JPG/PNG/PDF)
     status = db.Column(db.String(20), default="pending")       # pending / resolved
     date_report = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    #admin feedback
     admin_comment = db.Column(db.Text, nullable = True)
+    #appeal part
+    appeal_text = db.Column(db.Text, nullable=True)
+    appeal_file = db.Column(db.String(200), nullable=True)
+    appeal_status = db.Column(db.String(20), default="none")   # none / submitted / reviewed
+    appeal_deadline = db.Column(db.DateTime, nullable=True)
 
     # relationship
     reporter = db.relationship("User", backref="reports", lazy=True)
 
     def _repr_(self):
         return f"<Report {self.id} status={self.status}>"
+    
+class Announcement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # which admin
+
+    # relationship
+    author = db.relationship("User", backref="author", lazy=True)

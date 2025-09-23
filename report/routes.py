@@ -1,10 +1,10 @@
 import logging
 import time
 import os
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, abort
 from flask_login import login_required, current_user
-from datetime import datetime, timezone
-from models import db, Report, User, Product, Transaction, Messages
+from datetime import datetime, timezone, timedelta
+from models import db, Report, User, Product, Transaction, Messages, Annoucement
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
 
@@ -16,12 +16,25 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "pdf"}
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Announcement
+@report_bp.route("/announcements", methods=["GET"])
+@login_required
+def announcements():
+    today = datetime.now(timezone.utc)
+    announcements = Annoucement.query.order_by(
+        Annoucement.created_at.desc()
+    ).all()
+    return render_template("announcement.html", announcements=announcements)
+
+
 # Report Center 
 @report_bp.route("/report", methods=["GET"])
 @login_required
 def report_center():
     my_reports = Report.query.filter_by(reporter_id=current_user.id).all()
     return render_template("report_center.html", reports=my_reports)
+
+
 
 # Report Form 
 @report_bp.route("/report/submit", methods=["GET", "POST"])
@@ -47,7 +60,8 @@ def report_submit():
             reason=reason,
             evidence_file=filename,
             status="pending",
-            date_report=datetime.now(timezone.utc)
+            date_report=datetime.now(timezone.utc),
+            appeal_deadline=datetime.now(timezone.utc) + timedelta(days=5)
         )
 
         try:
@@ -64,12 +78,45 @@ def report_submit():
 
     return render_template("report_form.html", pre_id = pre_id, pre_type = pre_type)
 
+
+
 # My report
 @report_bp.route("/report/my_reports", methods=["GET"])
 @login_required
 def my_reports():
     reports = Report.query.filter_by(reporter_id=current_user.id).all()
     return render_template("my_reports.html", reports=reports)
+
+
+# Appeal report
+@report_bp.route("/appeal/<int:report_id>", methods=["GET", "POST"])
+@login_required
+def appeal(report_id):
+    report = Report.query.get_or_404(report_id)
+    if report.reported_id != current_user.id:
+        abort(403)  # can appeal by own self only
+
+    # check expire or not
+    if datetime.now(timezone.utc) > report.appeal_deadline:
+        flash("Your appeal deadline has expired.", "danger")
+        return redirect(url_for("home"))
+
+    if request.method == "POST":
+        report.appeal_text = request.form.get("appeal_text")
+        file = request.files.get("appeal_file")
+
+        filename = None
+        if file and allowed_file(file.filename):
+            filename = f"appeal_{current_user.id}{int(time.time())}{secure_filename(file.filename)}"
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            report.appeal_file = filename
+
+        report.appeal_status = "submitted"
+        db.session.commit()
+        flash("Your appeal has been submitted. Admin will review it soon.", "success")
+        return redirect(url_for("report.my_reports"))
+
+    return render_template("appeal_form.html", report=report)
 
 # ---------------- API endpoints ----------------
 

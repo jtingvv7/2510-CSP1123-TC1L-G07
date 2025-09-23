@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Manage Announcements{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3>Manage Announcements</h3>
+
+  <form method="POST" class="mb-4">
+    <div class="mb-2">
+      <label class="form-label">Title</label>
+      <input type="text" name="title" class="form-control" required>
+    </div>
+    <div class="mb-2">
+      <label class="form-label">Content</label>
+      <textarea name="content" class="form-control" rows="3" required></textarea>
+    </div>
+    <div class="mb-2">
+      <label class="form-label">Expiry Date (optional)</label>
+      <input type="date" name="expires_at" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+  </form>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Created</th>
+        <th>Expires</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in announcements %}
+      <tr>
+        <td>{{ a.id }}</td>
+        <td>{{ a.title }}</td>
+        <td>{{ a.content }}</td>
+        <td>{{ a.created_at.strftime('%Y-%m-%d') }}</td>
+        <td>{{ a.expires_at.strftime('%Y-%m-%d') if a.expires_at else '-' }}</td>
+        <td>
+          <a href="{{ url_for('admin.delete_announcement', id=a.id) }}" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

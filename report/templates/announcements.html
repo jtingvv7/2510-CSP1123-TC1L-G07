@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+      <i class="bi bi-megaphone-fill"></i> Official Announcements
+    </div>
+    <div class="card-body">
+      {% if announcements %}
+        {% for a in announcements %}
+        <div class="mb-3 border-bottom pb-2">
+          <h5>{{ a.title }}</h5>
+          <p>{{ a.content }}</p>
+          <small class="text-muted">
+            Posted on {{ a.created_at.strftime('%Y-%m-%d') }}
+            {% if a.expires_at %}(valid until {{ a.expires_at.strftime('%Y-%m-%d') }}){% endif %}
+          </small>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-muted">No announcements yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
