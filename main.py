@@ -5,6 +5,7 @@ from extensions import db, login_manager
 from models import User, Product, SafeLocation, Messages
 from flask_login import current_user
 from datetime import datetime, timedelta
+from sqlalchemy.orm import joinedload
 
 
 def create_app():
@@ -96,10 +97,12 @@ def create_app():
     @app.route("/")
     def index():
          # Only active and not sold products
-        products = Product.query.filter_by(
-            is_sold=False, 
-            is_active=True
-            ).all()
+        products = (
+            Product.query
+            .options(joinedload(Product.seller))  
+            .filter_by(is_sold=False, is_active=True)
+            .all()
+        )
         #  products = [p for p in products if not p.sold_out]
 
         # Optional: fetch user locations if user logged in

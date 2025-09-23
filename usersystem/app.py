@@ -567,15 +567,20 @@ def cart():
 @usersystem_bp.route("/search")
 def search():
     query = request.args.get("q", "").strip()
+    
     products = []
-
     if query:
-        products = Product.query.filter(
-            (Product.name.ilike(f"%{query}%")) | 
-            (Product.description.ilike(f"%{query}%"))
-        ).all()
+        products = (
+            Product.query
+            .filter(
+                Product.name.ilike(f"%{query}%"),
+                Product.is_sold == False,    # Exclude sold
+                Product.is_active == True    # Exclude inactive
+            )
+            .all()
+        )
 
-    return render_template("search.html", products=products, query=query)
+    return render_template("search.html", query=query, products=products)
 
 # ----------------- view seller profile -----------------
 @usersystem_bp.route("/profile/<int:user_id>")
