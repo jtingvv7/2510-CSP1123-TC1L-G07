@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}My Reports{% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg w-75">
+    
+    <!-- Header -->
+    <div class="card-header bg-primary text-white fw-bold fs-3 py-3">
+      <i class="bi bi-list-check"></i> My Reports
+    </div>
+    
+    <!-- Body -->
+    <div class="card-body" style="font-size: 1.1rem;">
+      {% if reports %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Target ID</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Admin Comment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in reports %}
+                <tr>
+                  <td>{{ r.id }}</td>
+                  <td class="text-capitalize">{{ r.reported_type }}</td>
+                  <td>{{ r.reported_id }}</td>
+                  <td>{{ r.reason }}</td>
+                  <td>
+                    {% if r.status == "pending" %}
+                      <span class="badge bg-warning text-dark">Pending</span>
+                    {% elif r.status == "resolved" %}
+                      <span class="badge bg-success">Resolved</span>
+                    {% elif r.status == "rejected" %}
+                      <span class="badge bg-danger">Rejected</span>
+                    {% else %}
+                      <span class="badge bg-secondary">{{ r.status }}</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ r.date_report.strftime('%Y-%m-%d %H:%M') if r.date_report else "-" }}</td>
+                  <td>{{ r.admin_comment or "-" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">You haven't submitted any reports yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer text-end">
+      <a href="{{ url_for('report.report_center') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Report Center
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

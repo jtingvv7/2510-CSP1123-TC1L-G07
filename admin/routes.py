@@ -268,25 +268,35 @@ def delete_message(message_id):
 
 ################## report management #####################
 
+#resolve report
 @admin_bp.route("/resolve_report/<int:report_id>")
 @login_required
+@admin_required
 def resolve_report(report_id):
-    if not current_user.is_admin:
-        abort(403)
     report = Report.query.get_or_404(report_id)
     report.status = "resolved"
     db.session.commit()
     flash("Report resolved!", "success")
     return redirect(url_for("admin.manage_reports"))
 
-
+#delete report
 @admin_bp.route("/delete_report/<int:report_id>")
 @login_required
+@admin_required
 def delete_report(report_id):
-    if not current_user.is_admin:
-        abort(403)
     report = Report.query.get_or_404(report_id)
     db.session.delete(report)
     db.session.commit()
     flash("Report deleted!", "danger")
+    return redirect(url_for("admin.manage_reports"))
+
+#update report
+@admin_bp.route("/update_report/<int:report_id>", methods=["POST"])
+@login_required
+@admin_required
+def update_report(report_id):
+    report = Report.query.get_or_404(report_id)
+    report.admin_comment = request.form.get("admin_comment")
+    db.session.commit()
+    flash("Admin comment updated.", "success")
     return redirect(url_for("admin.manage_reports"))

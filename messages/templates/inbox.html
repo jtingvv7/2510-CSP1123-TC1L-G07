@@ -23,54 +23,60 @@
             </div>
         </div>      
     
-<!--conversation list on right side-->
-<div class="col-md-9" style="background: white; border-radius: 15px; padding: 0; margin-top: 20px;">
-    {% if users %}
-        <div class="p-3 border-bottom">
-            <h5 class="mb-0">Recent Conversations</h5>
-        </div>
-        <div class="conversation-list" style="max-height: calc(100vh - 200px); overflow-y: auto;">
-            {% for user in users %}
-            <a href="{{ url_for('messages.chat', user_id=user.id) }}"
-                class="d-flex align-items-center py-3 border-bottom text-decoration-none conversation-item"
-                style="transition: background-color 0.2s;"
-                onmouseover="this.style.backgroundColor='#f8f9fa'"
-                onmouseout="this.style.backgroundColor='white'">
-                
-                {% if user.profile_pic %}
-                    <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
-                        alt="{{ user.name }}"
-                        class="rounded-circle border me-3"
-                        width="50" height="50"
-                        style="object-fit: cover;">
-                {% else %}
-                    <img src="https://i.pravatar.cc/100?u={{ user.id }}"
-                        alt="Avatar"
-                        class="rounded-circle border me-3"
-                        width="50" height="50"
-                        style="object-fit: cover;">
-                {% endif %}
-                
-                <div class="flex-grow-1">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-1 text-dark">{{ user.name }}</h6>
-                    </div>
-                    <p class="mb-0 text-muted small">{{ user.email }}</p>
+        <!--conversation list on right side-->
+        <div class="col-md-9" style="background: white; border-radius: 15px; padding: 0; margin-top: 20px;">
+            {% if users %}
+                <div class="p-3 border-bottom">
+                    <h5 class="mb-0">Recent Conversations</h5>
                 </div>
-        </a>
-        {% endfor %}
-    </div>
-    {% else %}
-        <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">
-            <i class="bi bi-chat-dots" style="font-size: 4rem; margin-bottom: 20px;"></i>
-            <h5>No conversations yet</h5>
-            <p>Start a conversation with someone!</p>
-            <button class="btn btn-primary">
-                <i class="bi bi-plus"></i> Start New Chat
-            </button>
+                <div class="conversation-list" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                    {% for user in users %}
+                    <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
+                        
+                        <!-- left site: avatar, name, email -->
+                        <a href="{{ url_for('messages.chat', user_id=user.id) }}"
+                           class="d-flex align-items-center text-decoration-none text-dark flex-grow-1"
+                           style="transition: background-color 0.2s;"
+                           onmouseover="this.style.backgroundColor='#f8f9fa'"
+                           onmouseout="this.style.backgroundColor='white'">
+
+                            {% if user.profile_pic %}
+                                <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
+                                    alt="{{ user.name }}"
+                                    class="rounded-circle border me-3"
+                                    width="50" height="50"
+                                    style="object-fit: cover;">
+                            {% else %}
+                                <img src="https://i.pravatar.cc/100?u={{ user.id }}"
+                                    alt="Avatar"
+                                    class="rounded-circle border me-3"
+                                    width="50" height="50"
+                                    style="object-fit: cover;">
+                            {% endif %}
+
+                            <div>
+                                <h6 class="mb-1">{{ user.name }}</h6>
+                                <p class="mb-0 text-muted small">{{ user.email }}</p>
+                            </div>
+                        </a>
+
+                        <!-- right site : report button -->
+                        <a href="{{ url_for('report.report_submit', type='user', pre_id=user.id) }}"
+                           class="btn btn-outline-danger btn-sm ms-3">Report</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">
+                    <i class="bi bi-chat-dots" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h5>No conversations yet</h5>
+                    <p>Start a conversation with someone!</p>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-plus"></i> Start New Chat
+                    </button>
+                </div>
+            {% endif %}
         </div>
-    {% endif %}
-</div>
-</div>
+    </div>
 </div>
 {% endblock %}

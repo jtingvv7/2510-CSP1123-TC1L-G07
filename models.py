@@ -168,6 +168,7 @@ class Report(db.Model):
     evidence_file = db.Column(db.String(255), nullable=True)   # save filename (JPG/PNG/PDF)
     status = db.Column(db.String(20), default="pending")       # pending / resolved
     date_report = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    admin_comment = db.Column(db.text, nullable = True)
 
     # relationship
     reporter = db.relationship("User", backref="reports", lazy=True)

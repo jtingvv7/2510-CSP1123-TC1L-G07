@@ -67,6 +67,10 @@
             <a href="{{ url_for('admin.delete_report', report_id=r.id) }}" 
                class="btn btn-danger btn-sm">Delete</a>
           </td>
+          <form method="POST" action="{{ url_for('admin.update_report', report_id=r.id) }}">
+            <textarea name="admin_comment" class="form-control mb-2" rows="2">{{ r.admin_comment or '' }}</textarea>
+            <button type="submit" class="btn btn-sm btn-primary">Save Comment</button>
+          </form>
         </tr>
         {% endfor %}
       </tbody>

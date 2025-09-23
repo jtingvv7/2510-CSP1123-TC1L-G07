@@ -9,22 +9,36 @@
     </div>
     <div class="card-body" style="font-size: 1.2rem;">
       <form method="POST" enctype="multipart/form-data">
+        
+        <!-- Report Type -->
         <div class="mb-3">
           <label class="form-label">Report Type</label>
-          <select class="form-select" name="report_type" required>
+          <select class="form-select" name="report_type" id="report_type" required>
             <option value="">-- Select Type --</option>
             <option value="user">User</option>
             <option value="product">Product</option>
             <option value="transaction">Transaction</option>
-            <option value="message">Message</option>
           </select>
         </div>
 
+        <!-- Target ID  -->
+        <div class="mb-3" id="target-container">
+          <label class="form-label">Select Target</label>
+          <select class="form-select" id="reported_id_select" >
+            <option value="">-- Select --</option>
+          </select>
+        </div>
+        <!-- hidden input field -->
+        <input type="hidden" id="reported_id_hidden">
+
+
+        <!-- Reason -->
         <div class="mb-3">
           <label class="form-label">Reason</label>
           <textarea name="reason" class="form-control" rows="5" required></textarea>
         </div>
 
+        <!-- Evidence -->
         <div class="mb-3">
           <label class="form-label">Upload Evidence (optional)</label>
           <input type="file" name="evidence" class="form-control">
@@ -40,4 +54,11 @@
   </div>
 </div>
 
+<!-- javascript -->
+ <!--send default value to js-->
+ <script>
+    const PRE_TYPE = "{{ pre_type or '' }}";
+    const PRE_ID = "{{ pre_id or '' }}";
+ </script>
+<script src="{{ url_for('report.static', filename='report_form.js') }}"></script>
 {% endblock %}
