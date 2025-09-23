@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
 from datetime import datetime
 from collections import defaultdict
-from models import User, Transaction, Review, SafeLocation, Product, Wallet
+from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement
 from flask_login import login_user, logout_user, current_user
 
 usersystem_bp = Blueprint(
@@ -106,6 +106,7 @@ def login():
         password_input = request.form.get('password')
 
         user = User.query.filter_by(email=email).first()
+        
         if not user:
             flash("Email not registered.", "error")
             return redirect(url_for('usersystem.register'))
@@ -117,6 +118,12 @@ def login():
             session["user_id"] = user.id
             session["user_name"] = user.name
             session["user_profile_pic"] = user.profile_pic
+
+            latest_announcement = Announcement.query.order_by(Announcement.id.desc()).first()
+            if latest_announcement and (user.last_seen_announcement_id is None or latest_announcement.id > user.last_seen_announcement):
+                flash (f"{latest_announcement.title}: {latest_announcement.content}", "info")
+                user.last_seen_announcement_id = latest_announcement.id
+                db.session.commit()
             return redirect(url_for("index"))
         else:
             flash("Invalid password.", "error")

@@ -70,6 +70,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
+                        <a class="nav-link text-info" href="{{ url_for('report.announcements') }}">
+                    <i class="bi bi-megaphone-fill"></i> Announcements
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('transaction.my_transaction') }}">My Transaction</a>
                     </li>
                     <li class="nav-item">
@@ -81,11 +86,6 @@
                     <li class="nav-item">
                         <a class="nav-link text-danger" href="{{ url_for('report.report_center') }}">
                     <i class="bi bi-flag-fill"></i> Report
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('report.announcements') }}">
-                    <i class="bi bi-megaphone-fill"></i> Announcements
                         </a>
                     </li>
                     

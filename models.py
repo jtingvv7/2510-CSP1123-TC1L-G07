@@ -16,6 +16,7 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(20), default="user") #admin
     profile_address = db.Column(db.String(250))
     is_active = db.Column(db.Boolean, default=True)
+    last_seen_announcement_id = db.Column(db.Integer, default=0) #for announcement flash
 
     @property
     def is_sold(self):

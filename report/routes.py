@@ -4,7 +4,7 @@ import os
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, abort
 from flask_login import login_required, current_user
 from datetime import datetime, timezone, timedelta
-from models import db, Report, User, Product, Transaction, Messages, Annoucement
+from models import db, Report, User, Product, Transaction, Messages, Announcement
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
 
@@ -21,10 +21,11 @@ def allowed_file(filename):
 @login_required
 def announcements():
     today = datetime.now(timezone.utc)
-    announcements = Annoucement.query.order_by(
-        Annoucement.created_at.desc()
+    announcements = Announcement.query.order_by(
+        Announcement.created_at.desc()
     ).all()
     return render_template("announcement.html", announcements=announcements)
+
 
 
 # Report Center 
@@ -96,7 +97,7 @@ def appeal(report_id):
     if report.reported_id != current_user.id:
         abort(403)  # can appeal by own self only
 
-    # check expire or not
+    # check expired or not
     if datetime.now(timezone.utc) > report.appeal_deadline:
         flash("Your appeal deadline has expired.", "danger")
         return redirect(url_for("home"))
