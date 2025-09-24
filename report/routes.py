@@ -80,7 +80,7 @@ def report_submit():
             # report against a product → send announcement to product owner
             product = Product.query.get(reported_id)
             if product:
-                target_user_id = product.user_id
+                target_user_id = product.seller_id
 
         elif report_type == "transaction":
             # report against a transaction → notify the other party
@@ -98,7 +98,7 @@ def report_submit():
         new_announcement = Announcement(
             user_id=target_user_id,          # the user who should see this announcement
             report_id=new_report.id,         # link to the report
-            author_id=current_user.id,       # who created this announcement (the reporter/admin)
+            author_id=None,       
             title="⚠ You have been reported!",
             content=f"Please submit your appeal before {deadline_str}.",
             expires_at=appeal_deadline

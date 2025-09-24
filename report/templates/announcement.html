@@ -22,7 +22,7 @@
 
                 {# if about report add button #}
                 {% if a.report_id %}
-                  {% if not a.expires_at or a.expires_at > now %}
+                  {% if not a.expires_at or a.expires_at.replace(tzinfo=None) > now.replace(tzinfo=None) %}
                     <a href="{{ url_for('report.submit_appeal', report_id=a.report_id) }}"
                        class="btn btn-warning btn-sm">
                       <i class="bi bi-exclamation-triangle"></i> Submit Appeal
@@ -33,7 +33,7 @@
                 <small class="text-muted d-block mt-2">
                   Posted on {{ (a.created_at + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') }}
                   {% if a.expires_at %}
-                    {% if a.expires_at < now %}
+                    {% if a.expires_at.replace(tzinfo=None) < now.replace(tzinfo=None) %}
                       <span class="text-danger">(Expired)</span>
                     {% else %}
                       (valid until {{ (a.expires_at + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') }})

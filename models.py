@@ -179,7 +179,8 @@ class Report(db.Model):
     appeal_deadline = db.Column(db.DateTime, nullable=True)
 
     # relationship
-    reporter = db.relationship("User", backref="reports", lazy=True)
+    reporter = db.relationship("User", foreign_keys=[reporter_id], backref="reporter", lazy=True)
+    reported_user = db.relationship("User", foreign_keys=[reported_user_id], backref="reported", lazy=True)
 
     def _repr_(self):
         return f"<Report {self.id} status={self.status}>"
