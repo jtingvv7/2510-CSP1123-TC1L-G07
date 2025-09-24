@@ -7,12 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const hiddenReportedId = document.getElementById("hidden_reported_id");
 
     function loadTargets(type, preId = null) {
+        if (!reportedIdSelect) return;
+
         reportedIdSelect.innerHTML = "<option value=''>-- Select --</option>";
 
         let apiUrl = "";
         if (type === "product") apiUrl = "/report/api/my_products";
         if (type === "user") apiUrl = "/report/api/my_users";
-        if (type === "transaction") apiUrl = "/report/api/my_transaction";
+        if (type === "transaction") apiUrl = "/report/api/my_transactions"; 
 
         if (apiUrl) {
             fetch(apiUrl)
@@ -38,32 +40,43 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // user manually choose type
-    typeSelect.addEventListener("change", function () {
-        if (this.value) {
-            loadTargets(this.value);
-        } else {
-            targetContainer.style.display = "none";
-        }
-    });
+    // When user manually chooses type
+    if (typeSelect) {
+        typeSelect.addEventListener("change", function () {
+            if (this.value) {
+                loadTargets(this.value);
+            } else {
+                targetContainer.style.display = "none";
+            }
+        });
+    }
 
-    // if have default id
+    // If there is a pre-selected type
     if (PRE_TYPE) {
         typeSelect.value = PRE_TYPE;
 
         if (PRE_ID) {
-            //if default id exist hide the dropdown menu and direct insert value to a hidden input field
-            document.getElementById("reported_id_hidden").value = PRE_ID;
-            document.getElementById("reported_id_hidden").setAttribute("name", "reported_id");
+            // Case 1: direct report with pre_id
+            hiddenReportedId.value = PRE_ID;
+            hiddenReportedId.setAttribute("name", "reported_id");
 
-            document.getElementById("reported_id_select").removeAttribute("name");
+            if (reportedIdSelect) {
+                reportedIdSelect.removeAttribute("name");
+            }
             targetContainer.style.display = "none";
 
         } else {
-            // if not default id, as usual
-            document.getElementById("reported_id_select").setAttribute("name", "reported_id");
-            document.getElementById("reported_id_hidden").removeAttribute("name");
+            // Case 2: type exists but no pre_id thn load options normally
+            if (reportedIdSelect) {
+                reportedIdSelect.setAttribute("name", "reported_id");
+            }
+            hiddenReportedId.removeAttribute("name");
             loadTargets(PRE_TYPE);
+        }
+    } else {
+        // No pre_type thn check if user already selected manually
+        if (typeSelect && typeSelect.value) {
+            loadTargets(typeSelect.value);
         }
     }
 });

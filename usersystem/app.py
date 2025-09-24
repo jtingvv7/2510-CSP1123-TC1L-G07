@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import defaultdict
 from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement
 from flask_login import login_user, logout_user, current_user
@@ -119,11 +119,17 @@ def login():
             session["user_name"] = user.name
             session["user_profile_pic"] = user.profile_pic
 
-            latest_announcement = Announcement.query.order_by(Announcement.id.desc()).first()
+            now = datetime.now(timezone.utc)
+            latest_announcement = Announcement.query.filter(
+                ((Announcement.user_id == None) | (Announcement.user_id == user.id)) &
+                ((Announcement.expires_at == None) | (Announcement.expires_at > now))
+                ).order_by(Announcement.id.desc()).first()
+
             if latest_announcement and (user.last_seen_announcement_id is None or latest_announcement.id > user.last_seen_announcement_id):
-                flash (f"{latest_announcement.title}: {latest_announcement.content}", "info")
+                flash(f"{latest_announcement.title}: {latest_announcement.content}", "info")
                 user.last_seen_announcement_id = latest_announcement.id
                 db.session.commit()
+
             return redirect(url_for("index"))
         else:
             flash("Invalid password.", "error")
