@@ -25,28 +25,7 @@
     
     <form id="paymentForm" method="GET">
     <div>
-      <input type="radio" id="card" name="payment_method" value="card" checked>
-      <label class="payment-method" for="card">
-        <img src="https://img.icons8.com/color/96/visa.png" alt="Card"> Credit/Debit Card
-      </label>
-    </div>
-
-    <div>
-      <input type="radio" id="grabpay" name="payment_method" value="grabpay">
-      <label class="payment-method" for="grabpay">
-        <img src="https://img.icons8.com/color/96/google-pay.png" alt="GrabPay"> GrabPay (Wallet)
-      </label>
-    </div>
-
-    <div>
-      <input type="radio" id="fpx" name="payment_method" value="fpx">
-      <label class="payment-method" for="fpx">
-        <img src="https://img.icons8.com/color/96/bank-building.png" alt="FPX"> Online Banking (FPX)
-      </label>
-    </div>
-
-    <div>
-      <input type="radio" id="secondlooppay" name="payment_method" value="secondlooppay">
+      <input type="radio" id="secondlooppay" name="payment_method" value="secondlooppay" checked>
       <label class="payment-method" for="secondlooppay">
         <img src="https://img.icons8.com/color/96/wallet.png" alt="SecondLoopPay"> SecondLoopPay (Wallet)
       </label>
@@ -67,13 +46,7 @@
       document.getElementById("paymentForm").addEventListener("submit", function(e) {
         e.preventDefault();
         const choice = document.querySelector('input[name="payment_method"]:checked').value;
-        if (choice === "card") {
-          this.action = "{{ url_for('payment.card') }}";
-        } else if (choice === "grabpay") {
-          this.action = "{{ url_for('payment.grabpay') }}";
-        } else if (choice === "fpx") {
-          this.action = "{{ url_for('payment.fpx') }}";
-        } else if (choice === "secondlooppay") {
+        if (choice === "secondlooppay") {
           this.action = "{{ url_for('payment.secondlooppay') }}";
         } else if (choice === "cod") {
           this.action = "{{ url_for('payment.cod') }}";

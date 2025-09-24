@@ -26,67 +26,6 @@ def index():
                          grand_total=grand_total)
 
 
-@payment_bp.route("/card", methods=['GET', 'POST'])
-def card():
-    # Get current user's pending transaction
-    current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
-    
-    # Use transaction price for grand_total
-    grand_total = transaction.price if transaction else 0
-    if request.method == 'POST':
-        email = request.form.get('email')
-        card_number = request.form.get('card_number')
-        expiry = request.form.get('expiry')
-        cvv = request.form.get('cvv')
-
-        db.session.commit()
-
-        # Clear shopping cart
-        session['cart'] = {}
-
-        return redirect(url_for('payment.success'))
-    return render_template("card.html", transaction=transaction, grand_total=grand_total)
-
-
-@payment_bp.route("/grabpay", methods=['GET', 'POST'])
-def grabpay():
-    # Get current user's pending transaction
-    current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
-    
-    # Use transaction price for grand_total
-    grand_total = transaction.price if transaction else 0
-    if request.method == 'POST':
-        email = request.form.get('email')
-        
-        db.session.commit()
-
-        # Clear shopping cart
-        session['cart'] = {}
-
-        return redirect(url_for('payment.success'))
-    return render_template("grabpay.html", transaction=transaction, grand_total=grand_total)
-
-
-@payment_bp.route("/fpx", methods=['GET', 'POST'])
-def fpx():
-    # Get current user's pending transaction
-    current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
-    
-    # Use transaction price for grand_total
-    grand_total = transaction.price if transaction else 0
-    if request.method == 'POST':
-        bank = request.form.get('bank')
-        
-        db.session.commit()
-
-        # Clear shopping cart
-        session['cart'] = {}
-
-        return redirect(url_for('payment.success'))
-    return render_template("fpx.html", transaction=transaction, grand_total=grand_total)
     
 
 @payment_bp.route("/secondlooppay", methods=['GET', 'POST'])
