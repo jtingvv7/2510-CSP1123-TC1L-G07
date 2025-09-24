@@ -167,7 +167,7 @@ def cod():
         session['cart'] = {}
         
         flash('Order placed successfully! You will pay when you receive the item.', 'success')
-        return redirect(url_for('transaction.my_transactions'))
+        return redirect(url_for('transaction.my_transaction'))
     
     return render_template("cod.html", transaction=transaction, grand_total=grand_total)
 

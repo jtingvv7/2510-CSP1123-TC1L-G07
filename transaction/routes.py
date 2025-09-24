@@ -126,12 +126,12 @@ def confirm_receipt(transaction_id):
     # Check permission
     if transaction.buyer_id != current_user.id:
         flash("You are not authorized to confirm this transaction.", "danger")
-        return redirect(url_for("transaction.my_transactions"))
+        return redirect(url_for("transaction.my_transaction"))
     
     # Only confirm after the product is shipped
     if transaction.status != "shipped":
         flash("You can only confirm after the product is shipped.", "warning")
-        return redirect(url_for("transaction.my_transactions"))
+        return redirect(url_for("transaction.my_transaction"))
     
     try:
         # Find related payment record
@@ -163,7 +163,12 @@ def confirm_receipt(transaction_id):
             # Update transaction status
             transaction.status = "completed"
             transaction.created_at = datetime.now(timezone.utc)
-            
+        
+        elif payment and payment.escrow_status == "released":
+            # Funds already released, just complete the transaction
+            transaction.status = "completed"
+            transaction.created_at = datetime.now(timezone.utc)
+
         elif payment and payment.method == "cod":
             # COD no need to release fund, just complete
             transaction.status = "completed"
@@ -171,7 +176,7 @@ def confirm_receipt(transaction_id):
             
         else:
             flash("No valid payment found for this transaction.", "error")
-            return redirect(url_for("transaction.my_transactions"))
+            return redirect(url_for("transaction.my_transaction"))
         
         # Send system message
         msg = Messages(
@@ -191,7 +196,7 @@ def confirm_receipt(transaction_id):
         flash("Error confirming transaction.", "danger")
         print(f"Error: {e}")
     
-    return redirect(url_for("transaction.my_transactions"))
+    return redirect(url_for("transaction.my_transaction"))
     
 
 #buyer want to cancel transaction when pending state
@@ -376,6 +381,6 @@ def view_transaction(transaction_id):
 
     if transaction.buyer_id != current_user.id and transaction.seller_id != current_user.id:
         flash("You are not authorized to view this transaction.", "danger")
-        return redirect(url_for("transaction.my_transactions"))
+        return redirect(url_for("transaction.my_transaction"))
 
     return render_template("transaction/view_transaction.html", transaction=transaction, product=transaction.product)
