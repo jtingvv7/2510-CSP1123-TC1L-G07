@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>{{ transaction.product_id }} - MYR {{ '%.2f' |format(grand_total) }}</h2>
+        <h2>{{ transactions|length }} items - MYR {{ '%.2f' |format(grand_total) }}</h2>
         
         <div class="balance">
             <p>Your SecondLoopPay Balance:</p>

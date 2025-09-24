@@ -14,15 +14,15 @@ def index():
     # Get cart data
     cart = session.get("cart", {})
     
-    # Get current user's pending transaction
+    # Get current user's pending transactions
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
+    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").all()
     
-    # Use transaction price for grand_total
-    grand_total = transaction.price if transaction else 0
+    # Calculate total price from all pending transactions
+    grand_total = sum(transaction.price for transaction in transactions) if transactions else 0
     
     return render_template("index.html", 
-                         transaction=transaction, 
+                         transactions=transactions, 
                          grand_total=grand_total)
 
 
@@ -30,23 +30,20 @@ def index():
 
 @payment_bp.route("/secondlooppay", methods=['GET', 'POST'])
 def secondlooppay():
-    # Get current user's pending transaction
+    # Get current user's pending transactions
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
+    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").all()
     
-    # Use transaction price for grand_total
-    grand_total = transaction.price if transaction else 0
+    # Calculate total price from all pending transactions
+    grand_total = sum(transaction.price for transaction in transactions) if transactions else 0
 
     # Get current user wallet
-    current_user_id = session.get('user_id', 1) # Assume current user ID
     wallet = Wallet.query.filter_by(user_id=current_user_id).first()
 
     if not wallet: # might be change it!!!
         wallet = Wallet(user_id=current_user_id, balance=100.0) # Give initial balance
         db.session.add(wallet)
         db.session.commit()
-
-    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").first()
     if request.method == 'POST':
         # Check if wallet has enough balance
         if wallet.balance >= grand_total:
@@ -54,18 +51,19 @@ def secondlooppay():
             wallet.balance -= grand_total
             wallet.escrow_balance += grand_total
 
-            # Create payment record
-            payment = Payment(
-                transaction_id=transaction.id,
-                payer_id=current_user_id, 
-                amount=grand_total,
-                method="wallet",
-                status="held",
-                escrow_status="held"
-            )
-            db.session.add(payment)
+            # Create payment record for each transaction
+            for transaction in transactions:
+                payment = Payment(
+                    transaction_id=transaction.id,
+                    payer_id=current_user_id, 
+                    amount=transaction.price,
+                    method="wallet",
+                    status="held",
+                    escrow_status="held"
+                )
+                db.session.add(payment)
+                transaction.status = "pending"
 
-            transaction.status = "pending"
             db.session.commit()
 
             # Clear shopping cart
@@ -75,32 +73,32 @@ def secondlooppay():
         else:
             flash('Balance is not enough!', 'error')
 
-    return render_template("secondlooppay.html", transaction=transaction, grand_total=grand_total, wallet_balance=wallet.balance)
+    return render_template("secondlooppay.html", transactions=transactions, grand_total=grand_total, wallet_balance=wallet.balance)
 
 @payment_bp.route("/cod", methods=['GET', 'POST'])
 def cod():
     current_user_id = session.get('user_id', 1)
-    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
-    grand_total = transaction.price if transaction else 0
+    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").all()
+    grand_total = sum(transaction.price for transaction in transactions) if transactions else 0
     
     if request.method == 'POST':
-        if not transaction:
-            flash("No pending transaction found!", "error")
+        if not transactions:
+            flash("No pending transactions found!", "error")
             return redirect(url_for('payment.index'))
             
-        # Create COD payment record
-        payment = Payment(
-            transaction_id=transaction.id,
-            payer_id=current_user_id,
-            amount=grand_total,
-            method="cod",
-            status="pending",
-            escrow_status="none"
-        )
-        db.session.add(payment)
+        # Create COD payment record for each transaction
+        for transaction in transactions:
+            payment = Payment(
+                transaction_id=transaction.id,
+                payer_id=current_user_id,
+                amount=transaction.price,
+                method="cod",
+                status="pending",
+                escrow_status="none"
+            )
+            db.session.add(payment)
+            transaction.status = "pending"
         
-        # Update transaction status
-        transaction.status = "pending"
         db.session.commit()
 
         session['cart'] = {}
@@ -108,16 +106,17 @@ def cod():
         flash('Order placed successfully! You will pay when you receive the item.', 'success')
         return redirect(url_for('transaction.my_transaction'))
     
-    return render_template("cod.html", transaction=transaction, grand_total=grand_total)
+    return render_template("cod.html", transactions=transactions, grand_total=grand_total)
 
 
 @payment_bp.route("/success")
 def success():
-    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").first()
+    transactions = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").all()
 
-    if transaction:
+    if transactions:
         # Change transaction status to completed
-        transaction.status = "pending"
+        for transaction in transactions:
+            transaction.status = "pending"
         db.session.commit()
 
     return render_template("success.html")

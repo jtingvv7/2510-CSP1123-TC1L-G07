@@ -18,7 +18,7 @@
 <body>
     <div class="cod-box">
         <h2>Cash on Delivery</h2>
-        <p>Order ID: <b>{{ transaction.id }}</b></p>
+        <p>Order ID: <b>{{ transactions|length }} items</b></p>
         <p>Total Amount: <b>RM {{ "%.2f"|format(grand_total) }}</b></p>
         
         <div class="cod-info">

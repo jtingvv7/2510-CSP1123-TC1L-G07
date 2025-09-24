@@ -20,7 +20,7 @@
   <div class="checkout-box">
     <h2>Checkout</h2>
     <p><a href="{{ url_for('payment.cancel') }}" style="color: #504f4f; text-decoration: none;">← Back to Home</a></p>
-    <p>Order: <b>{{ transaction.product_id }}</b></p>
+    <p>Order: <b>{{ transactions|length }} items</b></p>
     <p>Total: <b>RM {{ "%.2f"|format(grand_total) }}</b></p>
     
     <form id="paymentForm" method="GET">
