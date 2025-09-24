@@ -209,7 +209,7 @@ def my_users():
     return jsonify([{"id": u.id, "name": u.name} for u in users])
 
 # get my transactions
-@report_bp.route("/api/my_transaction")
+@report_bp.route("/api/my_transactions")
 @login_required
 def my_transaction():
     transactions = Transaction.query.filter(
