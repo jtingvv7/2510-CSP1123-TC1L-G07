@@ -13,24 +13,31 @@
         <!-- Report Type -->
         <div class="mb-3">
           <label class="form-label">Report Type</label>
-          <select class="form-select" name="report_type" id="report_type" required>
+          <select class="form-select" name="report_type" id="report_type" {% if pre_type %}disabled{% endif %} required>
             <option value="">-- Select Type --</option>
-            <option value="user">User</option>
-            <option value="product">Product</option>
-            <option value="transaction">Transaction</option>
+            <option value="user" {% if pre_type == "user" %}selected{% endif %}>User</option>
+            <option value="product" {% if pre_type == "product" %}selected{% endif %}>Product</option>
+            <option value="transaction" {% if pre_type == "transaction" %}selected{% endif %}>Transaction</option>
           </select>
+          {% if pre_type %}
+            <!-- 保证即使 disabled，提交时依然能传值 -->
+            <input type="hidden" name="report_type" value="{{ pre_type }}">
+          {% endif %}
         </div>
 
         <!-- Target ID -->
-        <div class="mb-3" id="target-container" style="display:none;">
-          <label class="form-label">Select Target</label>
-          <select class="form-select" id="reported_id" name="reported_id" required >
-            <option value="">-- Select --</option>
-          </select>
-        </div>
-
-        <!-- Hidden input field (for PRE_ID case) -->
-        <input type="hidden" id="hidden_reported_id">
+        {% if pre_id %}
+          <!-- case 1：enter from trasnaction/ product/ chat with pre id -->
+          <input type="hidden" id="hidden_reported_id" name="reported_id" value="{{ pre_id }}">
+        {% else %}
+          <!-- case 2：enter from report center, user choose manually -->
+          <div class="mb-3" id="target-container" style="display:none;">
+            <label class="form-label">Select Target</label>
+            <select class="form-select" id="reported_id" name="reported_id" required>
+              <option value="">-- Select --</option>
+            </select>
+          </div>
+        {% endif %}
 
         <!-- Reason -->
         <div class="mb-3">
@@ -55,7 +62,6 @@
 </div>
 
 <!-- javascript -->
-<!-- send default value to js -->
 <script>
   const PRE_TYPE = "{{ pre_type or '' }}";
   const PRE_ID = "{{ pre_id or '' }}";

@@ -61,7 +61,7 @@
                         </a>
 
                         <!-- right site : report button -->
-                        <a href="{{ url_for('report.report_submit', type='user', pre_id=user.id) }}"
+                        <a href="{{ url_for('report.report_submit', pre_type='user', pre_id=user.id) }}"
                            class="btn btn-outline-danger btn-sm ms-3">Report</a>
                     </div>
                     {% endfor %}
