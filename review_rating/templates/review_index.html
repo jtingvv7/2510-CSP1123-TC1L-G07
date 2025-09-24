@@ -23,6 +23,14 @@
     </header>
     <div class="container">
         <p><a href="{{ url_for('index') }}" style="color: #504f4f; text-decoration: none;">← Back to Home</a></p>
+        
+        {% if seller_id %}
+        <h2>Reviews for Seller ID: {{ seller_id }}</h2>
+        <p>Total Reviews: {{ reviews|length }}</p>
+        {% else %}
+        <h2>All Reviews</h2>
+        {% endif %}
+        
         <ul>
             {% for review in reviews %}
             <li>

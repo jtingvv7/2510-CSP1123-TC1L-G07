@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user
 from extensions import db
-from models import Review
+from models import Review, User
 from werkzeug.utils import secure_filename
 import uuid
 import os
@@ -21,7 +21,22 @@ def allowed_file(filename):
 @review_bp.route("/")
 def index():
     seller_id = request.args.get('seller_id')
-    reviews = Review.query.order_by(Review.date_review.desc()).all()
+    if seller_id:
+        try:
+            seller_id = int(seller_id)
+            # Check if seller exicts
+            seller = User.query.get(seller_id)
+            if not seller:
+                flash("Seller not found!", "error")
+                return redirect(url_for('index'))
+            # Only show reviews for the specific seller
+            reviews = Review.query.filter_by(seller_id=seller_id).order_by(Review.date_review.desc()).all()
+        except ValueError:
+            flash("Invalid seller ID!", "error")
+            return redirect(url_for('index'))
+    else:
+        reviews = Review.query.order_by(Review.date_review.desc()).all()
+
     return render_template("review_index.html", reviews=reviews)
 
 
