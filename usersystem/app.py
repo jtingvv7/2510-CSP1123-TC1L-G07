@@ -8,7 +8,7 @@ from main import db
 from datetime import datetime, timezone
 from collections import defaultdict
 from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 
 usersystem_bp = Blueprint(
     "usersystem",
@@ -19,7 +19,7 @@ usersystem_bp = Blueprint(
 )
 
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp", "pdf"}
 
 
 def allowed_file(filename):
@@ -418,7 +418,7 @@ def profile_address():
 
 # ----------------- edit pickup point -----------------
 
-@usersystem_bp.route("/product_manage/add_pickup", methods=["GET", "POST"])
+@usersystem_bp.route("/pickup_point", methods=["GET", "POST"])
 def pickup_point():
     user_id = current_user.id
 
@@ -619,6 +619,44 @@ def view_profile(user_id):
         return_product=return_product  # pass to template
     )
 
+# ----------------- TOP UP -------------------#
+@usersystem_bp.route("/top_up", methods=["GET", "POST"])
+@login_required
+def top_up():
+    if request.method == "POST":
+        amount = request.form.get("amount")
+        payment_method = request.form.get("payment_method")
+        receipt_file = request.files.get("receipt")
+
+        # validate required fileds
+        if not amount or not payment_method:
+            flash("Please fill all required fields!", "danger")
+            return redirect(url_for("usersystem.top_up"))
+            
+        # validate amount
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                flash("Amount must be greater than 0!", "danger")
+                return redirect(url_for("usersystem.top_up"))
+        except ValueError:
+            flash("Invalid amount format!", "danger")
+            return redirect(url_for("usersystem.top_up"))
+        
+        # handle file upload
+        if receipt_file and allowed_file(receipt_file.filename):
+            filename = f"topup_{current_user.id}_{int(time.time())}.{receipt_file.filename.rsplit('.', 1)[1].lower()}"
+            upload_path = os.path.join(current_app.root_path, "static", "uploads", "topup")
+            os.makedirs(upload_path, exist_ok=True)
+            receipt_file.save(os.path.join(upload_path, filename))
+        else:
+            flash("Please upload a valid receipt file!", "danger")
+            return redirect(url_for("usersystem.top_up"))
+        
+        flash("Top up request submitted! Please wait for admin approval.", "success")
+        return redirect(url_for("usersystem.profile"))
+    
+    return render_template("top_up.html", user=current_user)
 
 # ----------------- SUCCESS -----------------
 @usersystem_bp.route("/success")
