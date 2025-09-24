@@ -68,8 +68,8 @@
     </div>
 
     <!-- Wallet Section -->
-    <div class="profilecard wallet-card">
-      <h3>Wallet</h3>
+    <div class="profilecard wallet-card" onclick="window.location.href='{{ url_for('usersystem.top_up') }}'" style="cursor: pointer;">
+      <h3>Wallet</h3><p>(Click to Top Up)</p>
       <div class="wallet-info">
         <span class="wallet-icon">💰</span>
         <h4>RM {{ "%.2f"|format(wallet) }}</h4>

@@ -205,3 +205,14 @@ class Announcement(db.Model):
     author = db.relationship("User", foreign_keys=[author_id], backref="announcements", lazy=True)
     target_user = db.relationship("User", foreign_keys=[user_id], backref="targeted_announcements", lazy=True)
     report = db.relationship("Report", backref="announcements", lazy=True)
+
+
+class TopUpRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    payment_method = db.Column(db.String(50))  # 'tng' or 'cimb'
+    receipt_file = db.Column(db.String(255))  # name of the file uploaded
+    status = db.Column(db.String(50), default='pending')  # pending/approved/rejected
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    admin_comment = db.Column(db.Text)
