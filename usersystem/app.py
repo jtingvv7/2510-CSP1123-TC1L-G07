@@ -412,7 +412,7 @@ def profile_address():
 
 # ----------------- edit pickup point -----------------
 
-@usersystem_bp.route("/product_manage/add_pickup", methods=["GET", "POST"])
+@usersystem_bp.route("/pickup_point", methods=["GET", "POST"])
 def pickup_point():
     user_id = current_user.id
 
