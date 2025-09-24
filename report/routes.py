@@ -209,9 +209,9 @@ def my_users():
     return jsonify([{"id": u.id, "name": u.name} for u in users])
 
 # get my transactions
-@report_bp.route("/api/my_transactions")
+@report_bp.route("/api/my_transaction")
 @login_required
-def my_transactions():
+def my_transaction():
     transactions = Transaction.query.filter(
         (Transaction.buyer_id == current_user.id) | (Transaction.seller_id == current_user.id)
     ).all()
