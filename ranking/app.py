@@ -102,8 +102,6 @@ def get_review_rankings():
             (review_stats.c.positive_reviews * 100.0 / review_stats.c.total_reviews).label('positive_percentage')
             ).join(
                 review_stats, User.id == review_stats.c.user_id
-            ).filter(
-                review_stats.c.total_reviews >= 3  # Minimum 3 reviews to be ranked
             ).order_by(desc('average_rating')).limit(50)
         
         rankings = []
