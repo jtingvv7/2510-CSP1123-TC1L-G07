@@ -70,6 +70,7 @@ class Transaction(db.Model):
     created_at = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     safe_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'))
     price = db.Column(db.Float, nullable=False)
+    quantity = db.Column(db.Integer, default=1)
     
 #relationship
     messages = db.relationship('Messages', backref = 'chating',lazy = True)
@@ -133,6 +134,9 @@ class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     balance = db.Column(db.Float, default = 0.0)
+    escrow_balance = db.Column(db.Float, default=0.0)
+    total_escrow_released = db.Column(db.Float, default=0.0) 
+    total_escrow_received = db.Column(db.Float, default=0.0)
 
     def __repr__(self):
         return f"<Wallet {self.user_id} balance {self.balance}>"
@@ -146,6 +150,8 @@ class Payment(db.Model):
     method =db.Column(db.String(20), nullable= False) #wallet / online / offline
     status = db.Column(db.String(20), default = 'pending') #pending / success / fail
     date_created = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
+    escrow_status = db.Column(db.String(20), default='none')  # none/held/released
+    date_released = db.Column(db.DateTime, nullable=True)
     
     def __repr__(self):
         return f"<Payment {self.id} amount: {self.amount}>"

@@ -42,9 +42,9 @@ def fake_transaction():
     buyer_id = current_user.id
     seller_id = current_user.id
     fake_data = [
-        Transaction(product_id="0619",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
-        Transaction(product_id="201",buyer_id=buyer_id,seller_id=seller_id,status="completed"),
-        Transaction(product_id="333",buyer_id=buyer_id,seller_id=seller_id,status="cancelled"),
+        Transaction(product_id="0619",buyer_id=buyer_id,seller_id=seller_id,status="pending", quantity=1),
+        Transaction(product_id="201",buyer_id=buyer_id,seller_id=seller_id,status="completed", quantity=1),
+        Transaction(product_id="333",buyer_id=buyer_id,seller_id=seller_id,status="cancelled", quantity=1),
     ]
     db.session.add_all(fake_data)
     db.session.commit()
@@ -56,9 +56,9 @@ def fake_purchase():
     buyer_id = 999
     seller_id = current_user.id
     fake_requests = [
-        Transaction(product_id="111",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
-        Transaction(product_id="222",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
-        Transaction(product_id="1018",buyer_id=buyer_id,seller_id=seller_id,status="pending"),
+        Transaction(product_id="111",buyer_id=buyer_id,seller_id=seller_id,status="pending", quantity=1),
+        Transaction(product_id="222",buyer_id=buyer_id,seller_id=seller_id,status="pending", quantity=1),
+        Transaction(product_id="1018",buyer_id=buyer_id,seller_id=seller_id,status="pending", quantity=1),
     ]
     db.session.add_all(fake_requests)
     db.session.commit()
@@ -118,41 +118,85 @@ def buy_product(product_id):
 
 
 #complete transaction
-@transaction_bp.route("/confirm/<int:transaction_id>",methods = ["POST"])
+@transaction_bp.route("/confirm/<int:transaction_id>", methods=["POST"])
 @login_required
 def confirm_receipt(transaction_id):
     transaction = Transaction.query.get_or_404(transaction_id)
-    #only buyer can complete transaction
+    
+    # Check permission
     if transaction.buyer_id != current_user.id:
-        flash("You are not authorized to confirm this transaction.","danger")
-        return redirect(url_for("transaction.my_transactions"))
+        flash("You are not authorized to confirm this transaction.", "danger")
+        return redirect(url_for("transaction.my_transaction"))
     
-    #only can complete when shipped 
+    # Only confirm after the product is shipped
     if transaction.status != "shipped":
-        flash ("You can only confirm after the product is shipped.","warning")
-        return redirect(url_for("transaction.my_transactions"))
+        flash("You can only confirm after the product is shipped.", "warning")
+        return redirect(url_for("transaction.my_transaction"))
     
-     #change status
     try:
-        transaction.status = "payment_pending"
-        transaction.created_at = datetime.now(timezone.utc)
-        db.session.commit()
+        # Find related payment record
+        payment = Payment.query.filter_by(transaction_id=transaction_id).first()
+        
+        if payment and payment.escrow_status == "held":
+            buyer_wallet = Wallet.query.filter_by(user_id=current_user.id).first()
+            if not buyer_wallet:
+                buyer_wallet = Wallet(user_id=current_user.id, balance=0.0, escrow_balance=0.0)
+                db.session.add(buyer_wallet)
+            
+            seller_wallet = Wallet.query.filter_by(user_id=transaction.seller_id).first()
+            if not seller_wallet:
+                seller_wallet = Wallet(user_id=transaction.seller_id, balance=0.0, escrow_balance=0.0)
+                db.session.add(seller_wallet)
 
-        #send message to seller (auto)
+            # Release funds from buyer
+            buyer_wallet.escrow_balance -= payment.amount
+            buyer_wallet.total_escrow_released += payment.amount
+            
+            # Release funds to seller
+            seller_wallet.balance += payment.amount
+            seller_wallet.total_escrow_received += payment.amount
+            
+            # Update payment status
+            payment.escrow_status = "released"
+            payment.date_released = datetime.now(timezone.utc)
+            
+            # Update transaction status
+            transaction.status = "completed"
+            transaction.created_at = datetime.now(timezone.utc)
+        
+        elif payment and payment.escrow_status == "released":
+            # Funds already released, just complete the transaction
+            transaction.status = "completed"
+            transaction.created_at = datetime.now(timezone.utc)
+
+        elif payment and payment.method == "cod":
+            # COD no need to release fund, just complete
+            transaction.status = "completed"
+            transaction.created_at = datetime.now(timezone.utc)
+            
+        else:
+            flash("No valid payment found for this transaction.", "error")
+            return redirect(url_for("transaction.my_transaction"))
+        
+        # Send system message
         msg = Messages(
             sender_id=current_user.id,
             receiver_id=transaction.seller_id,
             transaction_id=transaction.id,
             message_type="system",
-            content="[System] Buyer has confirmed receipt."
+            content="[System] Buyer has confirmed receipt and payment has been released."
         )
         db.session.add(msg)
         db.session.commit()
-
-    except SQLAlchemyError:
+        
+        flash("Transaction completed successfully! Payment has been released to seller.", "success")
+        
+    except SQLAlchemyError as e:
         db.session.rollback()
-        flash("Error confirming transaction.","danger")
-    return redirect(url_for("payment.index"))
+        flash("Error confirming transaction.", "danger")
+        print(f"Error: {e}")
+    
+    return redirect(url_for("transaction.my_transaction"))
     
 
 #buyer want to cancel transaction when pending state
@@ -164,7 +208,7 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
         flash("You cannot cancel this transaction.","warning")
         return redirect(url_for("transaction.my_transaction"))
     
-    if transaction.status != "pending": #only transaction in pending state can be cancelled
+    if transaction.status != "payment_pending": #only transaction in pending state can be cancelled
         flash("Only pending requests can be cancelled.","warning")
         return redirect(url_for("transaction.my_transaction"))
     
@@ -315,7 +359,7 @@ def ship_transaction(transaction_id):
 
 
 #check transaction records  (buyer/seller) 
-@transaction_bp.route("/my_transactions") 
+@transaction_bp.route("/my_transaction") 
 @login_required
 def my_transaction():#check all owner by current user transaction record
     bought_transactions = Transaction.query.filter_by(buyer_id = current_user.id).all()  
@@ -337,6 +381,6 @@ def view_transaction(transaction_id):
 
     if transaction.buyer_id != current_user.id and transaction.seller_id != current_user.id:
         flash("You are not authorized to view this transaction.", "danger")
-        return redirect(url_for("transaction.my_transactions"))
+        return redirect(url_for("transaction.my_transaction"))
 
     return render_template("transaction/view_transaction.html", transaction=transaction, product=transaction.product)

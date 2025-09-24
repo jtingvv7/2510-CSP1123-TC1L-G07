@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let apiUrl = "";
         if (type === "product") apiUrl = "/report/api/my_products";
         if (type === "user") apiUrl = "/report/api/my_users";
-        if (type === "transaction") apiUrl = "/report/api/my_transactions";
+        if (type === "transaction") apiUrl = "/report/api/my_transaction";
 
         if (apiUrl) {
             fetch(apiUrl)
