@@ -113,7 +113,7 @@ def secondlooppay():
         if wallet.balance >= grand_total:
             # Minus balance from wallet
             wallet.balance -= grand_total
-            db.session.commit()
+            wallet.escrow_balance += grand_total
 
             # Create payment record
             payment = Payment(
@@ -121,9 +121,12 @@ def secondlooppay():
                 payer_id=current_user_id, 
                 amount=grand_total,
                 method="wallet",
-                status="success"
+                status="held",
+                escrow_status="held"
             )
             db.session.add(payment)
+
+            transaction.status = "pending"
             db.session.commit()
 
             # Clear shopping cart
@@ -158,13 +161,13 @@ def cod():
         db.session.add(payment)
         
         # Update transaction status
-        transaction.status = "shipped"
-        
+        transaction.status = "pending"
         db.session.commit()
+
         session['cart'] = {}
         
         flash('Order placed successfully! You will pay when you receive the item.', 'success')
-        return redirect(url_for('transaction.my_transaction'))
+        return redirect(url_for('transaction.my_transactions'))
     
     return render_template("cod.html", transaction=transaction, grand_total=grand_total)
 
@@ -175,7 +178,7 @@ def success():
 
     if transaction:
         # Change transaction status to completed
-        transaction.status = "completed"
+        transaction.status = "pending"
         db.session.commit()
 
     return render_template("success.html")
@@ -183,11 +186,23 @@ def success():
 
 @payment_bp.route("/cancel")
 def cancel():
-    transaction = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").first()
+    transactions = Transaction.query.filter_by(
+        buyer_id=session.get('user_id', 1), 
+        status="payment_pending"
+    ).all()
 
-    if transaction:
-        # Change transaction status to shipped
-        transaction.status = "shipped"
+    if transactions:
+        for transaction in transactions:
+            product = Product.query.get(transaction.product_id)
+            if product:
+                # 使用transaction.quantity恢复库存
+                product.quantity += transaction.quantity
+                product.is_sold = False
+            
+            db.session.delete(transaction)
+        
         db.session.commit()
+        session['cart'] = {}
+        flash("Payment cancelled. All products are back on the market.", "info")
 
     return render_template("cancel.html")

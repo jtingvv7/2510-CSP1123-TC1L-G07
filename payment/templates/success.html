@@ -2,21 +2,26 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Payment Succesful</title>
+    <title>Payment Successful</title>
 <style>
     body {font-family: Arial, Helvetica, sans-serif; text-align: center; padding: 50px; background: #f5f5f5;}
-    .message {background: #fff; padding: 30px; border-radius: 10px; display: inline-block; box-shadow: 0 4ps 10px rgba(0,0,0,0.1);}
+    .message {background: #fff; padding: 30px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
     h1 {color: #28a745;}
-    a { display: inline-block; margin-top: 20px; text-decoration: none; color: #fff; background: #ee4d2d; padding: 10px 20px; border-radius: 5px;}
+    a { display: inline-block; margin: 5px 10px; text-decoration: none; color: #fff; background: #ee4d2d; padding: 10px 20px; border-radius: 5px;}
     a:hover {background: #d63c1f;}
+    .primary {background: #007bff;}
+    .primary:hover {background: #0056b3;}
 </style>
 </head>
 <body>
     <div class="message">
         <h1>Payment Successful!</h1>
-        <p>Thank you for your trading.</p>
+        <p>Your payment has been processed successfully!</p>
+        <p><strong>Next step:</strong> The seller will review your order and decide to accept or reject it.</p>
+        <p>You will be notified once the seller responds.</p>
         <p>Have a Nice Day!</p>
         <a href="{{ url_for('index') }}">Go Back to Home</a>
+        <a href="{{ url_for('messages.inbox') }}" class="primary">View Messages</a>
         <a href="{{ url_for('transaction.my_transaction') }}">View My Transactions</a>
     </div>
 </body>

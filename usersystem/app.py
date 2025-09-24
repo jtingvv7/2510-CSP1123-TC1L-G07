@@ -476,8 +476,9 @@ def cart():
                         product_id=product.id,
                         buyer_id=current_user.id,
                         seller_id=product.seller_id,
-                        status="pending",
+                        status="payment_pending",
                         price=product.price * qty,
+                        quantity=qty,
                     )
                     db.session.add(new_transaction)
 
@@ -489,8 +490,8 @@ def cart():
                 db.session.commit()
                 session["cart"] = {}
 
-                flash("Checkout successful!Your orders are now pending seller confirmation.", "success")
-                return redirect(url_for("transaction.my_transaction"))
+                flash("Checkout successful!  Please complete your payment.", "success")
+                return redirect(url_for("payment.index"))
 
             except Exception as e:
                 db.session.rollback()

@@ -96,7 +96,7 @@
                 <h6 class="mb-1">{{ tx.product.name }}</h6>
                 <p class="mb-1 text-muted">RM {{ tx.product.price }}</p>
                 <span class="badge 
-                  {% if tx.status == 'payment_pending' %} bg-secondary
+                  {% if tx.status == 'pending' %} bg-warning text-dark
                   {% elif tx.status == 'accepted' %} bg-primary
                   {% elif tx.status == 'shipped' %} bg-warning text-dark
                   {% elif tx.status == 'completed' %} bg-success
@@ -108,7 +108,9 @@
                 <div class="button-group d-flex flex-column align-items-end gap-1" style="min-height: 80px; justify-content: center;">
                   <!-- status buttons -->
                   <div class="status-buttons mb-2">
-                    {% if tx.status == "accepted" %}
+                    {% if tx.status == "pending" %}
+                      <span class="badge bg-warning text-dark">Awaiting Seller Action</span>
+                    {% elif tx.status == "accepted" %}
                       <form action="{{ url_for('transaction.ship_transaction', transaction_id=tx.id) }}" method="POST" class="d-inline">
                         <button type="submit" class="btn btn-warning btn-sm">Ship</button>
                       </form>
