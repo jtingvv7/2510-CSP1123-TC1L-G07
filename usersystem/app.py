@@ -495,7 +495,7 @@ def cart():
                 db.session.commit()
                 session["cart"] = {}
 
-                flash("Checkout successful! Your orders are now pending seller confirmation.", "success")
+                flash("Checkout successful!Your orders are now pending seller confirmation.", "success")
                 return redirect(url_for("transaction.my_transaction"))
 
             except Exception as e:

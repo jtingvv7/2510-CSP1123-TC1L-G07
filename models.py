@@ -137,6 +137,7 @@ class Wallet(db.Model):
     def __repr__(self):
         return f"<Wallet {self.user_id} balance {self.balance}>"
     
+
 class Payment(db.Model):
     id =db.Column(db.Integer, primary_key = True)
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = False)
