@@ -57,18 +57,6 @@ def report_submit():
 
         appeal_deadline = datetime.now(timezone.utc) + timedelta(days=5)
 
-        #  Create a new Report
-        new_report = Report(
-            reporter_id=current_user.id,
-            reported_type=report_type,
-            reported_id=reported_id,         # can be product.id / user.id / transaction.id
-            reason=reason,
-            evidence_file=filename,
-            status="pending",
-            date_report=datetime.now(timezone.utc),
-            appeal_deadline=appeal_deadline
-        )
-
         # Determine which user should receive the announcement
         target_user_id = None
 
@@ -91,21 +79,38 @@ def report_submit():
                 elif current_user.id == transaction.seller_id:
                     target_user_id = transaction.buyer_id   # reporter is seller → notify buyer
 
-
-        #  Create an Announcement
-        deadline_str = (appeal_deadline + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
-
-        new_announcement = Announcement(
-            user_id=target_user_id,          # the user who should see this announcement
-            report_id=new_report.id,         # link to the report
-            author_id=None,       
-            title="⚠ You have been reported!",
-            content=f"Please submit your appeal before {deadline_str}.",
-            expires_at=appeal_deadline
+                #  Create a new Report
+        new_report = Report(
+            reporter_id=current_user.id,
+            reported_type=report_type,
+            reported_id=reported_id,         # can be product.id / user.id / transaction.id
+            reported_user_id = target_user_id,
+            reason=reason,
+            evidence_file=filename,
+            status="pending",
+            date_report=datetime.now(timezone.utc),
+            appeal_deadline=appeal_deadline,
         )
-
+        
         try:
-            db.session.add_all([new_report, new_announcement])
+
+            #save report
+            db.session.add(new_report)
+            db.session.flush()
+
+            #  Create an Announcement
+            deadline_str = (appeal_deadline + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+
+            new_announcement = Announcement(
+                user_id=target_user_id,          # the user who should see this announcement
+                report_id=new_report.id,         # link to the report
+                author_id=None,       
+                title="⚠ You have been reported!",
+                content=f"Please submit your appeal before {deadline_str}.",
+                expires_at=appeal_deadline
+            )
+
+            db.session.add(new_announcement)
             db.session.commit()
             flash("Your report has been submitted. Admin will review it soon.", "success")
         except SQLAlchemyError:
@@ -127,7 +132,8 @@ def report_submit():
 @login_required
 def my_reports():
     reports = Report.query.filter_by(reporter_id=current_user.id).all()
-    return render_template("my_reports.html", reports=reports)
+    reports_against_me = Report.query.filter_by(reported_user_id=current_user.id).all()
+    return render_template("my_reports.html", reports=reports, reports_against_me=reports_against_me, datetime=datetime,timedelta=timedelta)
 
 
 # Appeal report
@@ -136,15 +142,18 @@ def my_reports():
 def submit_appeal(report_id):
     report = Report.query.get_or_404(report_id)
 
-    # only reported can appeal
-    if report.reported_id != current_user.id:
+    if report.reported_user_id != current_user.id:
         flash("You are not authorized to appeal this report.", "danger")
-        return redirect(url_for("report.my_reports"))
+        return redirect(url_for("index"))
+    
+    if report.appeal_deadline:
+        deadline = report.appeal_deadline
+        if deadline.tzinfo is None:
+            deadline = deadline.replace(tzinfo=timezone.utc)
 
-    # check  expired
-    if report.appeal_deadline and datetime.utcnow() > report.appeal_deadline:
-        flash("The appeal deadline has expired.", "danger")
-        return redirect(url_for("report.my_reports"))
+        if datetime.now(timezone.utc) > deadline:
+            flash("The appeal deadline has expired.", "danger")
+            return redirect(url_for("index"))
 
     if request.method == "POST":
         appeal_text = request.form.get("reason")
@@ -153,23 +162,30 @@ def submit_appeal(report_id):
         if not appeal_text:
             flash("You must provide a reason for your appeal.", "danger")
             return redirect(url_for("report.submit_appeal", report_id=report_id))
-        
+
         filename = None
         if appeal_file and appeal_file.filename != "":
-            filename = secure_filename(appeal_file.filename)
+            filename = f"appeal_{report_id}_{secure_filename(appeal_file.filename)}"
             file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
             appeal_file.save(file_path)
             report.appeal_file = filename
 
-        # update status
         report.appeal_text = appeal_text
         report.appeal_status = "submitted"
         db.session.commit()
 
         flash("Your appeal has been submitted successfully!", "success")
-        return redirect(url_for("report.my_reports"))
+        return redirect(url_for("report.my_reports"))   
 
-    return render_template("appeal_form.html", report=report)
+    return render_template(
+        "appeal_form.html",
+        report=report,
+        reason=report.reason,
+        evidence_file=report.evidence_file,
+        appeal_deadline=report.appeal_deadline,
+        datetime=datetime,
+        timedelta=timedelta
+    )
 
 # ---------------- API endpoints ----------------
 
