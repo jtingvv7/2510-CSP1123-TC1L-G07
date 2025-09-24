@@ -47,6 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // // ✅ 初始化加载
+    if (typeSelect && typeSelect.value) {
+    loadTargets(typeSelect.value);
+    }
+
     // if have default id
     if (PRE_TYPE) {
         typeSelect.value = PRE_TYPE;
