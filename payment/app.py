@@ -135,6 +135,39 @@ def secondlooppay():
 
     return render_template("secondlooppay.html", transaction=transaction, grand_total=grand_total, wallet_balance=wallet.balance)
 
+@payment_bp.route("/cod", methods=['GET', 'POST'])
+def cod():
+    current_user_id = session.get('user_id', 1)
+    transaction = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").first()
+    grand_total = transaction.price if transaction else 0
+    
+    if request.method == 'POST':
+        if not transaction:
+            flash("No pending transaction found!", "error")
+            return redirect(url_for('payment.index'))
+            
+        # Create COD payment record
+        payment = Payment(
+            transaction_id=transaction.id,
+            payer_id=current_user_id,
+            amount=grand_total,
+            method="cod",
+            status="pending",
+            escrow_status="none"
+        )
+        db.session.add(payment)
+        
+        # Update transaction status
+        transaction.status = "shipped"
+        
+        db.session.commit()
+        session['cart'] = {}
+        
+        flash('Order placed successfully! You will pay when you receive the item.', 'success')
+        return redirect(url_for('transaction.my_transaction'))
+    
+    return render_template("cod.html", transaction=transaction, grand_total=grand_total)
+
 
 @payment_bp.route("/success")
 def success():
