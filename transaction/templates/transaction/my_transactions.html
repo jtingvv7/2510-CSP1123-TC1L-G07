@@ -6,7 +6,7 @@
 
 <div class="container-fluid mt-4">
 
-  <!-- 顶部标题 -->
+  <!-- title -->
   <div class="text-center p-4 rounded shadow-sm mb-4" style="background: linear-gradient(90deg, #6a11cb, #2575fc); color: white;">
     <h2 class="fw-bold"><i class="bi bi-wallet2 me-2"></i>My Transactions</h2>
     <p class="mb-0">Track and manage all your purchases and sales easily</p>
@@ -111,8 +111,13 @@
                     {% if tx.status == "pending" %}
                       <span class="badge bg-warning text-dark">Awaiting Seller Action</span>
                     {% elif tx.status == "accepted" %}
-                      <form action="{{ url_for('transaction.ship_transaction', transaction_id=tx.id) }}" method="POST" class="d-inline">
+                      <form action="{{ url_for('transaction.ship_transaction', transaction_id=tx.id) }}" 
+                            method="POST" enctype="multipart/form-data" class="d-inline">
+                      <div class="input-group input-group-sm">
+                        <input type="file" name="proof" accept="image/*,.pdf" required 
+                              class="form-control form-control-sm">
                         <button type="submit" class="btn btn-warning btn-sm">Ship</button>
+                      </div>
                       </form>
                     {% elif tx.status == "shipped" %}
                       <span class="badge bg-info">Awaiting Buyer</span>

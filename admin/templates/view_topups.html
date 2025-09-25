@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Manage Top-ups{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4" style="min-height: calc(100vh - 80px);">
+  <div class="row justify-content-center">
+    <div class="col-lg-11">
+      <div class="card shadow border-0">
+        <div class="card-header bg-dark text-white text-center fw-bold fs-4">
+          <i class="bi bi-wallet2"></i> Manage Top-up Requests
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped align-middle text-center">
+              <thead class="table-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>User</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Receipt</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for t in topups %}
+                <tr>
+                  <td>{{ t.id }}</td>
+                  <td>{{ t.user_id }} - {{ t.user.name }}</td>
+                  <td><span class="badge bg-primary">RM {{ "%.2f"|format(t.amount) }}</span></td>
+                  <td>{{ t.payment_method }}</td>
+
+                  <!-- Receipt -->
+                  <td>
+                    {% if t.receipt_file %}
+                      <button class="btn btn-sm btn-outline-primary"
+                              data-bs-toggle="modal"
+                              data-bs-target="#receiptModal{{ t.id }}">
+                        View Receipt
+                      </button>
+
+                      <!-- Receipt Modal -->
+                      <div class="modal fade" id="receiptModal{{ t.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Receipt for Top-up #{{ t.id }}</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                              <img src="{{ url_for('static', filename='uploads/topup/' ~ t.receipt_file) }}" 
+                                   class="img-fluid rounded shadow">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% else %}
+                      <span class="text-muted">No File</span>
+                    {% endif %}
+                  </td>
+
+                  <!-- Status -->
+                  <td>
+                    {% if t.status == "pending" %}
+                      <span class="badge bg-warning text-dark px-3 py-2">Pending</span>
+                    {% elif t.status == "approved" %}
+                      <span class="badge bg-success px-3 py-2">Approved</span>
+                    {% else %}
+                      <span class="badge bg-danger px-3 py-2">Rejected</span>
+                    {% endif %}
+                  </td>
+
+                  <td>{{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+
+                  <!-- Action -->
+                  <td>
+                    <div class="d-grid gap-2">
+                      <a href="{{ url_for('admin.approve_topup', topup_id=t.id) }}" class="btn btn-success btn-sm">Approve</a>
+                      <a href="{{ url_for('admin.reject_topup', topup_id=t.id) }}" class="btn btn-danger btn-sm">Reject</a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

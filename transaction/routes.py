@@ -1,13 +1,20 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for , flash
+import os
+from flask import Blueprint, render_template, redirect, url_for , flash, request, current_app
 from flask_login import  login_required , current_user, login_user
 from datetime import datetime, timezone
 from models import db
 from models import User, Product, Transaction, Messages, Review, Payment, Wallet
 from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.utils import secure_filename
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp", "pdf"}
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 ''' for test
@@ -321,40 +328,62 @@ def reject_request(transaction_id):
     return redirect(url_for("transaction.view_requests"))
 
 
-#marks transaction as shipped
-@transaction_bp.route("/ship/<int:transaction_id>",methods = ["POST"])
+# marks transaction as shipped (with proof)
+@transaction_bp.route("/ship/<int:transaction_id>", methods=["POST"])
 @login_required
 def ship_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
-    #only seller can ship
+
+    # only seller can ship
     if tx.seller_id != current_user.id:
-        flash("You do not have permission to ship this order.","danger")
+        flash("You do not have permission to ship this order.", "danger")
         return redirect(url_for("transaction.my_transaction"))
-    
-    if tx.status !="accepted":
-        flash("Only accepted orders can be shipped.","warning")
+
+    if tx.status != "accepted":
+        flash("Only accepted orders can be shipped.", "warning")
         return redirect(url_for("transaction.my_transaction"))
-    
+
+    # check file upload
+    if "proof" not in request.files:
+        flash("Please upload shipping proof.", "danger")
+        return redirect(url_for("transaction.my_transaction"))
+
+    file = request.files["proof"]
+    if not (file and allowed_file(file.filename)):
+        flash("Invalid file type. Please upload an image or PDF.", "danger")
+        return redirect(url_for("transaction.my_transaction"))
+
     try:
+        # save file
+        filename = secure_filename(file.filename)
+        folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "proofs")
+        os.makedirs(folder, exist_ok=True)
+        filepath = os.path.join(folder, filename)
+        file.save(filepath)
+
+        # update transaction
         tx.status = "shipped"
+        tx.proof = f"proofs/{filename}"   
         db.session.commit()
 
-        # send message to buyer (auto)
+        # send auto message to buyer
         msg = Messages(
             sender_id=current_user.id,
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content="[System] Seller has marked the transaction as shipped."
+            content="[System] Seller has marked the transaction as shipped (with proof)."
         )
         db.session.add(msg)
         db.session.commit()
-        flash("Order marked as shipped.","success")
+
+        flash("Order marked as shipped with proof uploaded.", "success")
+
     except SQLAlchemyError as e:
         db.session.rollback()
-        logging.error( f"Transaction ship failed, tx_id={tx.id}, error={e}", exc_info = True )
-        flash("Error marking as shipped.","danger")
-    
+        logging.error(f"Transaction ship failed, tx_id={tx.id}, error={e}", exc_info=True)
+        flash("Error marking as shipped.", "danger")
+
     return redirect(url_for("transaction.my_transaction"))
 
 

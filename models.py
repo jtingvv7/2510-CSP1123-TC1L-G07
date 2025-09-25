@@ -71,6 +71,7 @@ class Transaction(db.Model):
     safe_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'))
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, default=1)
+    proof = db.Column(db.String(255), nullable=True)
     
 #relationship
     messages = db.relationship('Messages', backref = 'chating',lazy = True)

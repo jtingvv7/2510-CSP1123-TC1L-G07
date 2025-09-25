@@ -7,7 +7,7 @@ from flask_login import  login_required , current_user, login_user, logout_user
 from datetime import datetime, timezone
 from models import db
 from werkzeug.utils import secure_filename
-from models import User, Product, Transaction, Messages, Wallet, Report, Announcement
+from models import User, Product, Transaction, Messages, Wallet, Report, Announcement, TopUpRequest
 from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
@@ -99,6 +99,13 @@ def manage_announcements():
     announcements = Announcement.query.order_by(Announcement.created_at.desc()).all()
     return render_template("manage_announcements.html", announcements=announcements)
 
+# view all top up requests
+@admin_bp.route("/view_topups")
+@login_required
+@admin_required
+def view_topups():
+    topups = TopUpRequest.query.order_by(TopUpRequest.created_at.desc()).all()
+    return render_template("view_topups.html", topups=topups)
 
 ################## user management #####################
 

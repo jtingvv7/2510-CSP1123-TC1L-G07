@@ -166,7 +166,8 @@ def submit_appeal(report_id):
         filename = None
         if appeal_file and appeal_file.filename != "":
             filename = f"appeal_{report_id}_{secure_filename(appeal_file.filename)}"
-            file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
+            file_path = os.path.join(current_app.config["UPLOAD_FOLDER"],"reports", filename)
+            os.makedirs(os.path.dirname(file_path), exist_ok=True) #ensure folder exists
             appeal_file.save(file_path)
             report.appeal_file = filename
 
