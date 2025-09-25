@@ -1,8 +1,9 @@
 import logging
+import time
 import os
 from flask import Blueprint, render_template, redirect, url_for , flash, request, current_app
 from flask_login import  login_required , current_user, login_user
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from models import db
 from models import User, Product, Transaction, Messages, Review, Payment, Wallet
 from sqlalchemy.exc import SQLAlchemyError
@@ -72,6 +73,36 @@ def fake_purchase():
     return "Fake purchase requests inserted"
 
 '''
+
+#auto confirm transactions
+from datetime import datetime, timedelta
+from models import db, Transaction, Messages
+
+def auto_confirm_transactions():
+    now = datetime.now()
+    deadline = now - timedelta(days=5)
+
+    expired_tx = Transaction.query.filter(
+        Transaction.status == "shipped",
+        Transaction.shipped_at <= deadline
+    ).all()
+
+    for tx in expired_tx:
+        tx.status = "completed"
+
+        msg = Messages(
+            sender_id=tx.seller_id,
+            receiver_id=tx.buyer_id,
+            transaction_id=tx.id,
+            message_type="system",
+            content="[System] Transaction auto-confirmed after 5 days."
+        )
+        db.session.add(msg)
+
+    if expired_tx:
+        db.session.commit()
+        print(f"[AutoConfirm] {len(expired_tx)} transactions confirmed.")
+
 
 #buyer action
 
@@ -305,6 +336,9 @@ def reject_request(transaction_id):
     
     try:
         tx.status = "rejected"
+        tx.product.is_sold = False
+        db.session.commit()
+        
         db.session.commit()
 
         # send to buyer (auto)
@@ -354,27 +388,38 @@ def ship_transaction(transaction_id):
         return redirect(url_for("transaction.my_transaction"))
 
     try:
-        # save file
-        filename = secure_filename(file.filename)
-        folder = os.path.join(current_app.config["UPLOAD_FOLDER"], "proofs")
+        folder = os.path.join(current_app.static_folder, "uploads", "proofs")
         os.makedirs(folder, exist_ok=True)
+
+        ext = file.filename.rsplit(".", 1)[1].lower()
+        filename = f"tx{tx.id}_{int(time.time())}.{ext}"
+
         filepath = os.path.join(folder, filename)
         file.save(filepath)
 
-        # update transaction
+        tx.proof = f"uploads/proofs/{filename}"
         tx.status = "shipped"
-        tx.proof = f"proofs/{filename}"   
+        tx.shipped_at = datetime.now()
         db.session.commit()
 
-        # send auto message to buyer
         msg = Messages(
             sender_id=current_user.id,
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content="[System] Seller has marked the transaction as shipped (with proof)."
+            content="[System] Seller has marked the transaction as shipped with proof."
         )
+        
+        msg2 = Messages(
+        sender_id=tx.buyer_id,
+        receiver_id=tx.seller_id,
+        transaction_id=tx.id,
+        message_type="system",
+        content="[System] Transaction was auto-confirmed after 5 days."
+        )
+    
         db.session.add(msg)
+        db.session.add(msg2)
         db.session.commit()
 
         flash("Order marked as shipped with proof uploaded.", "success")

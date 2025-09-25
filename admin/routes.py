@@ -4,7 +4,7 @@ import os
 from flask import Blueprint, render_template, redirect, url_for , flash, abort, request, current_app
 from functools import wraps
 from flask_login import  login_required , current_user, login_user, logout_user
-from datetime import datetime, timezone
+from datetime import datetime, timezone,timedelta
 from models import db
 from werkzeug.utils import secure_filename
 from models import User, Product, Transaction, Messages, Wallet, Report, Announcement, TopUpRequest
@@ -65,7 +65,7 @@ def manage_products():
 @admin_required
 def manage_transactions():
     all_transactions = Transaction.query.all()
-    return render_template("manage_transactions.html", transactions = all_transactions)
+    return render_template("manage_transactions.html", transactions = all_transactions,timedelta=timedelta)
 
 #check all wallets
 @admin_bp.route("/manage_wallets")
@@ -229,6 +229,8 @@ def delete_product(product_id):
 @admin_required
 def delete_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
+    tx.product.is_sold = False
+    tx.product.quantity = +1
     db.session.delete(tx)
     db.session.commit()
     flash("Transaction deleted successfully","success")

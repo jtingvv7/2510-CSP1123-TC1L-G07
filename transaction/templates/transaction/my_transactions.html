@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}My transaction {% endblock %}
+{% block title %}My Transactions{% endblock %}
 
 {% block main_container %}
-
 <div class="container-fluid mt-4">
 
   <!-- title -->
@@ -39,7 +38,20 @@
                   {% else %} bg-danger {% endif %}">
                   {{ t.status|capitalize }}
                 </span>
+
+                <!-- Proof -->
+                {% if t.proof %}
+                  <div class="mt-2">
+                    <a href="{{ url_for('static', filename=t.proof) }}" target="_blank">
+                      <img src="{{ url_for('static', filename=t.proof) }}" 
+                           alt="Shipping Proof" 
+                           class="img-thumbnail" 
+                           style="max-width: 120px;">
+                    </a>
+                  </div>
+                {% endif %}
               </div>
+
               <div class="text-end">
                 <div class="button-group d-flex flex-column align-items-end gap-1" style="min-height: 80px; justify-content: center;">
                   <!-- status buttons -->
@@ -65,7 +77,7 @@
                   <!-- fixed buttons -->
                   <div class="fixed-buttons d-flex gap-1">
                     <a href="{{ url_for('messages.chat', user_id=t.seller_id) }}" class="btn btn-outline-primary btn-sm">Contact</a>
-                    <a href="{{ url_for('report.report_submit', type='transaction', pre_id=t.id) }}" class="btn btn-outline-danger btn-sm">Report</a>
+                    <a href="{{ url_for('report.report_submit', pre_type='transaction', pre_id=t.id) }}" class="btn btn-outline-danger btn-sm">Report</a>
                   </div>
                 </div>
               </div>
@@ -103,24 +115,36 @@
                   {% else %} bg-danger {% endif %}">
                   {{ tx.status|capitalize }}
                 </span>
+
+                <!-- Proof -->
+                {% if tx.proof %}
+                  <div class="mt-2">
+                    <a href="{{ url_for('static', filename=tx.proof) }}" target="_blank">
+                      <img src="{{ url_for('static', filename=tx.proof) }}" 
+                           alt="Shipping Proof" 
+                           class="img-thumbnail" 
+                           style="max-width: 120px;">
+                    </a>
+                  </div>
+                {% endif %}
               </div>
+
               <div class="text-end">
                 <div class="button-group d-flex flex-column align-items-end gap-1" style="min-height: 80px; justify-content: center;">
                   <!-- status buttons -->
                   <div class="status-buttons mb-2">
                     {% if tx.status == "pending" %}
-                      <span class="badge bg-warning text-dark">Awaiting Seller Action</span>
+                      <span class="badge bg-warning text-dark">Awaiting Seller Acceptance</span>
                     {% elif tx.status == "accepted" %}
                       <form action="{{ url_for('transaction.ship_transaction', transaction_id=tx.id) }}" 
                             method="POST" enctype="multipart/form-data" class="d-inline">
-                      <div class="input-group input-group-sm">
-                        <input type="file" name="proof" accept="image/*,.pdf" required 
-                              class="form-control form-control-sm">
-                        <button type="submit" class="btn btn-warning btn-sm">Ship</button>
-                      </div>
+                        <div class="input-group input-group-sm">
+                          <input type="file" name="proof" accept="image/*,.pdf" required class="form-control form-control-sm">
+                          <button type="submit" class="btn btn-warning btn-sm">Ship</button>
+                        </div>
                       </form>
                     {% elif tx.status == "shipped" %}
-                      <span class="badge bg-info">Awaiting Buyer</span>
+                      <span class="badge bg-info">Awaiting Buyer Confirmation</span>
                     {% endif %}
                   </div>
                   

@@ -72,6 +72,7 @@ class Transaction(db.Model):
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, default=1)
     proof = db.Column(db.String(255), nullable=True)
+    shipped_at = db.Column(db.DateTime, nullable =True)
     
 #relationship
     messages = db.relationship('Messages', backref = 'chating',lazy = True)
