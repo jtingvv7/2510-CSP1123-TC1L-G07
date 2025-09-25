@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
 from datetime import datetime, timezone
 from collections import defaultdict
-from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement
+from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement, TopUpRequest
 from flask_login import login_user, logout_user, current_user, login_required
 
 usersystem_bp = Blueprint(
@@ -657,6 +657,16 @@ def top_up():
         else:
             flash("Please upload a valid receipt file!", "danger")
             return redirect(url_for("usersystem.top_up"))
+        
+        new_topup = TopUpRequest(
+            user_id = current_user.id,
+            amount = amount,
+            payment_method = payment_method,
+            receipt_file = filename,
+            status="pending"
+        )
+        db.session.add(new_topup)
+        db.session.commit()
         
         flash("Top up request submitted! Please wait for admin approval.", "success")
         return redirect(url_for("usersystem.profile"))
