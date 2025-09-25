@@ -271,6 +271,50 @@ def recharge_wallet(user_id):
     flash(f"Added RM{amount:.2f} to User {user_id}'s wallet", "success")
     return redirect(url_for("admin.manage_wallets"))
 
+################## top up management #####################
+@admin_bp.route("/approve_topup/<int:topup_id>")
+def approve_topup(topup_id):
+    topup = TopUpRequest.query.get_or_404(topup_id)
+    if topup.status != "approved":
+        topup.status = "approved"
+
+        wallet = Wallet.query.filter_by(user_id=topup.user_id).first()
+        if wallet:
+            wallet.balance += topup.amount
+        else:
+            wallet = Wallet(user_id=topup.user_id, balance=topup.amount)
+            db.session.add(wallet)
+
+        announcement = Announcement(
+            user_id=topup.user_id,            
+            title="Top-up Approved",
+            content=f"Your top-up of RM {topup.amount:.2f} has been approved and credited to your wallet."
+        )
+        db.session.add(announcement)
+
+        db.session.commit()
+        flash(f"Top-up {topup.id} approved, {topup.amount} credited to wallet.", "success")
+    return redirect(url_for("admin.view_topups"))
+
+
+@admin_bp.route("/reject_topup/<int:topup_id>")
+def reject_topup(topup_id):
+    topup = TopUpRequest.query.get_or_404(topup_id)
+    if topup.status != "rejected":
+        topup.status = "rejected"
+
+        announcement = Announcement(
+            user_id=topup.user_id,
+            title="Top-up Rejected",
+            content=f"Your top-up of RM {topup.amount:.2f} has been rejected. Please contact admin for details."
+        )
+        db.session.add(announcement)
+
+        db.session.commit()
+        flash(f"Top-up {topup.id} rejected.", "warning")
+    return redirect(url_for("admin.view_topups"))
+
+
 
 ################## messages management #####################
 
