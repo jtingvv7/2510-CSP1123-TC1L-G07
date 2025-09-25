@@ -35,17 +35,14 @@
         <strong>Seller:</strong>
         <a href="{{ url_for('usersystem.view_profile', user_id=product.seller.id, return_product=product.id) }}" 
            class="d-flex align-items-center text-decoration-none">
-              {% if session.get('user_profile_pic') %}
-                  <img src="{{ url_for('static',filename='uploads/profiles/' ~ product.seller.profile_pic) }}"
-                      alt="Profile" 
-                      class="rounded-circle" 
-                      style="width:40px; height:40px; object-fit:cover; margin-right:10px;">  
-              {% else %}
-                  <img src="https://i.pravatar.cc/40?u={{ session.get('user_id') }}"
-                      alt="Profile" 
-                      class="rounded-circle" 
-                      style="width:40px; height:40px; object-fit:cover; margin-right:10px;">  
-              {% endif %}  
+          <img src="{% if product.seller.profile_pic %}
+                      {{ url_for('static', filename='uploads/profiles/' ~ product.seller.profile_pic) }}
+                    {% else %}
+                      https://i.pravatar.cc/40?u={{ product.seller.id }}
+                    {% endif %}"
+              alt="{{ product.seller.name }}"
+              class="rounded-circle"
+              style="width:40px; height:40px; object-fit:cover; margin-right:10px;">
           <span>{{ product.seller.name }}</span>
         </a>
       </p>

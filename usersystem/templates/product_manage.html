@@ -360,44 +360,69 @@ document.addEventListener('DOMContentLoaded', function() {
   const fileInfo = document.getElementById('fileInfo');
   const uploadText = document.querySelector('.upload-text');
 
-  // file select
+  const form = document.querySelector('form');
+  const fields = form.querySelectorAll('input, textarea, select');
+  const prefix = "productForm_"; // storage namespace
+
+  // ---- Image Upload Preview ----
   imageInput.addEventListener('change', function(e) {
     const file = e.target.files[0];
     
     if (file) {
-      // check type of file
       if (!file.type.startsWith('image/')) {
         alert('Please select image file');
         return;
       }
-      
-      // check size of file (5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('Image file cannot be larger than 5MB');
         return;
       }
-      
-      // display file info
       const fileSize = (file.size / 1024 / 1024).toFixed(2);
       fileInfo.textContent = `Selected: ${file.name} (${fileSize} MB)`;
-      
-      // create preview
       const reader = new FileReader();
       reader.onload = function(e) {
         previewImage.src = e.target.result;
         filePreview.style.display = 'block';
         uploadZone.classList.add('has-file');
-        uploadText.textContent = '✓ File selected, cilck to select again';
+        uploadText.textContent = '✓ File selected, click to select again';
       };
       reader.readAsDataURL(file);
     } else {
-      // reset if no file selected
       filePreview.style.display = 'none';
       uploadZone.classList.remove('has-file');
       uploadText.textContent = 'Click to upload';
     }
   });
 
+  // ---- Restore Saved Values ----
+  fields.forEach(field => {
+    if (field.type === "file") return; // skip file inputs
+    const saved = localStorage.getItem(prefix + field.name);
+    if (saved !== null) {
+      if (field.type === "checkbox" || field.type === "radio") {
+        field.checked = saved === "true";
+      } else {
+        field.value = saved;
+      }
+    }
+  });
+
+  // ---- Save Values on Change ----
+  fields.forEach(field => {
+    if (field.type === "file") return;
+    field.addEventListener('input', () => {
+      if (field.type === "checkbox" || field.type === "radio") {
+        localStorage.setItem(prefix + field.name, field.checked);
+      } else {
+        localStorage.setItem(prefix + field.name, field.value);
+      }
+    });
+  });
+
+  // ---- Clear Storage on Submit ----
+  form.addEventListener('submit', () => {
+    fields.forEach(field => localStorage.removeItem(prefix + field.name));
+  });
 });
 </script>
 

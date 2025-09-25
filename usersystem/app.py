@@ -29,6 +29,7 @@ def allowed_file(filename):
 # ----------------- product manage-----------------
 
 @usersystem_bp.route("/product_manage", methods=["GET", "POST"])
+@login_required
 def product_manage():
     product_id = request.args.get("product_id")
     product = Product.query.get(product_id) if product_id else None
@@ -204,6 +205,7 @@ def forgot_reset_password():
 # ----------------- PROFILE -----------------
 @usersystem_bp.route("/profile", methods=["GET", "POST"])
 def profile():
+    user = current_user
     history = session.get("history", [])
 
     user_id = session.get("user_id")
@@ -354,6 +356,7 @@ def history():
 
 # ----------------- EDIT PROFILE -----------------
 @usersystem_bp.route("/editprofile", methods=["GET", "POST"])
+@login_required
 def editprofile():
     user_id = session.get("user_id")
     if not user_id:
@@ -419,6 +422,7 @@ def profile_address():
 # ----------------- edit pickup point -----------------
 
 @usersystem_bp.route("/pickup_point", methods=["GET", "POST"])
+@login_required
 def pickup_point():
     user_id = current_user.id
 
@@ -451,6 +455,7 @@ def pickup_point():
 
  # ----------------- cart -----------------
 @usersystem_bp.route("/cart", methods=["GET", "POST"])
+@login_required
 def cart():
     # ----------------- LOAD CART -----------------
     cart = session.get("cart", {})
