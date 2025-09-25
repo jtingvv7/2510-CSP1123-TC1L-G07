@@ -327,24 +327,38 @@ def update_report(report_id):
 @login_required
 @admin_required
 def add_announcement():
+    users = User.query.all()  
+
     if request.method == "POST":
         title = request.form.get("title")
         content = request.form.get("content")
+        expires_at = request.form.get("expires_at")
+        target_user_id = request.form.get("user_id")  
 
         if not title or not content:
             flash("Title and content are required!", "danger")
             return redirect(url_for("admin.add_announcement"))
 
+        # None = all users
+        if target_user_id == "all":
+            user_id = None
+        else:
+            user_id = int(target_user_id)
+
         announcement = Announcement(
             title=title,
-            content=content
+            content=content,
+            expires_at=datetime.strptime(expires_at, "%Y-%m-%d") if expires_at else None,
+            author_id=current_user.id,
+            user_id=user_id
         )
+
         db.session.add(announcement)
         db.session.commit()
         flash("Announcement added successfully!", "success")
         return redirect(url_for("admin.manage_announcements"))
 
-    return render_template("add_announcement.html")
+    return render_template("add_announcement.html", users=users)
 
 
 # edit announcement

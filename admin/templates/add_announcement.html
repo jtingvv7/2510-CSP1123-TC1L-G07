@@ -11,19 +11,37 @@
         </div>
         <div class="card-body">
           <form method="POST">
+            <!-- Title -->
             <div class="mb-3">
               <label class="form-label">Title</label>
               <input type="text" name="title" class="form-control" required>
             </div>
+
+            <!-- Content -->
             <div class="mb-3">
               <label class="form-label">Content</label>
               <textarea name="content" class="form-control" rows="5" required></textarea>
             </div>
+
+            <!-- Valid Until -->
             <div class="mb-3">
               <label class="form-label">Valid Until (optional)</label>
               <input type="date" name="expires_at" class="form-control">
             </div>
 
+            <!-- Target User -->
+            <div class="mb-3">
+              <label class="form-label">Send To</label>
+              <select name="user_id" class="form-select">
+                <option value="all" selected>All Users</option>
+                {% for u in users %}
+                  <option value="{{ u.id }}">{{ u.name }}</option>
+                {% endfor %}
+              </select>
+              <div class="form-text">Choose a user or leave as "All Users".</div>
+            </div>
+
+            <!-- Buttons -->
             <button type="submit" class="btn btn-success">
               <i class="bi bi-check-circle"></i> Submit
             </button>
