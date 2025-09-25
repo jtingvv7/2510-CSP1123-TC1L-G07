@@ -4,10 +4,10 @@ import os
 from flask import Blueprint, render_template, redirect, url_for , flash, abort, request, current_app
 from functools import wraps
 from flask_login import  login_required , current_user, login_user, logout_user
-from datetime import datetime, timezone
+from datetime import datetime, timezone,timedelta
 from models import db
 from werkzeug.utils import secure_filename
-from models import User, Product, Transaction, Messages, Wallet, Report, Announcement
+from models import User, Product, Transaction, Messages, Wallet, Report, Announcement, TopUpRequest
 from sqlalchemy.exc import SQLAlchemyError 
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
@@ -65,7 +65,7 @@ def manage_products():
 @admin_required
 def manage_transactions():
     all_transactions = Transaction.query.all()
-    return render_template("manage_transactions.html", transactions = all_transactions)
+    return render_template("manage_transactions.html", transactions = all_transactions,timedelta=timedelta)
 
 #check all wallets
 @admin_bp.route("/manage_wallets")
@@ -99,6 +99,13 @@ def manage_announcements():
     announcements = Announcement.query.order_by(Announcement.created_at.desc()).all()
     return render_template("manage_announcements.html", announcements=announcements)
 
+# view all top up requests
+@admin_bp.route("/view_topups")
+@login_required
+@admin_required
+def view_topups():
+    topups = TopUpRequest.query.order_by(TopUpRequest.created_at.desc()).all()
+    return render_template("view_topups.html", topups=topups)
 
 ################## user management #####################
 
@@ -222,6 +229,8 @@ def delete_product(product_id):
 @admin_required
 def delete_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
+    tx.product.is_sold = False
+    tx.product.quantity = +1
     db.session.delete(tx)
     db.session.commit()
     flash("Transaction deleted successfully","success")
@@ -261,6 +270,7 @@ def recharge_wallet(user_id):
     db.session.commit()
     flash(f"Added RM{amount:.2f} to User {user_id}'s wallet", "success")
     return redirect(url_for("admin.manage_wallets"))
+
 
 ################## messages management #####################
 
@@ -317,24 +327,38 @@ def update_report(report_id):
 @login_required
 @admin_required
 def add_announcement():
+    users = User.query.all()  
+
     if request.method == "POST":
         title = request.form.get("title")
         content = request.form.get("content")
+        expires_at = request.form.get("expires_at")
+        target_user_id = request.form.get("user_id")  
 
         if not title or not content:
             flash("Title and content are required!", "danger")
             return redirect(url_for("admin.add_announcement"))
 
+        # None = all users
+        if target_user_id == "all":
+            user_id = None
+        else:
+            user_id = int(target_user_id)
+
         announcement = Announcement(
             title=title,
-            content=content
+            content=content,
+            expires_at=datetime.strptime(expires_at, "%Y-%m-%d") if expires_at else None,
+            author_id=current_user.id,
+            user_id=user_id
         )
+
         db.session.add(announcement)
         db.session.commit()
         flash("Announcement added successfully!", "success")
         return redirect(url_for("admin.manage_announcements"))
 
-    return render_template("add_announcement.html")
+    return render_template("add_announcement.html", users=users)
 
 
 # edit announcement

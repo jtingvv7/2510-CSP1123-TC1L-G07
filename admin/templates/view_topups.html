@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}View Top-ups{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, oklch(83.693% 0.02258 17.382), lch(91.75% 2.15 19.27));
+    min-height: 100vh;
+  }
+</style>
+
+<div class="container-fluid py-4" style="min-height: calc(100vh - 80px);">
+  <div class="row justify-content-center">
+    <div class="col-lg-11">
+      <div class="card shadow border-0">
+        <!-- header -->
+        <div class="card-header bg-dark text-white text-center fw-bold fs-4">
+          <i class="bi bi-wallet2"></i> View Top-up Requests
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped align-middle text-center mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>User</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Receipt</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for t in topups %}
+                <tr>
+                  <td>{{ t.id }}</td>
+                  <td>{{ t.user_id }} - {{ t.user.name }}</td>
+                  <td><span class="badge bg-primary">RM {{ "%.2f"|format(t.amount) }}</span></td>
+                  <td>{{ t.payment_method }}</td>
+
+                  <!-- Receipt -->
+                  <td>
+                    {% if t.receipt_file %}
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#receiptModal{{ t.id }}">
+                        <img src="{{ url_for('static', filename='uploads/topup/' ~ t.receipt_file) }}" 
+                             class="img-thumbnail" style="max-width: 60px; cursor: pointer;">
+                      </a>
+
+                      <!-- Receipt Modal -->
+                      <div class="modal fade" id="receiptModal{{ t.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title">Receipt for Top-up #{{ t.id }}</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                              <img src="{{ url_for('static', filename='uploads/topup/' ~ t.receipt_file) }}" 
+                                   class="img-fluid rounded shadow">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% else %}
+                      <span class="text-muted">No File</span>
+                    {% endif %}
+                  </td>
+
+                  <!-- Status -->
+                  <td>
+                    {% if t.status == "pending" %}
+                      <span class="badge bg-warning text-dark px-3 py-2">Pending</span>
+                    {% elif t.status == "approved" %}
+                      <span class="badge bg-success px-3 py-2">Approved</span>
+                    {% else %}
+                      <span class="badge bg-danger px-3 py-2">Rejected</span>
+                    {% endif %}
+                  </td>
+
+                  <td>{{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

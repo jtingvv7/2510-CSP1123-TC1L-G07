@@ -71,6 +71,8 @@ class Transaction(db.Model):
     safe_location_id = db.Column(db.Integer, db.ForeignKey('safelocation.id'))
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, default=1)
+    proof = db.Column(db.String(255), nullable=True)
+    shipped_at = db.Column(db.DateTime, nullable =True)
     
 #relationship
     messages = db.relationship('Messages', backref = 'chating',lazy = True)
@@ -217,3 +219,5 @@ class TopUpRequest(db.Model):
     status = db.Column(db.String(50), default='pending')  # pending/approved/rejected
     created_at = db.Column(db.DateTime, default=datetime.now)
     admin_comment = db.Column(db.Text)
+
+    user = db.relationship("User",backref="topups")

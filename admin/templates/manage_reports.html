@@ -51,27 +51,6 @@
                               data-bs-target="#evidenceModal{{ r.id }}">
                         View Evidence
                       </button>
-
-                      <!-- Evidence Modal -->
-                      <div class="modal fade" id="evidenceModal{{ r.id }}" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title">Evidence for Report #{{ r.id }}</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body text-center">
-                              <img src="{{ url_for('static', filename='uploads/reports/' ~ r.evidence_file) }}" 
-                                   class="img-fluid rounded shadow">
-                            </div>
-                            <div class="modal-footer">
-                              <a href="{{ url_for('static', filename='uploads/reports/' ~ r.evidence_file) }}" 
-                                 class="btn btn-sm btn-primary" download>Download</a>
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     {% else %}
                       <span class="text-muted">No File</span>
                     {% endif %}
@@ -114,83 +93,106 @@
                         </button>
                       {% endif %}
                     </div>
-
-                    <!-- Comment Modal -->
-                    <div class="modal fade" id="commentModal{{ r.id }}" tabindex="-1">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title">Edit Admin Comment (Report #{{ r.id }})</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                          </div>
-                          <form method="POST" action="{{ url_for('admin.update_report', report_id=r.id) }}">
-                            <div class="modal-body">
-                              <textarea name="admin_comment" class="form-control" rows="4">{{ r.admin_comment or '' }}</textarea>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                              <button type="submit" class="btn btn-primary">Save</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Appeal Modal -->
-                    {% if r.appeal_text %}
-                    <div class="modal fade" id="appealModal{{ r.id }}" tabindex="-1">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                          <div class="modal-header bg-info text-white">
-                            <h5 class="modal-title">Appeal for Report #{{ r.id }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                          </div>
-                          <div class="modal-body text-start">
-                            <p><strong>Text:</strong> {{ r.appeal_text }}</p>
-                            <p><strong>Status:</strong> {{ r.appeal_status }}</p>
-
-                            {% if r.appeal_file %}
-                              <button class="btn btn-sm btn-outline-primary"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#appealFileModal{{ r.id }}">
-                                View Appeal File
-                              </button>
-
-                              <!-- Appeal File Modal -->
-                              <div class="modal fade" id="appealFileModal{{ r.id }}" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">Appeal File for Report #{{ r.id }}</h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body text-center">
-                                      <img src="{{ url_for('static', filename='uploads/reports/' ~ r.appeal_file) }}" 
-                                           class="img-fluid rounded shadow">
-                                    </div>
-                                    <div class="modal-footer">
-                                      <a href="{{ url_for('static', filename='uploads/reports/' ~ r.appeal_file) }}" 
-                                         class="btn btn-sm btn-primary" download>Download</a>
-                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            {% endif %}
-
-                            {% if r.appeal_deadline %}
-                              <p class="mt-3"><strong>Deadline:</strong> {{ r.appeal_deadline.strftime('%Y-%m-%d %H:%M') }}</p>
-                            {% endif %}
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {% endif %}
                   </td>
                 </tr>
+
+                <!-- Comment Modal -->
+                <div class="modal fade" id="commentModal{{ r.id }}" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Edit Admin Comment (Report #{{ r.id }})</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <form method="POST" action="{{ url_for('admin.update_report', report_id=r.id) }}">
+                        <div class="modal-body">
+                          <textarea name="admin_comment" class="form-control" rows="4">{{ r.admin_comment or '' }}</textarea>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Evidence Modal -->
+                {% if r.evidence_file %}
+                <div class="modal fade" id="evidenceModal{{ r.id }}" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Evidence for Report #{{ r.id }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body text-center">
+                        <img src="{{ url_for('static', filename='uploads/reports/' ~ r.evidence_file) }}" 
+                             class="img-fluid rounded shadow">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                <!-- Appeal Modal -->
+                {% if r.appeal_text %}
+                <div class="modal fade" id="appealModal{{ r.id }}" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title">Appeal for Report #{{ r.id }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body text-start">
+                        <p><strong>Text:</strong> {{ r.appeal_text }}</p>
+                        <p><strong>Status:</strong> {{ r.appeal_status }}</p>
+
+                        {% if r.appeal_file %}
+                          <button class="btn btn-sm btn-outline-primary"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#appealFileModal{{ r.id }}">
+                            View Appeal File
+                          </button>
+                        {% endif %}
+
+                        {% if r.appeal_deadline %}
+                          <p class="mt-3"><strong>Deadline:</strong> {{ r.appeal_deadline.strftime('%Y-%m-%d %H:%M') }}</p>
+                        {% endif %}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Appeal File Modal -->
+                {% if r.appeal_file %}
+                <div class="modal fade" id="appealFileModal{{ r.id }}" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Appeal File for Report #{{ r.id }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <img 
+                        src="{{ url_for('static', filename='uploads/reports/' ~ r.appeal_file) }}"
+                        data-fallback="{{ url_for('static', filename='uploads/' ~ r.appeal_file) }}"
+                        class="img-fluid rounded shadow"
+                        onerror="this.onerror=null; this.src=this.dataset.fallback;">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% endif %}
                 {% endfor %}
               </tbody>
             </table>
