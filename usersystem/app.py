@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from main import db
 from datetime import datetime, timezone
 from collections import defaultdict
-from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement
+from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement, TopUpRequest, Messages
 from flask_login import login_user, logout_user, current_user, login_required
 
 usersystem_bp = Blueprint(
@@ -114,12 +114,29 @@ def login():
         
         if check_password_hash(user.password, password_input):
             # Successful login
-            login_user(user) #let flask-login remember user
+            login_user(user) # let flask-login remember user
+
+            # create chat with admin
+            admin = User.query.filter_by(role="admin").first()
+            if admin and user.id != admin.id:
+                existing_message = Messages.query.filter(
+                    ((Messages.sender_id == user.id) & (Messages.receiver_id == admin.id)) |
+                    ((Messages.sender_id == admin.id) & (Messages.receiver_id == user.id))
+                ).first()
+                if not existing_message:
+                    welcome = Messages(
+                        sender_id=admin.id,
+                        receiver_id=user.id,
+                        content="Hello! This is Admin. Feel free to contact us if you need help."
+                    )
+                    db.session.add(welcome)
+                    db.session.commit()
 
             session["user_id"] = user.id
             session["user_name"] = user.name
             session["user_profile_pic"] = user.profile_pic
 
+            #flash latest announcement
             now = datetime.now(timezone.utc)
             latest_announcement = Announcement.query.filter(
                 ((Announcement.user_id == None) | (Announcement.user_id == user.id)) &
@@ -657,6 +674,16 @@ def top_up():
         else:
             flash("Please upload a valid receipt file!", "danger")
             return redirect(url_for("usersystem.top_up"))
+        
+        new_topup = TopUpRequest(
+            user_id = current_user.id,
+            amount = amount,
+            payment_method = payment_method,
+            receipt_file = filename,
+            status="pending"
+        )
+        db.session.add(new_topup)
+        db.session.commit()
         
         flash("Top up request submitted! Please wait for admin approval.", "success")
         return redirect(url_for("usersystem.profile"))

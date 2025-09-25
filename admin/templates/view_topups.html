@@ -15,9 +15,16 @@
   <div class="row justify-content-center">
     <div class="col-lg-11">
       <div class="card shadow border-0">
+        
         <!-- header -->
-        <div class="card-header bg-dark text-white text-center fw-bold fs-4">
-          <i class="bi bi-wallet2"></i> View Top-up Requests
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+          <a href="{{ url_for('admin.manage_wallets') }}" class="btn btn-sm btn-secondary">
+            ← Back to Manage Wallets
+          </a>
+          <span class="fw-bold fs-4">
+            <i class="bi bi-wallet2"></i> View Top-up Requests
+          </span>
+          <div></div>
         </div>
 
         <div class="card-body">
@@ -32,6 +39,7 @@
                   <th>Receipt</th>
                   <th>Status</th>
                   <th>Created</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -82,12 +90,25 @@
                   </td>
 
                   <td>{{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+
+                  <!-- Action -->
+                  <td>
+                    {% if t.status == "pending" %}
+                      <a href="{{ url_for('admin.approve_topup', topup_id=t.id) }}" class="btn btn-sm btn-success me-1">Approve</a>
+                      <a href="{{ url_for('admin.reject_topup', topup_id=t.id) }}" class="btn btn-sm btn-danger">Reject</a>
+                    {% elif t.status == "approved" %}
+                      <span class="text-success fw-bold">✔ Approved</span>
+                    {% elif t.status == "rejected" %}
+                      <span class="text-danger fw-bold">✘ Rejected</span>
+                    {% endif %}
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         </div>
+
       </div>
     </div>
   </div>
