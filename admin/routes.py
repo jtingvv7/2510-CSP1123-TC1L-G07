@@ -271,6 +271,7 @@ def recharge_wallet(user_id):
     flash(f"Added RM{amount:.2f} to User {user_id}'s wallet", "success")
     return redirect(url_for("admin.manage_wallets"))
 
+
 ################## messages management #####################
 
 #delete messages

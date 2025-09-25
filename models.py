@@ -219,3 +219,5 @@ class TopUpRequest(db.Model):
     status = db.Column(db.String(50), default='pending')  # pending/approved/rejected
     created_at = db.Column(db.DateTime, default=datetime.now)
     admin_comment = db.Column(db.Text)
+
+    user = db.relationship("User",backref="topups")
