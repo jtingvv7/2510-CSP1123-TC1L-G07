@@ -1,4 +1,6 @@
 import logging
+import random
+import string
 import time
 import os
 from flask import Blueprint, render_template, redirect, url_for , flash, request, current_app
@@ -102,6 +104,10 @@ def auto_confirm_transactions():
     if expired_tx:
         db.session.commit()
         print(f"[AutoConfirm] {len(expired_tx)} transactions confirmed.")
+
+# random code
+def generate_random_code(length=6):
+    return''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
 
 #buyer action
@@ -388,6 +394,7 @@ def ship_transaction(transaction_id):
         return redirect(url_for("transaction.my_transaction"))
 
     try:
+        tx.random_code = random_code
         folder = os.path.join(current_app.static_folder, "uploads", "proofs")
         os.makedirs(folder, exist_ok=True)
 
@@ -407,7 +414,8 @@ def ship_transaction(transaction_id):
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content="[System] Seller has marked the transaction as shipped with proof."
+            random_code = random_code,
+            content="[System] Seller has marked the transaction as shipped with proof. Please use this code to confirm receipt: {random_code}"
         )
         
         msg2 = Messages(
