@@ -117,7 +117,7 @@ class Review(db.Model):
     date_review = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
 
     def __repr__(self):
-        return f"<Review {self.id} by {self.id} rating {self.rating}>"
+        return f"<Review {self.id} by {self.buyer_id} rating {self.rating}>"
     
 
 #location db

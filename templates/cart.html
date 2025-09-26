@@ -49,16 +49,6 @@
                         {% endif %}
                     </td>
 
-
-                    <span class="mx-2">{{ item.qty }}</span>
-
-                    <form method="POST" action="{{ url_for('usersystem.cart') }}" class="d-inline">
-                        <input type="hidden" name="product_id" value="{{ item.id }}">
-                        <input type="hidden" name="action" value="increase">
-                        <button type="submit" class="btn btn-sm btn-outline-secondary" {% if item.is_sold %}disabled{% endif %}>+</button>
-                    </form>
-                    </td>
-
                     <!-- Price -->
                     <td style="width: 10% !important;">
                         RM {{ "%.2f"|format(item.price * item.qty) }}

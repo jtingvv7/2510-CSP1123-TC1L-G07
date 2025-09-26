@@ -51,8 +51,8 @@ def add():
         seller_id = request.form.get('seller_id') or seller_id
         transaction_id = request.form.get('transaction_id') or transaction_id
 
-        if not username or not comment:
-            flash("Username and Comment cannot be empty!", "error")
+        if not username:
+            flash("Username cannot be empty!", "error")
             return render_template("add.html", seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
 
         # Check if seller_id and transaction_id exist
@@ -79,7 +79,7 @@ def add():
                 image_path = unique_filename
 
             elif file and file.filename:
-                flash('Invalid file type. Please upload JPG, PNG, or Webp image only', 400)
+                flash('Invalid file type. Please upload JPG, PNG, or Webp image only', "error")
                 return render_template('add.html', seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
         
         new_review = Review(username=username, rating=rating, comment=comment, image_path=image_path, seller_id=int(seller_id), buyer_id=current_user.id, transaction_id=int(transaction_id))

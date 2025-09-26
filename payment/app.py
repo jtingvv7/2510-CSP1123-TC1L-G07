@@ -127,8 +127,7 @@ def cancel():
         for transaction in transactions:
             product = Product.query.get(transaction.product_id)
             if product:
-                # Use transaction.quantity to restore stock
-                product.quantity += transaction.quantity
+                # Restore stock
                 product.is_sold = False
             
             db.session.delete(transaction)
