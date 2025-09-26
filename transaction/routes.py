@@ -77,8 +77,6 @@ def fake_purchase():
 '''
 
 #auto confirm transactions
-from datetime import datetime, timedelta
-from models import db, Transaction, Messages
 
 def auto_confirm_transactions():
     now = datetime.now()
@@ -97,7 +95,7 @@ def auto_confirm_transactions():
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content="[System] Transaction auto-confirmed after 5 days."
+            content="[System] Transaction was auto-confirmed after 5 days."
         )
         db.session.add(msg)
 
@@ -394,7 +392,6 @@ def ship_transaction(transaction_id):
         return redirect(url_for("transaction.my_transaction"))
 
     try:
-        tx.random_code = random_code
         folder = os.path.join(current_app.static_folder, "uploads", "proofs")
         os.makedirs(folder, exist_ok=True)
 
@@ -407,6 +404,8 @@ def ship_transaction(transaction_id):
         tx.proof = f"uploads/proofs/{filename}"
         tx.status = "shipped"
         tx.shipped_at = datetime.now()
+        code = generate_random_code()
+        tx.random_code = code
         db.session.commit()
 
         msg = Messages(
@@ -414,20 +413,11 @@ def ship_transaction(transaction_id):
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            random_code = random_code,
-            content="[System] Seller has marked the transaction as shipped with proof. Please use this code to confirm receipt: {random_code}"
+            content=f"[System] Seller has marked the transaction as shipped with proof. Please use this code to confirm receipt: {code}"
         )
         
-        msg2 = Messages(
-        sender_id=tx.buyer_id,
-        receiver_id=tx.seller_id,
-        transaction_id=tx.id,
-        message_type="system",
-        content="[System] Transaction was auto-confirmed after 5 days."
-        )
     
         db.session.add(msg)
-        db.session.add(msg2)
         db.session.commit()
 
         flash("Order marked as shipped with proof uploaded.", "success")
