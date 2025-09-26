@@ -109,7 +109,7 @@ def create_app():
             locations = SafeLocation.query.filter_by(user_id=user_id).all() if user_id else []
             return render_template("home_index.html", products=products, locations=locations)
         except Exception as e:
-            logging.error("Error in index route", exc_info=e)
+            logging.error("Error in index route", exc_info=True)
             return "Internal Server Error", 500
 
     return app
