@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import joinedload
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
-from main import create_app
 
 
 
@@ -144,9 +143,9 @@ def auto_confirm_transactions(app):
             db.session.commit()
             print(f"[AutoConfirm] {len(expired_tx)} transactions updated.")
 
+app = create_app()
 
 if __name__ == "__main__":
-    app = create_app()
 
     # start APScheduler
     scheduler = BackgroundScheduler()
