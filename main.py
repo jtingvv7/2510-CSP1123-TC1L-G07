@@ -96,23 +96,25 @@ def create_app():
             return dict(unread_count=unread_count)
         return dict(unread_count=0)
 
-    # --- Routes ---
-    @app.route("/")
-    def index():
-        try:
-            products = (
-                Product.query.options(joinedload(Product.seller))
-                .filter_by(is_sold=False, is_active=True)
-                .all()
-            )
-            user_id = session.get("user_id")
-            locations = SafeLocation.query.filter_by(user_id=user_id).all() if user_id else []
-            return render_template("home_index.html", products=products, locations=locations)
-        except Exception as e:
-            logging.error("Error in index route", exc_info=True)
-            return "Internal Server Error", 500
-
-    return app
+# --- Routes ---
+@app.route("/")
+def index():
+    try:
+        products = (
+            Product.query.options(joinedload(Product.seller))
+            .filter_by(is_sold=False, is_active=True)
+            .all()
+        )
+        user_id = session.get("user_id")
+        locations = SafeLocation.query.filter_by(user_id=user_id).all() if user_id else []
+        return render_template("home_index.html", products=products, locations=locations)
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        print("=== Error in index() ===")
+        print(tb)  # this will show up in Render "Logs" tab
+        logging.error("Error in index route", exc_info=True)
+        return f"Internal Server Error: {str(e)}", 500
 
 # --- User Loader ---
 @login_manager.user_loader
