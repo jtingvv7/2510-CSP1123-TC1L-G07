@@ -35,7 +35,7 @@ def create_app():
     # Error handling
     @app.errorhandler(Exception)
     def handle_exception(e):
-        logging.error("Unhandled Exception", exc_info=e)
+        logging.error("Unhandled Exception", exc_info=True)
         return "Internal Server Error", 500
 
     # Initialize extensions
