@@ -8,6 +8,9 @@ from models import db
 from models import User, Product, Transaction, Messages, Review, Payment, Wallet
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
+from messages.routes import issue_warning
+from decorators import restrict_banned
+
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 transaction_bp = Blueprint('transaction', __name__, template_folder='templates', static_folder='static')
@@ -109,6 +112,7 @@ def auto_confirm_transactions():
 #buyer click product, initiate purchase request   all return to transaction home
 @transaction_bp.route("/buy/<int:product_id>", methods = ["POST"])
 @login_required
+@restrict_banned
 def buy_product(product_id):
     product = Product.query.get_or_404(product_id)
 
@@ -158,6 +162,7 @@ def buy_product(product_id):
 #complete transaction
 @transaction_bp.route("/confirm/<int:transaction_id>", methods=["POST"])
 @login_required
+@restrict_banned
 def confirm_receipt(transaction_id):
     transaction = Transaction.query.get_or_404(transaction_id)
     
@@ -240,6 +245,7 @@ def confirm_receipt(transaction_id):
 #buyer want to cancel transaction when pending state
 @transaction_bp.route("/cancel/<int:transaction_id>",methods = ["POST"])
 @login_required
+@restrict_banned
 def cancel_transaction(transaction_id): #user cannot delete transaction for others
     transaction = Transaction.query.get_or_404(transaction_id)
     if transaction.buyer_id != current_user.id :
@@ -279,6 +285,7 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
 #check request
 @transaction_bp.route("/view_requests")
 @login_required
+@restrict_banned
 def view_requests():
     requests = Transaction.query.filter(
         Transaction.seller_id == current_user.id,
@@ -289,6 +296,7 @@ def view_requests():
 #seller accept order
 @transaction_bp.route("/accept/<int:transaction_id>",methods = ["POST"])
 @login_required
+@restrict_banned
 def accept_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
     #product = Product.query.get_or_404(tx.product_id)
@@ -326,6 +334,7 @@ def accept_transaction(transaction_id):
 #reject order
 @transaction_bp.route("/reject/<int:transaction_id>",methods = ["POST"])
 @login_required
+@restrict_banned
 def reject_request(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
     #product = Product.query.get_or_404(tx.product_id)
@@ -365,6 +374,7 @@ def reject_request(transaction_id):
 # marks transaction as shipped (with proof)
 @transaction_bp.route("/ship/<int:transaction_id>", methods=["POST"])
 @login_required
+@restrict_banned
 def ship_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
 
@@ -435,6 +445,7 @@ def ship_transaction(transaction_id):
 #check transaction records  (buyer/seller) 
 @transaction_bp.route("/my_transaction") 
 @login_required
+@restrict_banned
 def my_transaction():#check all owner by current user transaction record
     bought_transactions = Transaction.query.filter_by(buyer_id = current_user.id).all()  
 
@@ -450,6 +461,7 @@ def my_transaction():#check all owner by current user transaction record
 #view transaction (in chat)
 @transaction_bp.route("/view/<int:transaction_id>")
 @login_required
+@restrict_banned
 def view_transaction(transaction_id):
     transaction = Transaction.query.get_or_404(transaction_id)
 
@@ -458,3 +470,35 @@ def view_transaction(transaction_id):
         return redirect(url_for("transaction.my_transaction"))
 
     return render_template("transaction/view_transaction.html", transaction=transaction, product=transaction.product)
+
+
+#report buyer no show
+@transaction_bp.route("/transaction/no_show/<int:transaction_id>", methods=["POST"])
+@login_required
+@restrict_banned
+def mark_no_show(transaction_id):
+    txn = Transaction.query.get(transaction_id)
+    if not txn:
+        return {"message": "Transaction not found"}, 404
+
+    txn.status = "no_show"
+
+    # issue warning to the buyer
+    result = issue_warning(txn.buyer_id)
+
+    db.session.commit()
+    return {"message": f"Buyer did not show up. {result['message']}"}
+
+@transaction_bp.route("/no_show/<int:transaction_id>", methods=["POST"])
+@login_required
+@restrict_banned
+def report_no_show(transaction_id):
+    txn = Transaction.query.get_or_404(transaction_id)
+
+    if txn.seller_id != current_user.id and current_user.role != "admin":
+        flash("Unauthorized", "danger")
+        return redirect(url_for("transaction.view_transaction", transaction_id=transaction_id))
+
+    result = issue_warning(txn.buyer_id)  # mark warnings and ban if >=3
+    flash(result.get("message", "No message"), "warning")
+    return redirect(url_for("transaction.view_transaction", transaction_id=transaction_id))

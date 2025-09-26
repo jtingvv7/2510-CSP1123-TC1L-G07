@@ -19,7 +19,6 @@
                 <tr>
                     <th style="width: 10% !important;">Image</th>
                     <th style="width: 50% !important;">Product</th>
-                    <th style="width: 20% !important;">Quantity</th>
                     <th style="width: 10% !important;">Price</th>
                     <th style="width: 10% !important;">Action</th>
                 </tr>
@@ -42,7 +41,7 @@
                     <!-- Product Name -->
                     <td style="width: 50% !important;">
                         <strong>{{ item.name }}</strong><br>
-                        <span class="text-muted">RM {{ "%.2f"|format(item.price) }} x {{ item.qty }}</span><br>
+                        <span class="text-muted">RM {{ "%.2f"|format(item.price) }}</span><br>
                         {% if item.is_sold %}
                             <span class="badge bg-danger">Sold Out</span>
                         {% else %}
@@ -50,13 +49,6 @@
                         {% endif %}
                     </td>
 
-                        <!-- Quantity control -->
-                    <td style="width: 20% !important;">
-                    <form method="POST" action="{{ url_for('usersystem.cart') }}" class="d-inline">
-                        <input type="hidden" name="product_id" value="{{ item.id }}">
-                        <input type="hidden" name="action" value="decrease">
-                        <button type="submit" class="btn btn-sm btn-outline-secondary" {% if item.qty <= 1 %}disabled{% endif %}>-</button>
-                    </form>
 
                     <span class="mx-2">{{ item.qty }}</span>
 

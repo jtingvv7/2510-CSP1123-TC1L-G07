@@ -9,6 +9,7 @@ from models import db
 from werkzeug.utils import secure_filename
 from models import User, Product, Transaction, Messages, Wallet, Report, Announcement, TopUpRequest
 from sqlalchemy.exc import SQLAlchemyError 
+from main import db
 
 admin_bp = Blueprint("admin", __name__, template_folder="templates", static_folder="static")
 
@@ -433,4 +434,52 @@ def delete_announcement(announcement_id):
     flash("Announcement deleted successfully!", "success")
     return redirect(url_for("admin.manage_announcements"))
 
+# issue warning to a user
 
+@admin_bp.route("/warn_user/<int:user_id>", methods=["POST"])
+@login_required
+def warn_user(user_id):
+    if current_user.role != "admin":
+        flash("Unauthorized", "danger")
+        return redirect(url_for("admin.dashboard"))
+
+    user = User.query.get_or_404(user_id)
+    if user.is_banned:
+        flash("User is already banned.", "warning")
+        return redirect(url_for("admin.manage_users"))
+
+    # increment warnings
+    user.warnings += 1
+
+    # send system message
+    system_user = User.query.filter_by(email="system@system.com").first()
+    if not system_user:
+        flash("System user not found.", "danger")
+        return redirect(url_for("admin.manage_users"))
+
+    if user.warnings >= 3:
+        user.is_banned = True
+        db.session.commit()
+
+        msg = Messages(
+            sender_id=system_user.id,
+            receiver_id=user.id,
+            content="⚠️ Your account has been banned due to 3 warnings.",
+            message_type="system"
+        )
+        db.session.add(msg)
+        db.session.commit()
+        flash(f"{user.name} has been banned due to 3 warnings.", "danger")
+    else:
+        db.session.commit()
+        msg = Messages(
+            sender_id=system_user.id,
+            receiver_id=user.id,
+            content=f"⚠️ Warning issued. Current warnings: {user.warnings}. 3 warnings = ban.",
+            message_type="system"
+        )
+        db.session.add(msg)
+        db.session.commit()
+        flash(f"Warning issued to {user.name}. Current warnings: {user.warnings}", "warning")
+
+    return redirect(url_for("admin.manage_users"))

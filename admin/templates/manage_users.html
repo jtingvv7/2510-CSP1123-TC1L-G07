@@ -31,7 +31,9 @@
                   <th scope="col">Email</th>
                   <th scope="col">Role</th>
                   <th scope="col">Join Date</th>
-                  <th scope="col">Action</th>
+                  <th scope="col">Warnings</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th> 
                 </tr>
               </thead>
               <tbody>
@@ -67,8 +69,29 @@
                       -----
                     {% endif %}
                   </td>
+                                    <td>
+                    {{ u.warnings }}
+                  </td>
+                  <td>
+                    {% if u.is_banned %}
+                      <span class="badge bg-danger">🚫 Banned</span>
+                    {% else %}
+                      <span class="badge bg-success">✅ Active</span>
+                    {% endif %}
+                  </td>
                   <td>
                     <div class="d-grid gap-2">
+
+                      <!-- warn user -->
+                      {% if not u.is_banned %}
+                      <form action="{{ url_for('admin.warn_user', user_id=u.id)}}" method="POST">
+                        <button class="btn btn-sm btn-outline-warning"
+                            onclick="return confirm('Issue a warning to {{ u.name }}?')">
+                          ⚠️ Warn
+                        </button>
+                      </form>
+                      {% endif %}
+
                       <!-- make admin -->
                       {% if u.role != "admin" %}
                       <form action="{{ url_for('admin.make_admin', user_id=u.id)}}" method="POST">
