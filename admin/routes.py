@@ -230,7 +230,7 @@ def delete_product(product_id):
 def delete_transaction(transaction_id):
     tx = Transaction.query.get_or_404(transaction_id)
     tx.product.is_sold = False
-    tx.product.quantity = +1
+    tx.product.quantity += 1
     db.session.delete(tx)
     db.session.commit()
     flash("Transaction deleted successfully","success")
