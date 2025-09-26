@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import joinedload
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
+from main import create_app
 
 
 
