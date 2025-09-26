@@ -17,6 +17,8 @@ class User(db.Model, UserMixin):
     profile_address = db.Column(db.String(250))
     is_active = db.Column(db.Boolean, default=True)
     last_seen_announcement_id = db.Column(db.Integer, default=0) #for announcement flash
+    warnings = db.Column(db.Integer, default=0)
+    is_banned = db.Column(db.Boolean, default=False)
 
     @property
     def is_sold(self):
@@ -92,7 +94,7 @@ class Messages(db.Model):
     transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable = True)
     content = db.Column(db.Text, nullable = True)
     timestamp = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
-    is_read = db.Column(db.Text, default = True)
+    is_read = db.Column(db.Boolean, default = True)
     message_type = db.Column(db.String(20), default = "text") #text/image/transaction
 
 #relationship

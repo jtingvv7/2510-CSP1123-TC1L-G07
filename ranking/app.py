@@ -5,12 +5,14 @@ from extensions import db
 from models import User, Transaction, Review, Product
 from datetime import datetime, timedelta
 import logging
+from decorators import restrict_banned
 
 ranking_bp = Blueprint('ranking', __name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 
 logger = logging.getLogger(__name__)
 
 @ranking_bp.route('/')
+@restrict_banned
 def index():
     try:
         # Get transaction volume ranking

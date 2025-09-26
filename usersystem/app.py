@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from collections import defaultdict
 from models import User, Transaction, Review, SafeLocation, Product, Wallet, Announcement, TopUpRequest, Messages
 from flask_login import login_user, logout_user, current_user, login_required
+from functools import wraps
+from decorators import restrict_banned
 
 usersystem_bp = Blueprint(
     "usersystem",
@@ -30,6 +32,7 @@ def allowed_file(filename):
 
 @usersystem_bp.route("/product_manage", methods=["GET", "POST"])
 @login_required
+@restrict_banned
 def product_manage():
     product_id = request.args.get("product_id")
     product = Product.query.get(product_id) if product_id else None
@@ -113,6 +116,11 @@ def login():
             return redirect(url_for('usersystem.register'))
         
         if check_password_hash(user.password, password_input):
+            # Check if user is banned
+            if user.is_banned:
+                flash("Your account has been banned. Contact admin.", "error")
+                return redirect(url_for('usersystem.login'))
+            
             # Successful login
             login_user(user) # let flask-login remember user
 
@@ -221,6 +229,8 @@ def forgot_reset_password():
     return render_template('forgot_reset_password.html', email_verified=email_verified)
 # ----------------- PROFILE -----------------
 @usersystem_bp.route("/profile", methods=["GET", "POST"])
+@login_required
+@restrict_banned
 def profile():
     user = current_user
     history = session.get("history", [])
@@ -308,6 +318,8 @@ def add_to_history(product_id):
 # -----------------product detail -----------------
 
 @usersystem_bp.route("/product/<int:product_id>")
+@login_required
+@restrict_banned
 def product_detail(product_id):
     product = Product.query.get_or_404(product_id)
 
@@ -334,6 +346,8 @@ def product_detail(product_id):
 # ----------------- ADD TO cart  -----------------
 
 @usersystem_bp.route("/add_to_cart/<int:product_id>", methods=["POST"])
+@login_required
+@restrict_banned
 def add_to_cart(product_id):
     cart = session.get("cart", {})
     product = Product.query.get_or_404(product_id)
@@ -359,6 +373,8 @@ def add_to_cart(product_id):
 # -----------------view HISTORY  -----------------
 
 @usersystem_bp.route("/history")
+@login_required
+@restrict_banned
 def history():
     history = session.get("history", [])
     grouped = defaultdict(list)
@@ -374,6 +390,7 @@ def history():
 # ----------------- EDIT PROFILE -----------------
 @usersystem_bp.route("/editprofile", methods=["GET", "POST"])
 @login_required
+@restrict_banned
 def editprofile():
     user_id = session.get("user_id")
     if not user_id:
@@ -419,6 +436,8 @@ def editprofile():
 # ----------------- edit profile address -----------------
 
 @usersystem_bp.route("/profile/edit_address", methods=["GET", "POST"])
+@login_required
+@restrict_banned
 def profile_address():
     user = current_user
 
@@ -440,6 +459,7 @@ def profile_address():
 
 @usersystem_bp.route("/pickup_point", methods=["GET", "POST"])
 @login_required
+@restrict_banned
 def pickup_point():
     user_id = current_user.id
 
@@ -473,6 +493,7 @@ def pickup_point():
  # ----------------- cart -----------------
 @usersystem_bp.route("/cart", methods=["GET", "POST"])
 @login_required
+@restrict_banned
 def cart():
     # ----------------- LOAD CART -----------------
     cart = session.get("cart", {})
@@ -601,6 +622,7 @@ def cart():
 # ----------------- search engine -----------------
 
 @usersystem_bp.route("/search")
+@restrict_banned
 def search():
     query = request.args.get("q", "").strip()
     
@@ -620,6 +642,7 @@ def search():
 
 # ----------------- view seller profile -----------------
 @usersystem_bp.route("/profile/<int:user_id>")
+@restrict_banned
 def view_profile(user_id):
     user = User.query.get_or_404(user_id)
     return_product = request.args.get("return_product")  # NEW
@@ -644,6 +667,7 @@ def view_profile(user_id):
 # ----------------- TOP UP -------------------#
 @usersystem_bp.route("/top_up", methods=["GET", "POST"])
 @login_required
+@restrict_banned
 def top_up():
     if request.method == "POST":
         amount = request.form.get("amount")
@@ -701,3 +725,4 @@ def logout():
     logout_user() #clear current_user
     session.clear() 
     return redirect(url_for("index"))
+

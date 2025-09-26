@@ -2,14 +2,18 @@ import logging
 import os
 from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify, current_app
 from flask_login import  login_required , current_user, login_user
+from .utils import create_message
 from datetime import timedelta
 from models import db
 from models import User, Product, Transaction, Messages
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
+from extensions import db
+
 
 logging.basicConfig(level = logging.INFO, filename = "app.log")
 messages_bp = Blueprint('messages', __name__, template_folder='templates', static_folder='static')
+
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 
@@ -54,6 +58,11 @@ def fake_messages():
     return "Fake messages inserted. Now go check /messages/inbox"
 '''
 
+@messages_bp.route("/send_system_message")
+def send_system_message():
+    create_message(sender_id=1, receiver_id=2, content=" System message")
+    return "System message sent!"
+
 #chat json
 @messages_bp.route("/chat/<int:user_id>/json", methods=["GET"])
 @login_required
@@ -95,7 +104,7 @@ def chat_json(user_id):
         for msg in conversation:
             if msg.receiver_id == current_user.id and not msg.is_read:
                 msg.is_read = True
-        db.session.commit
+        db.session.commit()
 
     return jsonify(result)
 
@@ -178,3 +187,48 @@ def inbox():
 
     users = User.query.filter(User.id.in_(user_ids)).all() if user_ids else[]
     return render_template("inbox.html", users=users)
+
+
+# helper function, not a route
+SYSTEM_USER_ID = 1
+
+def issue_warning(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return {"message": "User not found"}, 404
+
+    # Increment warnings
+    user.warnings += 1
+
+    # Get system user
+    system_user = User.query.filter_by(email="system@system.com").first()
+    if not system_user:
+        raise Exception("System user not found")
+
+    if user.warnings >= 3:
+        user.is_banned = True
+        db.session.commit()
+
+        warning_msg = Messages(
+            sender_id=system_user.id,
+            receiver_id=user.id,
+            content="⚠️ Your account has been banned due to 3 warnings.",
+            message_type="system"
+        )
+        db.session.add(warning_msg)
+        db.session.commit()
+
+        return {"message": "User banned due to 3 warnings."}
+
+    db.session.commit()
+
+    warning_msg = Messages(
+        sender_id=system_user.id,
+        receiver_id=user.id,
+        content=f"⚠️ Warning issued. Current warnings: {user.warnings}. 3 warnings = ban.",
+        message_type="system"
+    )
+    db.session.add(warning_msg)
+    db.session.commit()
+
+    return {"message": f"Warning issued. Current warnings: {user.warnings}"}

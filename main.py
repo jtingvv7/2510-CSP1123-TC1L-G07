@@ -10,6 +10,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 
 
+
 def create_app():
     app = Flask(__name__, template_folder="templates")    
 

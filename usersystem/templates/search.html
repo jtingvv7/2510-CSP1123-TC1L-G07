@@ -13,7 +13,6 @@
             <img src="{{ get_image_url(product.image) }}" class="card-img-top" alt="{{ product.name }}" style="object-fit: cover; height: 200px; width: 100%;">
             <div class="card-body text-center d-flex flex-column">
               <h5 class="card-title">{{ product.name }}</h5>
-              <p class="card-text">Quantity: {{ product.quantity }}</p>
               <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
 
               <!-- View Details Button -->
@@ -49,7 +48,6 @@
                     <div>
                       <p><strong>Name:</strong> {{ product.name }}</p>
                       <p><strong>Description:</strong> {{ product.description }}</p>
-                      <p><strong>Quantity:</strong> {{ product.quantity }}</p>
                       <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
 
                       {% if product.pickup_location %}
