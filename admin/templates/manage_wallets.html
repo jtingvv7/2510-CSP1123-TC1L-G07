@@ -18,8 +18,13 @@
       <div class="card shadow border-0">
         
         <!-- Header -->
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-          <h4 class="fw-bold mb-0"><i class="bi bi-wallet2"></i> Manage Wallets</h4>
+          <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light btn-sm me-4">
+            <i class="bi bi-arrow-left">Back</i>
+          </a>
+        <div class="card-header bg-dark text-white text-center fw-bold fs-4">
+          <span>
+          <i class="bi bi-wallet2"></i> Manage Wallets         
+          </span>
           <a href="{{ url_for('admin.view_topups') }}" class="btn btn-info">
             <i class="bi bi-cash-stack"></i> View Top-ups
           </a>
