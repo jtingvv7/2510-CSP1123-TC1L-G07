@@ -11,8 +11,6 @@ payment_bp = Blueprint('payment', __name__, template_folder='templates')
 # Main Page: Display Order ID and Payment Methods
 @payment_bp.route("/")
 def index():
-    # Get cart data
-    cart = session.get("cart", {})
     
     # Get current user's pending transactions
     current_user_id = session.get('user_id', 1)
@@ -40,10 +38,6 @@ def secondlooppay():
     # Get current user wallet
     wallet = Wallet.query.filter_by(user_id=current_user_id).first()
 
-    if not wallet: # might be change it!!!
-        wallet = Wallet(user_id=current_user_id, balance=100.0) # Give initial balance
-        db.session.add(wallet)
-        db.session.commit()
     if request.method == 'POST':
         # Check if wallet has enough balance
         if wallet.balance >= grand_total:
@@ -133,7 +127,7 @@ def cancel():
         for transaction in transactions:
             product = Product.query.get(transaction.product_id)
             if product:
-                # 使用transaction.quantity恢复库存
+                # Use transaction.quantity to restore stock
                 product.quantity += transaction.quantity
                 product.is_sold = False
             

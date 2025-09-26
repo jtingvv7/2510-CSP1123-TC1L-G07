@@ -21,21 +21,18 @@ def allowed_file(filename):
 @review_bp.route("/")
 def index():
     seller_id = request.args.get('seller_id')
-    if seller_id:
-        try:
-            seller_id = int(seller_id)
-            # Check if seller exicts
-            seller = User.query.get(seller_id)
-            if not seller:
-                flash("Seller not found!", "error")
-                return redirect(url_for('index'))
-            # Only show reviews for the specific seller
-            reviews = Review.query.filter_by(seller_id=seller_id).order_by(Review.date_review.desc()).all()
-        except ValueError:
-            flash("Invalid seller ID!", "error")
+    try:
+        seller_id = int(seller_id)
+        # Check if seller exicts
+        seller = User.query.get(seller_id)
+        if not seller:
+            flash("Seller not found!", "error")
             return redirect(url_for('index'))
-    else:
-        reviews = Review.query.order_by(Review.date_review.desc()).all()
+        # Only show reviews for the specific seller
+        reviews = Review.query.filter_by(seller_id=seller_id).order_by(Review.date_review.desc()).all()
+    except ValueError:
+        flash("Invalid seller ID!", "error")
+        return redirect(url_for('index'))
 
     return render_template("review_index.html", reviews=reviews)
 
@@ -55,12 +52,12 @@ def add():
         transaction_id = request.form.get('transaction_id') or transaction_id
 
         if not username or not comment:
-            flash("Username and Comment cannot be empty!", 400)
+            flash("Username and Comment cannot be empty!", "error")
             return render_template("add.html", seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
 
         # Check if seller_id and transaction_id exist
         if not seller_id or not transaction_id:
-            flash("Seller ID and Transaction ID are required!", 400)
+            flash("Seller ID and Transaction ID are required!", "error")
             return render_template("add.html", seller_id=seller_id, transaction_id=transaction_id, current_user=current_user)
         
         image_path = None
