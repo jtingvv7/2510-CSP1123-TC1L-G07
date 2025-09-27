@@ -13,9 +13,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 def create_app():
     app = Flask(__name__, template_folder="templates")
 
-    # ----------------------
     # Config
-    # ----------------------
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///secondloop.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")
@@ -33,18 +31,18 @@ def create_app():
         format="%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]"
     )
 
-    # ----------------------
+       
     # Init extensions
-    # ----------------------
+       
     db.init_app(app)
     login_manager.init_app(app)
 
     with app.app_context():
-        db.create_all()  # ✅ ensures SQLite tables exist
+        db.create_all()  #  ensures SQLite tables exist
 
-    # ----------------------
+       
     # Helpers
-    # ----------------------
+       
     @app.context_processor
     def utility_processor():
         def get_image_url(image_filename):
@@ -71,9 +69,9 @@ def create_app():
 
     app.jinja_env.filters["history_date"] = format_history_date
 
-    # ----------------------
+       
     # Context: unread messages
-    # ----------------------
+       
     @app.context_processor
     def inject_unread_count():
         if current_user.is_authenticated:
@@ -95,9 +93,9 @@ def create_app():
             return dict(request_count=new_requests)
         return dict(request_count=0)
 
-    # ----------------------
+       
     # Blueprints
-    # ----------------------
+       
     from transaction.routes import transaction_bp
     from payment.app import payment_bp
     from review_rating.app import review_bp
@@ -135,17 +133,17 @@ def create_app():
     return app
 
 
-# ----------------------
+   
 # Flask-Login Loader
-# ----------------------
+   
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# ----------------------
+   
 # Background Task
-# ----------------------
+   
 def auto_confirm_transactions(app):
     from models import Transaction, Messages
     with app.app_context():
@@ -171,14 +169,14 @@ def auto_confirm_transactions(app):
             logging.info(f"[AutoConfirm] {len(expired_tx)} transactions updated.")
 
 
-# ----------------------
+   
 # App Instance
-# ----------------------
+   
 app = create_app()
 
-# ----------------------
+   
 # Local Run (Scheduler only in dev mode)
-# ----------------------
+   
 if __name__ == "__main__":
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=lambda: auto_confirm_transactions(app),

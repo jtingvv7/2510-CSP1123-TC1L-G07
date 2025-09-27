@@ -25,7 +25,12 @@
       <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
 
       {% if product.pickup_location %}
-        <p><strong>Pickup Point:</strong> {{ product.pickup_location.name }} - {{ product.pickup_location.address }}</p>
+        <p><strong>Pickup Point:</strong> 
+          {{ product.pickup_location.name }} - {{ product.pickup_location.address }}
+          {% if product.pickup_location.description %}
+            <br><em>{{ product.pickup_location.description }}</em>
+          {% endif %}
+        </p>
       {% else %}
         <p><em>No pickup location specified</em></p>
       {% endif %}
