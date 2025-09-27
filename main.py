@@ -55,9 +55,7 @@ def create_app():
             return url_for('static', filename='uploads/products/' + image_filename)
         return dict(get_image_url=get_image_url)
 
-    # ----------------------
     # Custom Filters
-    # ----------------------
     def format_history_date(value):
         try:
             date_obj = datetime.strptime(value, "%Y-%m-%d").date()
@@ -79,9 +77,9 @@ def create_app():
     @app.context_processor
     def inject_unread_count():
         if current_user.is_authenticated:
-            unread_count = Messages.query.filter_by(
-                receiver_id=current_user.id,
-                is_read=False
+            unread_count = Messages.query.filter(
+                Messages.receiver_id == current_user.id,
+                Messages.is_read == False
             ).count()
             return dict(unread_count=unread_count)
         return dict(unread_count=0)
@@ -107,9 +105,7 @@ def create_app():
     app.register_blueprint(ranking_bp, url_prefix="/ranking")
     app.register_blueprint(report_bp, url_prefix="/report")
 
-    # ----------------------
     # Routes
-    # ----------------------
     @app.route("/")
     def index():
         try:

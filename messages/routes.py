@@ -3,7 +3,7 @@ import os
 from flask import Blueprint, render_template, redirect, url_for , flash, request, jsonify, current_app
 from flask_login import  login_required , current_user, login_user
 from .utils import create_message
-from datetime import timedelta
+from datetime import timedelta, datetime
 from models import db
 from models import User, Product, Transaction, Messages
 from sqlalchemy.exc import SQLAlchemyError
@@ -185,8 +185,36 @@ def inbox():
     received = db.session.query(Messages.sender_id).filter_by(receiver_id=current_user.id)
     user_ids = {uid for (uid,) in sent.union(received).all()} #prevent repeat
 
-    users = User.query.filter(User.id.in_(user_ids)).all() if user_ids else[]
-    return render_template("inbox.html", users=users)
+    conversations = []
+    if user_ids:
+        users = User.query.filter(User.id.in_(user_ids)).all()
+
+        for user in users:
+            #find latest messages
+            last_msg = Messages.query.filter(
+                ((Messages.sender_id == user.id) & (Messages.receiver_id == current_user.id)) |
+                ((Messages.sender_id == current_user.id) & (Messages.receiver_id == user.id))
+            ).order_by(Messages.timestamp.desc()).first()
+
+            # unread
+            unread_count = Messages.query.filter(
+                Messages.sender_id == user.id,
+                Messages.receiver_id == current_user.id,
+                Messages.is_read == False
+            ).count()
+
+            conversations.append({
+                "user": user,
+                "unread_count": unread_count,
+                "last_message": last_msg.content if last_msg else "",
+                "last_message_type": last_msg.message_type if last_msg else "text",
+                "last_time": last_msg.timestamp if last_msg else datetime.min
+            })
+
+    # newest at first
+    conversations.sort(key=lambda x: x["last_time"] , reverse=True)
+
+    return render_template("inbox.html", conversations=conversations)
 
 
 # helper function, not a route

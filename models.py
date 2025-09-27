@@ -95,7 +95,7 @@ class Messages(db.Model):
     content = db.Column(db.Text, nullable = True)
     timestamp = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
     is_read = db.Column(db.Boolean, default = True)
-    message_type = db.Column(db.String(20), default = "text") #text/image/transaction
+    message_type = db.Column(db.String(20), default = "text") #text/image/transaction/system
 
 #relationship
     sender = db.relationship('User', foreign_keys=[sender_id], backref='messages_sent', lazy = True)
@@ -117,7 +117,7 @@ class Review(db.Model):
     date_review = db.Column(db.DateTime, default = lambda : datetime.now(timezone.utc))
 
     def __repr__(self):
-        return f"<Review {self.id} by {self.id} rating {self.rating}>"
+        return f"<Review {self.id} by {self.buyer_id} rating {self.rating}>"
     
 
 #location db
