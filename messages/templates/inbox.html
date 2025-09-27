@@ -17,7 +17,7 @@
                     <h5 class="card-title mb-2">Inbox</h5>
                     <p class="card-text mb-3 opacity-75" style="font-size: 0.8rem;">View all your recent conversations</p>
                     <div class="badge bg-white text-primary px-2 py-1" style="font-size: 0.7rem;">
-                        {{ users|length }} conversations
+                        {{ conversations|length }} conversations
                     </div>
                 </div>
             </div>
@@ -25,29 +25,29 @@
     
         <!--conversation list on right side-->
         <div class="col-md-9" style="background: white; border-radius: 15px; padding: 0; margin-top: 20px;">
-            {% if users %}
+            {% if conversations %}
                 <div class="p-3 border-bottom">
                     <h5 class="mb-0">Recent Conversations</h5>
                 </div>
                 <div class="conversation-list" style="max-height: calc(100vh - 200px); overflow-y: auto;">
-                    {% for user in users %}
+                    {% for c in conversations %}
                     <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
                         
-                        <!-- left site: avatar, name, email -->
-                        <a href="{{ url_for('messages.chat', user_id=user.id) }}"
+                        <!-- left side: avatar, name, last message -->
+                        <a href="{{ url_for('messages.chat', user_id=c.user.id) }}"
                            class="d-flex align-items-center text-decoration-none text-dark flex-grow-1"
                            style="transition: background-color 0.2s;"
                            onmouseover="this.style.backgroundColor='#f8f9fa'"
                            onmouseout="this.style.backgroundColor='white'">
 
-                            {% if user.profile_pic %}
-                                <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
-                                    alt="{{ user.name }}"
+                            {% if c.user.profile_pic %}
+                                <img src="{{ url_for('static', filename='uploads/profiles/' ~ c.user.profile_pic) }}"
+                                    alt="{{ c.user.name }}"
                                     class="rounded-circle border me-3"
                                     width="50" height="50"
                                     style="object-fit: cover;">
                             {% else %}
-                                <img src="https://i.pravatar.cc/100?u={{ user.id }}"
+                                <img src="https://i.pravatar.cc/100?u={{ c.user.id }}"
                                     alt="Avatar"
                                     class="rounded-circle border me-3"
                                     width="50" height="50"
@@ -55,14 +55,26 @@
                             {% endif %}
 
                             <div>
-                                <h6 class="mb-1">{{ user.name }}</h6>
-                                <p class="mb-0 text-muted small">{{ user.email }}</p>
+                                <h6 class="mb-1">{{ c.user.name }}</h6>
+                                <!-- show last message -->
+                                <p class="mb-0 text-muted small">
+                                    {% if c.last_message_type == "system" %}
+                                        <span class="text-danger">[System]</span> {{ c.last_message }}
+                                    {% else %}
+                                        {{ c.last_message }}
+                                    {% endif %}
+                                </p>
                             </div>
                         </a>
 
-                        <!-- right site : report button -->
-                        <a href="{{ url_for('report.report_submit', pre_type='user', pre_id=user.id) }}"
-                           class="btn btn-outline-danger btn-sm ms-3">Report</a>
+                        <!-- right side : unread badge + report -->
+                        <div class="text-end">
+                            {% if c.unread_count > 0 %}
+                                <span class="badge bg-danger rounded-pill mb-2">{{ c.unread_count }}</span><br>
+                            {% endif %}
+                            <a href="{{ url_for('report.report_submit', pre_type='user', pre_id=c.user.id) }}"
+                               class="btn btn-outline-danger btn-sm">Report</a>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
