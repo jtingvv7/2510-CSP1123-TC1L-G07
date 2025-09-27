@@ -98,7 +98,8 @@ def auto_confirm_transactions():
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content="[System] Transaction was auto-confirmed after 5 days."
+            content="[System] Transaction was auto-confirmed after 5 days.",
+            is_read = False
         )
         db.session.add(msg)
 
@@ -231,7 +232,8 @@ def confirm_receipt(transaction_id):
             receiver_id=transaction.seller_id,
             transaction_id=transaction.id,
             message_type="system",
-            content="[System] Buyer has confirmed receipt and payment has been released."
+            content="[System] Buyer has confirmed receipt and payment has been released.",
+            is_read = False
         )
         db.session.add(msg)
         db.session.commit()
@@ -270,7 +272,8 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
             receiver_id=transaction.seller_id,
             transaction_id=transaction.id,
             message_type="system",
-            content="[System] Buyer has cancel request."
+            content="[System] Buyer has cancel request.",
+            is_read = False
             )
         db.session.add(msg)
         db.session.commit()
@@ -321,7 +324,8 @@ def accept_transaction(transaction_id):
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content="[System] Seller has accept your request."
+            content="[System] Seller has accept your request.",
+            is_read = False
         )
         db.session.add(msg)
         db.session.commit()
@@ -360,7 +364,8 @@ def reject_request(transaction_id):
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content="[System] Seller has rejected your request."
+            content="[System] Seller has rejected your request.",
+            is_read = False
         )
         db.session.add(msg)
         db.session.commit()
@@ -423,7 +428,8 @@ def ship_transaction(transaction_id):
             receiver_id=tx.buyer_id,
             transaction_id=tx.id,
             message_type="system",
-            content=f"[System] Seller has marked the transaction as shipped with proof. Please use this code to confirm receipt: {code}"
+            content=f"[System] Seller has marked the transaction as shipped with proof. Please use this code to confirm receipt: {code}",
+            is_read = False
         )
         
     

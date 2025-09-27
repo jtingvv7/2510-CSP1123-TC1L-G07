@@ -86,9 +86,9 @@ def create_app():
     @app.context_processor
     def inject_unread_count():
         if current_user.is_authenticated:
-            unread_count = Messages.query.filter_by(
-                receiver_id=current_user.id,
-                is_read=False
+            unread_count = Messages.query.filter(
+                Messages.receiver_id == current_user.id,
+                Messages.is_read == False
             ).count()
             return dict(unread_count=unread_count)
         return dict(unread_count=0)
