@@ -19,6 +19,25 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#make admin
+@admin_bp.route("/make_admin")
+def make_admin():
+    secret = request.args.get("secret")
+    if secret != "jwjt10188":
+        return "Unauthorized",403
+    
+    email = request.args.get("email")
+    if not email:
+        return "Missing email",403
+    
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return "User not found",403
+    
+    user.role ="admin"
+    db.session.commit()
+    return f"{user.email} has been save to user. "
+
 #ensure only admin can enter
 def admin_required(func):
     @wraps(func)
