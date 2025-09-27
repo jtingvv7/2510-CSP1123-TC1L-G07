@@ -21,7 +21,7 @@ def allowed_file(filename):
 
 #make admin
 @admin_bp.route("/make_admin")
-def make_admin():
+def onetime_make_admin():
     secret = request.args.get("secret")
     if secret != "jwjt10188":
         return "Unauthorized",403
