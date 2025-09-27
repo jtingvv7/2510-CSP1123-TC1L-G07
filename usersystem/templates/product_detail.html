@@ -27,12 +27,16 @@
       {% if product.pickup_location %}
         <p><strong>Pickup Point:</strong> 
           {{ product.pickup_location.name }} - {{ product.pickup_location.address }}
-          {% if product.pickup_location.description %}
-            <br><em>{{ product.pickup_location.description }}</em>
-          {% endif %}
         </p>
       {% else %}
         <p><em>No pickup location specified</em></p>
+      {% endif %}
+ 
+      {% if product.pickup_location.description %}
+      <p><strong>Description:</strong>
+        <br><em>{{ product.pickup_location.description }}</em>
+      {% else %}
+        <p><em>No description specified</em></p>
       {% endif %}
 
       <p class="mt-3">
