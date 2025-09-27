@@ -1,5 +1,6 @@
 import logging
 import os
+import atexit
 from flask import Flask, render_template, session, url_for
 from extensions import db, login_manager
 from models import User, Product, SafeLocation, Messages, Transaction
@@ -7,67 +8,55 @@ from flask_login import current_user
 from datetime import datetime, timedelta
 from sqlalchemy.orm import joinedload
 from apscheduler.schedulers.background import BackgroundScheduler
-import atexit
-
 
 
 def create_app():
-    app = Flask(__name__, template_folder="templates")    
+    app = Flask(__name__, template_folder="templates")
 
-    # Database + Config
+    # ----------------------
+    # Config
+    # ----------------------
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///secondloop.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.secret_key = "supersecretkey"  # session key
+    app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")
 
-    #set upload folder
+    # File uploads
     app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
 
-    #register helper
-    @app.context_processor
-    def utility_processor():
-        def get_image_url(image_filename):
-            # if no image = default
-            if not image_filename:
-                return url_for('static', filename='uploads/products/default_product.jpg')
+    # Ensure logs folder exists
+    if not os.path.exists("logs"):
+        os.mkdir("logs")
 
-            # if have products/
-            if image_filename.startswith("products/"):
-                return url_for('static', filename='uploads/' + image_filename)
+    logging.basicConfig(
+        filename="logs/app.log",
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]"
+    )
 
-            # if filename only
-            return url_for('static', filename='uploads/products/' + image_filename)
-
-        return dict(get_image_url=get_image_url)
-
-    # Logging setup
-    logging.basicConfig(level=logging.INFO, filename="app.log")
-
+    # ----------------------
     # Init extensions
+    # ----------------------
     db.init_app(app)
     login_manager.init_app(app)
 
-    # Import & register blueprints
-    from transaction.routes import transaction_bp
-    from payment.app import payment_bp
-    from review_rating.app import review_bp
-    from messages.routes import messages_bp
-    from usersystem.app import usersystem_bp
-    from admin.routes import admin_bp
-    from ranking.app import ranking_bp
-    from report.routes import report_bp
+    with app.app_context():
+        db.create_all()  # ✅ ensures SQLite tables exist
 
-    app.register_blueprint(transaction_bp, url_prefix="/transaction")
-    app.register_blueprint(messages_bp, url_prefix="/messages")
-    app.register_blueprint(payment_bp, url_prefix="/payment")
-    app.register_blueprint(review_bp, url_prefix="/review")
-    app.register_blueprint(usersystem_bp, url_prefix="/usersystem")
-    app.register_blueprint(admin_bp, url_prefix="/admin")
-    app.register_blueprint(ranking_bp, url_prefix="/ranking")
-    app.register_blueprint(report_bp, url_prefix="/report")
+    # ----------------------
+    # Helpers
+    # ----------------------
+    @app.context_processor
+    def utility_processor():
+        def get_image_url(image_filename):
+            if not image_filename:
+                return url_for('static', filename='uploads/products/default_product.jpg')
+            if image_filename.startswith("products/"):
+                return url_for('static', filename='uploads/' + image_filename)
+            return url_for('static', filename='uploads/products/' + image_filename)
+        return dict(get_image_url=get_image_url)
 
-    # --- Register custom filter ---
+    # Custom Filters
     def format_history_date(value):
-        """Format YYYY-MM-DD into Today / Yesterday / 20 Sep 2025"""
         try:
             date_obj = datetime.strptime(value, "%Y-%m-%d").date()
             today = datetime.today().date()
@@ -82,7 +71,9 @@ def create_app():
 
     app.jinja_env.filters["history_date"] = format_history_date
 
-    #for unread message
+    # ----------------------
+    # Context: unread messages
+    # ----------------------
     @app.context_processor
     def inject_unread_count():
         if current_user.is_authenticated:
@@ -104,34 +95,59 @@ def create_app():
             return dict(request_count=new_requests)
         return dict(request_count=0)
 
-    # Home route
+    # ----------------------
+    # Blueprints
+    # ----------------------
+    from transaction.routes import transaction_bp
+    from payment.app import payment_bp
+    from review_rating.app import review_bp
+    from messages.routes import messages_bp
+    from usersystem.app import usersystem_bp
+    from admin.routes import admin_bp
+    from ranking.app import ranking_bp
+    from report.routes import report_bp
+
+    app.register_blueprint(transaction_bp, url_prefix="/transaction")
+    app.register_blueprint(messages_bp, url_prefix="/messages")
+    app.register_blueprint(payment_bp, url_prefix="/payment")
+    app.register_blueprint(review_bp, url_prefix="/review")
+    app.register_blueprint(usersystem_bp, url_prefix="/usersystem")
+    app.register_blueprint(admin_bp, url_prefix="/admin")
+    app.register_blueprint(ranking_bp, url_prefix="/ranking")
+    app.register_blueprint(report_bp, url_prefix="/report")
+
+    # Routes
     @app.route("/")
     def index():
-        products = (
-            Product.query
-            .options(joinedload(Product.seller))  
-            .filter_by(is_sold=False, is_active=True)
-            .all()
-        )
-        user_id = session.get("user_id")
-        locations = SafeLocation.query.filter_by(user_id=user_id).all() if user_id else []
+        try:
+            products = (
+                Product.query.options(joinedload(Product.seller))
+                .filter_by(is_sold=False, is_active=True)
+                .all()
+            )
+            user_id = session.get("user_id")
+            locations = SafeLocation.query.filter_by(user_id=user_id).all() if user_id else []
+            return render_template("home_index.html", products=products, locations=locations)
+        except Exception as e:
+            logging.error("Error in index route", exc_info=True)
+            return "Internal Server Error", 500
 
-        return render_template("home_index.html", products=products, locations=locations)
-    
     return app
 
 
-# Flask-Login: user loader
+# ----------------------
+# Flask-Login Loader
+# ----------------------
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# auto confirm task
+# ----------------------
+# Background Task
+# ----------------------
 def auto_confirm_transactions(app):
     from models import Transaction, Messages
-    from datetime import datetime, timedelta
-
     with app.app_context():
         deadline = datetime.now() - timedelta(days=5)
         expired_tx = Transaction.query.filter(
@@ -152,18 +168,22 @@ def auto_confirm_transactions(app):
 
         if expired_tx:
             db.session.commit()
-            print(f"[AutoConfirm] {len(expired_tx)} transactions updated.")
+            logging.info(f"[AutoConfirm] {len(expired_tx)} transactions updated.")
 
 
+# ----------------------
+# App Instance
+# ----------------------
+app = create_app()
+
+# ----------------------
+# Local Run (Scheduler only in dev mode)
+# ----------------------
 if __name__ == "__main__":
-    app = create_app()
-
-    # start APScheduler
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=lambda: auto_confirm_transactions(app), trigger="interval", hours=24)  # run every 24 hours
+    scheduler.add_job(func=lambda: auto_confirm_transactions(app),
+                      trigger="interval", hours=24)
     scheduler.start()
-
-    # ensure scheduler is stopped when Flask shuts down
     atexit.register(lambda: scheduler.shutdown())
 
     app.run(debug=True)
