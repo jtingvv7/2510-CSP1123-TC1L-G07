@@ -258,12 +258,13 @@ def cancel_transaction(transaction_id): #user cannot delete transaction for othe
         flash("You cannot cancel this transaction.","warning")
         return redirect(url_for("transaction.my_transaction"))
     
-    if transaction.status != "payment_pending": #only transaction in pending state can be cancelled
+    if transaction.status != "pending": #only transaction in pending state can be cancelled
         flash("Only pending requests can be cancelled.","warning")
         return redirect(url_for("transaction.my_transaction"))
     
     try:
         transaction.status = "cancelled"
+        transaction.product.is_sold = False
         db.session.commit()
 
         #send message to seller (auto)
