@@ -2,7 +2,7 @@ import logging
 import os
 from flask import Flask, render_template, session, url_for
 from extensions import db, login_manager
-from models import User, Product, SafeLocation, Messages
+from models import User, Product, SafeLocation, Messages, Transaction
 from flask_login import current_user
 from datetime import datetime, timedelta
 from sqlalchemy.orm import joinedload
@@ -92,6 +92,17 @@ def create_app():
             ).count()
             return dict(unread_count=unread_count)
         return dict(unread_count=0)
+    
+    #for unread request
+    @app.context_processor
+    def inject_request_count():
+        if current_user.is_authenticated:
+            new_requests = Transaction.query.filter(
+                Transaction.seller_id == current_user.id,
+                Transaction.status =="pending"
+            ).count()
+            return dict(request_count=new_requests)
+        return dict(request_count=0)
 
     # Home route
     @app.route("/")

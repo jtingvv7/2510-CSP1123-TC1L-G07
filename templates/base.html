@@ -78,7 +78,12 @@
                         <a class="nav-link" href="{{ url_for('transaction.my_transaction') }}">My Transaction</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('transaction.view_requests') }}">View Requests</a>
+                        <a class="nav-link position-relative" href="{{ url_for('transaction.view_requests') }}">
+                            View Requests
+                            {% if request_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                            {% endif %}
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('ranking.index') }}">Ranking</a>
