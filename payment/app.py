@@ -120,7 +120,7 @@ def success():
 def cancel():
     transactions = Transaction.query.filter_by(
         buyer_id=session.get('user_id', 1), 
-        status="payment_pending"
+        status="pending"
     ).all()
 
     if transactions:
@@ -129,6 +129,7 @@ def cancel():
             if product:
                 # Restore stock
                 product.is_sold = False
+                db.session.flush()
             
             db.session.delete(transaction)
         
