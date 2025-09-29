@@ -23,7 +23,7 @@
                     <p class="text-primary fw-bold">RM {{ "%.2f"|format(product.price) }}</p>
                     <a href="{{ url_for('usersystem.product_detail', product_id=product.id) }}" 
                        class="btn btn-sm btn-outline-primary">View Details</a>
-                    <a href="{{ url_for('messages_bp.chat' , user_id=seller.id) }}"
+                    <a href="{{ url_for('messages.chat' , user_id=seller.id) }}"
                         class="btn btn-sm btn-success mt-2">Contact Seller</a>
                 </div>
             </div>
