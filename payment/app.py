@@ -3,6 +3,7 @@ from flask_login import current_user
 from extensions import db
 from models import Payment, Product, Transaction, Wallet
 from transaction.routes import transaction_bp
+from usersystem.app import product_manage
 
 payment_bp = Blueprint('payment', __name__, template_folder='templates')
 
@@ -128,8 +129,8 @@ def cancel():
             product = Product.query.get(transaction.product_id)
             if product:
                 # Restore stock
-                product.is_sold = False
-                db.session.flush()
+                product.quantity += transaction.quantity
+                product.is_sold = product.quantity <= 0 and product.is_sold or False
             
             db.session.delete(transaction)
         
