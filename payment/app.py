@@ -14,7 +14,7 @@ def index():
     
     # Get current user's pending transactions
     current_user_id = session.get('user_id', 1)
-    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="pending").all()
+    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").all()
     
     # Calculate total price from all pending transactions
     grand_total = sum(transaction.price for transaction in transactions) if transactions else 0
@@ -30,7 +30,7 @@ def index():
 def secondlooppay():
     # Get current user's pending transactions
     current_user_id = session.get('user_id', 1)
-    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="pending").all()
+    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").all()
     
     # Calculate total price from all pending transactions
     grand_total = sum(transaction.price for transaction in transactions) if transactions else 0
@@ -72,7 +72,7 @@ def secondlooppay():
 @payment_bp.route("/cod", methods=['GET', 'POST'])
 def cod():
     current_user_id = session.get('user_id', 1)
-    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="pending").all()
+    transactions = Transaction.query.filter_by(buyer_id=current_user_id, status="payment_pending").all()
     grand_total = sum(transaction.price for transaction in transactions) if transactions else 0
     
     if request.method == 'POST':
@@ -105,12 +105,12 @@ def cod():
 
 @payment_bp.route("/success")
 def success():
-    transactions = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="pending").all()
+    transactions = Transaction.query.filter_by(buyer_id=session.get('user_id', 1), status="payment_pending").all()
 
     if transactions:
         # Change transaction status to completed
         for transaction in transactions:
-            transaction.status = "pending"
+            transaction.status = "payment_pending"
         db.session.commit()
 
     return render_template("success.html")
@@ -120,7 +120,7 @@ def success():
 def cancel():
     transactions = Transaction.query.filter_by(
         buyer_id=session.get('user_id', 1), 
-        status="pending"
+        status="payment_pending"
     ).all()
 
     if transactions:
