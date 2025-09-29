@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Submit Appeal{% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg w-75">
+    
+    <!-- Header -->
+    <div class="card-header bg-warning text-dark fw-bold fs-3 py-3">
+      <i class="bi bi-exclamation-triangle"></i> Submit Appeal
+    </div>
+    
+    <!-- Body -->
+    <div class="card-body" style="font-size: 1.1rem;">
+      
+      <!-- Report details -->
+      <div class="mb-4 p-3 border rounded bg-light">
+        <h5 class="mb-3">📋 Report Details</h5>
+        <p><strong>Reason:</strong> {{ report.reason }}</p>
+        {% if report.evidence_file %}
+          <p>
+            <strong>Evidence File:</strong>
+            <a href="{{ url_for('static', filename='uploads/reports/' ~ report.evidence_file) }}" target="_blank">
+              View Evidence
+            </a>
+          </p>
+        {% endif %}
+        <p>
+          <strong>Reported On:</strong>
+          {{ (report.date_report + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') }}
+        </p>
+      </div>
+
+      <!-- due date -->
+      <div class="alert alert-info text-center">
+        You must submit your appeal before 
+        <strong>
+          {{ (report.appeal_deadline + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') }}
+        </strong> (Malaysia Time).
+      </div>
+
+      <!-- if submitted -->
+      {% if report.appeal_status == "submitted" %}
+        <div class="alert alert-secondary text-center">
+          <strong>You have already submitted your appeal.</strong><br>
+          <p class="mt-2">{{ report.appeal_text }}</p>
+          {% if report.appeal_file %}
+            <a href="{{ url_for('static', filename='uploads/reports/' ~ report.appeal_file) }}" target="_blank">
+              View Uploaded Evidence
+            </a>
+          {% endif %}
+        </div>
+      {% else %}
+      <!-- Appeal form -->
+      <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Reason for Appeal</label>
+          <textarea name="reason" class="form-control" rows="5" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload Evidence (optional)</label>
+          <input type="file" name="evidence" class="form-control">
+          <small class="text-muted">Accepted: JPG, PNG, PDF</small>
+        </div>
+        <button type="submit" class="btn btn-warning">
+          <i class="bi bi-send"></i> Submit Appeal
+        </button>
+        <a href="{{ url_for('report.my_reports') }}" class="btn btn-secondary">Cancel</a>
+      </form>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

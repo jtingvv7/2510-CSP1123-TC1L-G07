@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Add Announcement{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4" style="background-color: #f8f9fa; min-height: calc(100vh - 80px);">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border border-secondary">
+        <div class="card-header bg-success text-white">
+          <i class="bi bi-plus-circle"></i> Add New Announcement
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            <!-- Title -->
+            <div class="mb-3">
+              <label class="form-label">Title</label>
+              <input type="text" name="title" class="form-control" required>
+            </div>
+
+            <!-- Content -->
+            <div class="mb-3">
+              <label class="form-label">Content</label>
+              <textarea name="content" class="form-control" rows="5" required></textarea>
+            </div>
+
+            <!-- Valid Until -->
+            <div class="mb-3">
+              <label class="form-label">Valid Until (optional)</label>
+              <input type="date" name="expires_at" class="form-control">
+            </div>
+
+            <!-- Target User -->
+            <div class="mb-3">
+              <label class="form-label">Send To</label>
+              <select name="user_id" class="form-select">
+                <option value="all" selected>All Users</option>
+                {% for u in users %}
+                  <option value="{{ u.id }}">{{ u.name }}</option>
+                {% endfor %}
+              </select>
+              <div class="form-text">Choose a user or leave as "All Users".</div>
+            </div>
+
+            <!-- Buttons -->
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-check-circle"></i> Submit
+            </button>
+            <a href="{{ url_for('admin.manage_announcements') }}" class="btn btn-secondary">
+              <i class="bi bi-arrow-left"></i> Back
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

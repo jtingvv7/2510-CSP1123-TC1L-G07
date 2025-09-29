@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Add Review</title>
+        <style>
+        body {font-family: Arial, Helvetica, sans-serif; background: #f5f5f5; margin: 0; padding: 40px;}
+        .container {max-height: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0, 0, 0, 1);}
+        h2 {text-align: center; margin-bottom: 20px;}
+        label {display: block; margin: 10px 0 5px; font-weight: bold;}
+        input, textarea {width: 98.5%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: 14px; margin-right: 100px;}
+        select {width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: 14px; margin-right: 100px;}
+        textarea {resize: vertical; min-height: 100px;}
+        button:hover {background: #0f9c45;}
+        button {margin-top: 10px; width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;}
+        a {display: block; text-align: center; color: #666; border: none; border-radius: 6px; font-family: 16px; cursor: pointer;}
+        p {color: #666; font-family: 14px; margin-top: 10px; text-align: center;}
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h2>Add a Reviews</h2>
+    <form action="{{ url_for('review.add') }}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="seller_id" value="{{ seller_id or '' }}">
+        <input type="hidden" name="transaction_id" value="{{ transaction_id or '' }}">
+        <label for="username">User Name</label>
+        <input type="text" id="username" name="username" value="{{ current_user.name or '' }}" placeholder="Your name" required>
+
+        <label>Rating</label>
+        <select id="rating" name="rating" required>
+            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+            <option value="4">⭐️⭐️⭐️⭐️</option>
+            <option value="3">⭐️⭐️⭐️</option>
+            <option value="2">⭐️⭐️</option>
+            <option value="1">⭐️</option>
+        </select>
+
+        <label for="comment">Comment</label>
+        <textarea name="comment" placeholder="Write your review..." required></textarea>
+
+        <label for="image">Add Picture</label>
+        <input type="file" id="image" name="image" accept="image/" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; margin-bottom: 10px;">
+        <small style="color: #666; font-size: 12px;">Supported formats: JPG, PNG, Webp (Max size: 5MB)</small>
+
+        <button type="submit">Add Review</button>
+    </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}My Cart{% endblock %}
+
+{% block main_container %}
+<div style="width: 100vw; margin-left: calc(-50vw + 50%); padding: 20px; background: white; min-height: calc(100vh - 80px);">
+    <h2 style="text-align: left; margin-bottom: 30px;">My Cart</h2>
+
+    {% if not cart_items %}
+        <div class="alert alert-info" style="max-width: 500px; margin: 0 auto; text-align: center;">
+            <i class="bi bi-cart-x" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+            <h5>Your cart is empty</h5>
+            <p class="mb-0">Add some products to get started!</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">Browse Products</a>
+        </div>
+    {% else %}
+        <table class="table table-hover align-middle" style="width: 100% !important; table-layout: fixed; margin: 0;">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 10% !important;">Image</th>
+                    <th style="width: 50% !important;">Product</th>
+                    <th style="width: 10% !important;">Price</th>
+                    <th style="width: 10% !important;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <!-- Product Image -->
+                    <td style="width: 10% !important;">
+                        {% if item.image %}
+                            <img src="{{ get_image_url(item.image) }}"
+                                 alt="{{ item.name }}"
+                                 class="img-thumbnail"
+                                 style="width: 80px; height: 80px; object-fit: cover;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/80" class="img-thumbnail">
+                        {% endif %}
+                    </td>
+
+                    <!-- Product Name -->
+                    <td style="width: 50% !important;">
+                        <strong>{{ item.name }}</strong><br>
+                        <span class="text-muted">RM {{ "%.2f"|format(item.price) }}</span><br>
+                        {% if item.is_sold %}
+                            <span class="badge bg-danger">Sold Out</span>
+                        {% else %}
+                            <span class="badge bg-success">Available</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Price -->
+                    <td style="width: 10% !important;">
+                        RM {{ "%.2f"|format(item.price * item.qty) }}
+                    </td>
+
+                    <!-- Remove -->
+                    <td style="width: 10% !important;">
+                        <form method="POST" action="{{ url_for('usersystem.cart') }}">
+                            <input type="hidden" name="product_id" value="{{ item.id }}">
+                            <input type="hidden" name="action" value="remove">
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Grand Total -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <h4>Grand Total: RM {{ "%.2f"|format(grand_total) }}</h4>
+
+            <form action="{{ url_for('usersystem.cart') }}" method="POST">
+                <input type="hidden" name="action" value="checkout">
+                <button type="submit" class="btn btn-success"
+                        {% if sold_out %}disabled{% endif %}>
+                    Checkout
+                </button>
+            </form>
+        </div>
+
+        {% if sold_out %}
+            <div class="alert alert-danger mt-3">
+                One or more items in your cart are sold out. Please remove them before checkout.
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

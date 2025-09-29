@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cash on Delivery</title>
+    <style>
+        body { font-family: Arial, sans-serif; background:#f5f5f5; padding:30px; }
+        .cod-box { background:#fff; padding:30px; width:500px; margin:auto; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,.1); text-align:center; }
+        .cod-box h2 { color:#28a745; margin-bottom:20px; }
+        .cod-icon { font-size:60px; color:#28a745; margin-bottom:20px; }
+        .cod-info { background:#f8f9fa; padding:20px; border-radius:8px; margin:20px 0; }
+        .cod-btn { background:#28a745; color:#fff; border:none; padding:12px 20px; border-radius:8px; font-size:16px; cursor:pointer; margin: 20px 10px; }
+        .cod-btn:hover { background:#218838; }
+        .back-btn { background:#6c757d; color:#fff; border:none; padding:12px 20px; border-radius:8px; font-size:16px; cursor:pointer; margin: 20px 10px;}
+        .back-btn:hover { background:#5a6268; }
+    </style>
+</head>
+<body>
+    <div class="cod-box">
+        <h2>Cash on Delivery</h2>
+        <p>Order ID: <b>{{ transactions|length }} items</b></p>
+        <p>Total Amount: <b>RM {{ "%.2f"|format(grand_total) }}</b></p>
+        
+        <div class="cod-info">
+            <h4>Payment Instructions:</h4>
+            <p>• You will pay when you receive the item</p>
+            <p>• Please have exact change ready</p>
+            <p>• The seller will contact you for delivery details</p>
+        </div>
+        
+        <form method="POST">
+            <button type="submit" class="cod-btn">Confirm COD Order</button>
+        </form>
+        
+        <a href="{{ url_for('payment.index') }}" class="back-btn">Back to Payment Options</a>
+    </div>
+</body>
+</html>

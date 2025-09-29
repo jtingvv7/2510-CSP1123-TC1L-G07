@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %} Manage Wallets {% endblock %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, oklch(83.693% 0.02258 17.382), lch(91.75% 2.15 19.27));
+    min-height: 100vh;
+  }
+</style>
+
+
+<div class="container-fluid py-4" style="min-height: calc(100vh - 80px);">
+  <div class="row justify-content-center">
+    <div class="col-lg-11">
+      <div class="card shadow border-0">
+        
+        <!-- Header -->
+          <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light btn-sm me-4">
+            <i class="bi bi-arrow-left">Back</i>
+          </a>
+        <div class="card-header bg-dark text-white text-center fw-bold fs-4">
+          <span>
+          <i class="bi bi-wallet2"></i> Manage Wallets         
+          </span>
+          <a href="{{ url_for('admin.view_topups') }}" class="btn btn-info">
+            <i class="bi bi-cash-stack"></i> View Top-ups
+          </a>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped align-middle text-center mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th>User ID</th>
+                  <th>Username</th>
+                  <th>Balance (RM)</th>
+                  <th>Recharge</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for w in wallets %}
+                <tr>
+                  <td>{{ w.user_id }}</td>
+                  <td>{{ w.wallet_owner.name }}</td>
+                  <td>
+                    <span class="badge bg-primary px-3 py-2">
+                      {{ "%.2f"|format(w.balance) }}
+                    </span>
+                  </td>
+                  <td>
+                    <form action="{{ url_for('admin.recharge_wallet', user_id=w.user_id) }}"
+                          method="POST" class="d-flex justify-content-center">
+                      <input type="number" step="0.01" name="amount"
+                             placeholder="Amount"
+                             class="form-control form-control-sm me-2"
+                             style="width: 120px;" required>
+                      <button type="submit" class="btn btn-success btn-sm">
+                        <i class="bi bi-plus-circle"></i> Recharge
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="4" class="text-center text-muted">No wallets found</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

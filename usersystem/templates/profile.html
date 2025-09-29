@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Second Loop</title>
+  <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+</head>
+<body>
+<div class="container">
+
+  <div class="sidebar">
+    <div class="profilepic">
+      {% if user.profile_pic %}
+        <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
+             alt="Profile Picture">
+      {% else %}
+        <img src="https://i.pravatar.cc/100?u={{ user.id }}"
+             alt="Random Profile Picture"> <!-- fallback random profile picture -->
+      {% endif %}
+    </div>
+
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('usersystem.editprofile') }}" class="upload-btn">Edit Profile</a>
+    <a href="{{ url_for('usersystem.profile_address') }}">Edit Address</a>
+    <a href="{{ url_for('usersystem.product_manage') }}">Product</a>
+    <a href="{{ url_for('usersystem.logout') }}">Log out</a>
+  </div>
+
+  <div class="content">
+    <div class="profilecard">
+      <h2>{{ user.name }}</h2>
+      <p>{{ user.email }}</p>
+      <p><strong>Member since:</strong> {{ user.join_date.strftime('%B %Y') }}</p>
+      <p><strong>Phone number:</strong> {{ user.phone or '--' }}</p>
+
+      <h4>Address</h4>
+      {% if user.profile_address %}
+        <p>
+          {{ user.profile_address }}
+          (<a href="https://www.google.com/maps?q={{ user.profile_latitude }},{{ user.profile_longitude }}" target="_blank">View Map</a>)
+        </p>
+      {% else %}
+        <p>No address saved yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="stars-card">
+      <h3>Account Overview</h3>
+      <div class="stars-grid">
+        <div class="star">
+          <h4>{{ completed_sales }}</h4>
+          <p>Completed Sales</p>
+        </div>
+        <div class="star">
+          <h4>{{ completed_purchases }}</h4>
+          <p>Completed Purchases</p>
+        </div>
+        <div class="star">
+          <a href="{{ url_for('review.index', seller_id=user.id) }}" style="text-decoration: none; color: inherit;">
+            <h4>{{ "%.1f"|format(avg_rating) if avg_rating else '-' }} ⭐</h4>
+            <p>Average Rating</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wallet Section -->
+    <div class="profilecard wallet-card" onclick="window.location.href='{{ url_for('usersystem.top_up') }}'" style="cursor: pointer;">
+      <h3>Wallet <span style="font-size: 0.8em; color: #666;">(Click to Top Up)</span></h3>
+      <div class="wallet-info">
+        <span class="wallet-icon">💰</span>
+        <h4>RM {{ "%.2f"|format(wallet) }}</h4>
+      </div>
+    </div>
+
+        <!-- My Products -->
+    <div class="profilecard">
+      <h3>My Products</h3>
+      {% if products %}
+        <div class="product-grid">
+          {% for product in products %}
+            <div class="product-card">
+              {% if product.image %}
+                <img src="{{ get_image_url(product.image)}}"
+                     class="img-fluid rounded"
+                     alt="{{ product.name }}">
+              {% else %}
+                <img src="{{ url_for('static', filename='uploads/products/default_product.jpg') }}"
+                     class="img-fluid rounded"
+                     alt="Default Product">
+              {% endif %}
+              <h5>{{ product.name }}</h5>
+              <p>{{ product.description[:80] }}{% if product.description|length > 80 %}...{% endif %}</p>
+              <p><strong>MYR {{ "%.2f"|format(product.price) }}</strong></p>
+              {% if product.pickup_location %}
+                <p><small>Pickup: {{ product.pickup_location.name }} - {{ product.pickup_location.address }}</small></p>
+              {% endif %}
+              <a href="{{ url_for('usersystem.product_manage', product_id=product.id) }}" class="btn btn-sm btn-info">Edit</a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>You haven’t listed any products yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Recently Viewed -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <h4>Recently Viewed</h4>
+      <a href="{{ url_for('usersystem.history') }}" class="btn btn-sm btn-secondary">
+        View Full History
+      </a>
+    </div>
+    {% if history_products %}
+      <div class="product-grid">
+        {% for product in history_products %}
+          <div class="product-card">
+            <img src="{{ get_image_url(product.image) }}"
+                class="img-fluid rounded" alt="{{ product.name }}">
+            <h6>{{ product.name }}</h6>
+            <p class="text-muted small">RM {{ "%.2f"|format(product.price) }}</p>
+            <a href="{{ url_for('usersystem.product_detail', product_id=product.id) }}" 
+              class="btn btn-sm btn-outline-primary mt-auto">
+              View Details
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted">You haven’t viewed any products yet.</p>
+    {% endif %}
+
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+    // Call the Flask route
+    fetch("{{ url_for('usersystem.add_to_history', product_id=0) }}".replace("0", productId), {
+        method: "POST"
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error("Failed to save history");
+        }
+    })
+    .catch(err => console.error("Fetch error:", err));
+
+</script>
+
+</body>
+</html>
+            

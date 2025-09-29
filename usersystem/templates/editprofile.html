@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+  <style>
+    /* container style */
+    .edit-profile-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 40px;
+    }
+    
+    /* title style */
+    .edit-profile-container h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e2a47;
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 15px;
+    }
+    
+    /* profile pircture section */
+    .profile-picture-section {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 2px dashed #ddd;
+      transition: border-color 0.3s;
+    }
+    
+    .profile-picture-section:hover {
+       border-color: #2c21bb;
+      }
+      
+      .profile-picture-section img {
+         width: 120px;
+         height: 120px;
+         border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        margin-bottom: 15px;
+        transition: transform 0.3s;
+      }
+      
+      .profile-picture-section img:hover {
+        transform: scale(1.05);
+      }
+      
+      .file-upload-label {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #2c21bb;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s;
+        font-weight: 500;
+      }
+      
+      .file-upload-label:hover {
+        background: #1a1599;
+      }
+      
+      /* form input section */
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+      
+      .form-group label {
+        font-weight: 600;
+        color: #325896;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 14px;
+      }
+      
+      .form-group input[type="text"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background: #fff;
+      }
+      
+      .form-group input[type="text"]:focus {
+        border-color: #2c21bb;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(44, 33, 187, 0.1);
+      }
+      
+      /* phone num input section */
+      .phone-input-group {
+        display: flex;
+        align-items: center;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: border-color 0.3s;
+      }
+      
+      .phone-input-group:focus-within {
+        border-color: #2c21bb;
+        box-shadow: 0 0 0 3px rgba(44, 33, 187, 0.1);
+      }
+      
+      .phone-prefix {
+        padding: 12px 16px;
+        background: #f8f9fa;
+        color: #666;
+        font-weight: 500;
+        border-right: 1px solid #e1e5e9;
+        font-size: 14px;
+      }
+      
+      .phone-input {
+        flex: 1;
+        border: none;
+        padding: 12px 16px;
+        font-size: 14px;
+        background: #fff;
+      }
+      
+      .phone-input:focus {
+        outline: none;
+      }
+      
+      /* submit button */
+      .submit-button {
+        width: 100%;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, #2c21bb 0%, #325896 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        margin-top: 20px;
+      }
+      
+      .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(44, 33, 187, 0.3);
+      }
+      
+      .submit-button:active {
+        transform: translateY(0);
+      }
+      
+      /* responsive design */
+      @media (max-width: 768px) {
+        .edit-profile-container {
+          margin: 10px;
+          padding: 25px;
+        }
+        
+        .profile-picture-section img {
+          width: 100px;
+          height: 100px;
+        }
+      }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <a href="{{ url_for('usersystem.profile') }}">Profile</a>
+    <a class="active" href="{{ url_for('usersystem.editprofile') }}">Edit Profile</a>
+    <a href="{{ url_for('usersystem.logout') }}">Log out</a>
+  </div>
+
+  <div class="edit-profile-container">
+    <h2>Edit Profile</h2>
+
+    <form method="POST" action="{{ url_for('usersystem.editprofile') }}" enctype="multipart/form-data">
+      <!-- Profile Picture -->
+      <div class="profile-picture-section">
+        {% if user.profile_pic %}
+          <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}" 
+               alt="Profile Picture">
+        {% else %}
+          <img src="https://i.pravatar.cc/100?u={{ user.id }}" alt="Random Profile Picture">
+        {% endif %}
+        <label for="file-upload" class="file-upload-label">
+          Choose New Photo
+        </label>
+        <br><br>
+        <input type="file" id="file-upload" name="file" accept="image/*" style="display: none;">
+      </div>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label>Name:</label>
+        <input type="text" name="name" value="{{ user.name }}" required>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label>Phone Number:</label>
+        <div class="phone-input-group">
+          <span class="phone-prefix">+60</span>
+          <input type="text" name="phone" class="phone-input" 
+                 value="{{ user.phone[3:] if user.phone else '' }}" 
+                 pattern="\d{9}" maxlength="9" title="Enter exactly 9 digits">
+        </div>
+      </div>
+
+  
+      <button type="submit" class="submit-button">Save Changes</button>
+    </form>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %} Submit Report {% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg w-75">   
+    <div class="card-header bg-danger text-white fw-bold fs-3 py-3">
+      <i class="bi bi-flag-fill"></i> Submit Report
+    </div>
+    <div class="card-body" style="font-size: 1.2rem;">
+      <form method="POST" enctype="multipart/form-data">
+        
+        <!-- Report Type -->
+        <div class="mb-3">
+          <label class="form-label">Report Type</label>
+          <select class="form-select" name="report_type" id="report_type" {% if pre_type %}disabled{% endif %} required>
+            <option value="">-- Select Type --</option>
+            <option value="user" {% if pre_type == "user" %}selected{% endif %}>User</option>
+            <option value="product" {% if pre_type == "product" %}selected{% endif %}>Product</option>
+            <option value="transaction" {% if pre_type == "transaction" %}selected{% endif %}>Transaction</option>
+          </select>
+          {% if pre_type %}
+            <!-- 保证即使 disabled，提交时依然能传值 -->
+            <input type="hidden" name="report_type" value="{{ pre_type }}">
+          {% endif %}
+        </div>
+
+        <!-- Target ID -->
+        {% if pre_id %}
+          <!-- case 1：enter from trasnaction/ product/ chat with pre id -->
+          <input type="hidden" id="hidden_reported_id" name="reported_id" value="{{ pre_id }}">
+        {% else %}
+          <!-- case 2：enter from report center, user choose manually -->
+          <div class="mb-3" id="target-container" style="display:none;">
+            <label class="form-label">Select Target</label>
+            <select class="form-select" id="reported_id" name="reported_id" required>
+              <option value="">-- Select --</option>
+            </select>
+          </div>
+        {% endif %}
+
+        <!-- Reason -->
+        <div class="mb-3">
+          <label class="form-label">Reason</label>
+          <textarea name="reason" class="form-control" rows="5" required></textarea>
+        </div>
+
+        <!-- Evidence -->
+        <div class="mb-3">
+          <label class="form-label">Upload Evidence (optional)</label>
+          <input type="file" name="evidence" class="form-control">
+          <small class="text-muted">Accepted: PNG, JPG, PDF</small>
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-danger">Submit Report</button>
+          <a href="{{ url_for('report.report_center') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- javascript -->
+<script>
+  const PRE_TYPE = "{{ pre_type or '' }}";
+  const PRE_ID = "{{ pre_id or '' }}";
+</script>
+<script src="{{ url_for('report.static', filename='report_form.js') }}"></script>
+{% endblock %}

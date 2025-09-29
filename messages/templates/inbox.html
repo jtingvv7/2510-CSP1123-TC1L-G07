@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block main_container %}
+<div style="width: 100vw; margin-left: calc(-50vw + 50%); padding: 20px; background: #f8f9fa; min-height: calc(100vh - 80px);">
+    <div class="row g-0" style="height: calc(100vh - 120px);">
+
+        <!--navigation on left side-->
+        <div class="col-md-3" style="background: #f8f9fa; padding: 20px; position: relative;">
+            <!-- Inbox small card -->
+            <div class="card shadow-sm" style="background: linear-gradient(135deg, #0d6efd 0%, #3f8efc 100%); border: none; border-radius: 15px; max-width: 250px; margin: 0 auto;">
+                <div class="card-body text-white text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-envelope-fill" style="font-size: 2rem;"></i>
+                    </div>
+                    <h5 class="card-title mb-2">Inbox</h5>
+                    <p class="card-text mb-3 opacity-75" style="font-size: 0.8rem;">View all your recent conversations</p>
+                    <div class="badge bg-white text-primary px-2 py-1" style="font-size: 0.7rem;">
+                        {{ conversations|length }} conversations
+                    </div>
+                </div>
+            </div>
+        </div>      
+    
+        <!--conversation list on right side-->
+        <div class="col-md-9" style="background: white; border-radius: 15px; padding: 0; margin-top: 20px;">
+            {% if conversations %}
+                <div class="p-3 border-bottom">
+                    <h5 class="mb-0">Recent Conversations</h5>
+                </div>
+                <div class="conversation-list" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                    {% for c in conversations %}
+                    <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
+                        
+                        <!-- left side: avatar, name, last message -->
+                        <a href="{{ url_for('messages.chat', user_id=c.user.id) }}"
+                           class="d-flex align-items-center text-decoration-none text-dark flex-grow-1"
+                           style="transition: background-color 0.2s;"
+                           onmouseover="this.style.backgroundColor='#f8f9fa'"
+                           onmouseout="this.style.backgroundColor='white'">
+
+                            {% if c.user.profile_pic %}
+                                <img src="{{ url_for('static', filename='uploads/profiles/' ~ c.user.profile_pic) }}"
+                                    alt="{{ c.user.name }}"
+                                    class="rounded-circle border me-3"
+                                    width="50" height="50"
+                                    style="object-fit: cover;">
+                            {% else %}
+                                <img src="https://i.pravatar.cc/100?u={{ c.user.id }}"
+                                    alt="Avatar"
+                                    class="rounded-circle border me-3"
+                                    width="50" height="50"
+                                    style="object-fit: cover;">
+                            {% endif %}
+
+                            <div>
+                                <h6 class="mb-1">{{ c.user.name }}</h6>
+                                <!-- show last message -->
+                                <p class="mb-0 text-muted small">
+                                    {% if c.last_message_type == "system" %}
+                                        <span class="text-danger">[System]</span> {{ c.last_message }}
+                                    {% else %}
+                                        {{ c.last_message }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </a>
+
+                        <!-- right side : unread badge + report -->
+                        <div class="text-end">
+                            {% if c.unread_count > 0 %}
+                                <span class="badge bg-danger rounded-pill mb-2">{{ c.unread_count }}</span><br>
+                            {% endif %}
+                            <a href="{{ url_for('report.report_submit', pre_type='user', pre_id=c.user.id) }}"
+                               class="btn btn-outline-danger btn-sm">Report</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted">
+                    <i class="bi bi-chat-dots" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h5>No conversations yet</h5>
+                    <p>Start a conversation with someone!</p>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-plus"></i> Start New Chat
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rating & Review</title>
+    <style>
+        body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: o;}
+        header {background: linear-gradient(90deg, #4e73df, #1cc88a); color: white; padding: 20px; text-align: center;}
+        h1 {margin: 0;}
+        .container {width: 60%; margin: 30px auto; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0, 1);}
+        a.button {display: inline-block; padding: 10px 20px; background: #1cc88a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s;}
+        a.button:hover {background: #17a673;}
+        ul {list-style: none; padding: 0;}
+        li {background: #f1f3f6; margin-bottom: 15px; padding: 15px; border-radius: 8px;}
+        li strong {font-size: 18px;}
+        li small {color: gray; font-size: 12px;}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>All Reviews</h1>
+    </header>
+    <div class="container">
+        <p><a href="{{ url_for('index') }}" style="color: #504f4f; text-decoration: none;">← Back to Home</a></p>
+        
+        {% if seller_id %}
+        <h2>Reviews for Seller ID: {{ seller_id }}</h2>
+        <p>Total Reviews: {{ reviews|length }}</p>
+        {% else %}
+        <h2>All Reviews</h2>
+        {% endif %}
+        
+        <ul>
+            {% for review in reviews %}
+            <li>
+                <strong>{{ review.username }}</strong> 
+                {% if review.rating == 5 %}⭐️⭐️⭐️⭐️⭐️
+                {% elif review.rating == 4 %}⭐️⭐️⭐️⭐️
+                {% elif review.rating == 3 %}⭐️⭐️⭐️
+                {% elif review.rating == 2 %}⭐️⭐️
+                {% elif review.rating == 1 %}⭐️
+                {% endif %}<br>
+                <p>{{ review.comment }}</p>
+                {% if review.image_path %}
+                <div style="margin: 10px 0;">
+                    <img src="{{ url_for('static', filename='uploads/' + review.image_path) }}" alt="Review image" style="max-width: 200px; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0, 1);">
+                </div>
+                {% endif %}
+                <small>{{ review.date_review.strftime('%Y-%m-%d %H:%M') }}</small>
+
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

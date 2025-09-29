@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}My Reports{% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg w-75">
+    
+    <!-- Header -->
+    <div class="card-header bg-primary text-white fw-bold fs-3 py-3">
+      <i class="bi bi-list-check"></i> My Reports
+    </div>
+    
+    <!-- Body -->
+    <div class="card-body" style="font-size: 1.1rem;">
+      <!-- submit by me -->
+      <h4 class="mb-3">📝 Reports I Submitted</h4>
+      {% if reports %}
+        <div class="table-responsive mb-4">
+          <table class="table table-hover align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Target ID</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Admin Comment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in reports %}
+                <tr>
+                  <td>{{ r.id }}</td>
+                  <td class="text-capitalize">{{ r.reported_type }}</td>
+                  <td>{{ r.reported_id }}</td>
+                  <td>{{ r.reason }}</td>
+                  <td>
+                    {% if r.status == "pending" %}
+                      <span class="badge bg-warning text-dark">Pending</span>
+                    {% elif r.status == "resolved" %}
+                      <span class="badge bg-success">Resolved</span>
+                    {% elif r.status == "rejected" %}
+                      <span class="badge bg-danger">Rejected</span>
+                    {% else %}
+                      <span class="badge bg-secondary">{{ r.status }}</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ (r.date_report + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') if r.date_report else "-" }}</td>
+                  <td>{{ r.admin_comment or "-" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">You haven't submitted any reports yet.</p>
+      {% endif %}
+
+      <!-- report by other against me-->
+      <h4 class="mt-5 mb-3 text-danger">⚠ Reports Against Me</h4>
+      {% if reports_against_me %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Reason</th>
+                <th>Reported On</th>
+                <th>Appeal Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in reports_against_me %}
+                <tr>
+                  <td>{{ r.id }}</td>
+                  <td>{{ r.reason }}</td>
+                  <td>{{ (r.date_report + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') if r.date_report else "-" }}</td>
+                  <td>
+                    {% if r.appeal_status == "none" %}
+                      <span class="badge bg-secondary">None</span>
+                    {% elif r.appeal_status == "submitted" %}
+                      <span class="badge bg-info text-dark">Submitted</span>
+                    {% elif r.appeal_status == "reviewed" %}
+                      <span class="badge bg-success">Reviewed</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if r.appeal_status != "submitted" and (not r.appeal_deadline or datetime.utcnow() < r.appeal_deadline) %}
+                      <a href="{{ url_for('report.submit_appeal', report_id=r.id) }}" class="btn btn-warning btn-sm">
+                        Submit Appeal
+                      </a>
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted">No one has reported you.</p>
+      {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer text-end">
+      <a href="{{ url_for('report.report_center') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Report Center
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

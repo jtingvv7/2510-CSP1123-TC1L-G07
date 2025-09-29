@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SecondLoop Pay</title>
+    <style>
+        body {font-family: Arial, Helvetica, sans-serif; background: #f5f5f5; margin: 0; padding: 40px;}
+        .container {max-width: 400px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);}
+        h2 {text-align: center; margin-bottom: 20px;}
+        .balance {background: #e8f5e8; padding: 15px; border-radius: 5px; margin-bottom: 20px;}
+        .amount {font-size: 1.5em; font-weight: bold; color: #28a745;}
+        button {width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;}
+        button:hover {background: #218838;}
+        button:disabled {background: #ccc; cursor: not-allowed;}
+        a {display: block; text-align: center; color: #666; margin-top: 15px;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ transactions|length }} items - MYR {{ '%.2f' |format(grand_total) }}</h2>
+        
+        <div class="balance">
+            <p>Your SecondLoopPay Balance:</p>
+            <p class="amount">MYR {{ '%.2f' |format(wallet_balance) }}</p>
+        </div>
+        
+        <form action="{{ url_for('payment.secondlooppay') }}" method="POST">
+            <button type="submit" {% if wallet_balance < grand_total %}disabled{% endif %}>
+                {% if wallet_balance >= grand_total %}
+                    Pay MYR {{ '%.2f' |format(grand_total) }}
+                {% else %}
+                    Balance is not enough!
+                {% endif %}
+            </button>
+        </form>
+        
+        <a href="{{ url_for('payment.cancel') }}">Cancel Payment</a>
+    </div>
+</body>
+</html>

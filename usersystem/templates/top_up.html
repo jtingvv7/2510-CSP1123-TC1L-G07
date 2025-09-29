@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Up Wallet - Second Loop</title>
+    <link rel="stylesheet" href="{{ url_for('usersystem.static', filename='usersystemstyle.css') }}">
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .payment-option {
+            background: #f8f9fa;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .important-note {
+            background: #fff3cd;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 1px solid #ffeaa7;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- sidebar content -->
+        <div class="profilepic">
+            {% if user.profile_pic %}
+              <img src="{{ url_for('static', filename='uploads/profiles/' ~ user.profile_pic) }}"
+                   alt="Profile Picture">
+            {% else %}
+              <img src="https://i.pravatar.cc/100?u={{ user.id }}"
+                   alt="Random Profile Picture"> <!-- fallback random profile picture -->
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('usersystem.editprofile') }}" class="upload-btn">Edit Profile</a>
+        <a href="{{ url_for('usersystem.profile_address') }}">Edit Address</a>
+        <a href="{{ url_for('usersystem.product_manage') }}">Product</a>
+        <a href="{{ url_for('usersystem.logout') }}">Log out</a>
+    </div>
+
+    <div class="content">
+        <div class="profilecard">
+            <h2>Top Up Your Wallet</h2>
+            
+            <div class="payment-methods">
+                <h3>Payment Methods:</h3>
+                <div class="payment-option">
+                    <h4>Touch n Go 💳</h4>
+                    <p><strong>Account Number:</strong> +601112075233</p>
+                </div>
+                <div class="payment-option">
+                    <h4>CIMB Bank 🏦</h4>
+                    <p><strong>Account Number:</strong> 7653126029</p>
+                </div>
+                <div class="important-note">
+                    <p><strong>Important:</strong> Please include your username (e.g.  {{ user.name }}) in the transfer remark/reference.</p>
+                </div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Amount (RM):</label>
+                    <input type="number" name="amount" step="0.01" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Payment Method:</label>
+                    <select name="payment_method" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="tng">Touch n Go</option>
+                        <option value="cimb">CIMB Bank</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Upload Receipt:</label>
+                    <input type="file" name="receipt" accept="image/*,.pdf" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit Top Up Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

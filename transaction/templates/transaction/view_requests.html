@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}View Requests{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0; padding: 20px;">
+    <h2 style="text-align: left; margin-bottom: 30px;">Purchase Requests</h2>
+
+    {% if requests %}
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+            {% for r in requests %}
+                <div style="width: 350px; flex-shrink: 0;">
+                    <div class="card shadow-sm">
+                        <!-- product image -->
+                        <img src="{{ get_image_url(r.product.image)  }}"
+                             class="card-img-top"
+                             alt="Product Image"
+                             style="object-fit: cover; height: 200px; width: 100%;">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Request #{{ r.id }}</h5>
+                            <p class="card-text mb-1"><b>Product:</b> {{ r.product.name }}</p>
+                            <p class="card-text mb-1"><b>Buyer ID:</b> {{ r.buyer_id }}</p>
+                            <p class="card-text">
+                                <b>Status:</b>
+                                {% if r.status == "pending" %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                {% elif r.status == "accepted" %}
+                                    <span class="badge bg-success">Accepted</span>
+                                {% elif r.status == "rejected" %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ r.status }}</span>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="card-footer bg-light text-center">
+                            {% if r.status == "pending" %}
+                                <!--Accept-->
+                                <form action="{{ url_for('transaction.accept_transaction', transaction_id=r.id) }}"
+                                    method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-success me-2">Accept</button>
+                                </form>
+                                <!--Reject-->
+                                <form action="{{ url_for('transaction.reject_request', transaction_id=r.id) }}"
+                                    method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No purchase requests yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
